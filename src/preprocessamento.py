@@ -19,7 +19,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-from src.utils import CycleContext, get_logger, resolve_path, write_json
+from src.utils import CycleContext, get_logger, read_json, resolve_path, write_json
 
 log = get_logger(__name__)
 
@@ -104,13 +104,16 @@ def rename_target(df: pd.DataFrame, cfg: dict[str, Any]) -> pd.DataFrame:
     return df.rename(columns={cfg["data"]["source"]["original_target"]: cfg["data"]["target"]})
 
 
-def validate(df: pd.DataFrame, cfg: dict[str, Any]) -> ValidationReport:
-    """Valida estrutura, nulos, duplicatas e dominios. Nao altera o DataFrame."""
+def validate(df: pd.DataFrame, cfg: dict[str, Any], require_target: bool = True) -> ValidationReport:
+    """Valida estrutura, nulos, duplicatas e dominios. Nao altera o DataFrame.
+
+    `require_target=False` valida registros de inferencia, que chegam sem rotulo.
+    """
     target = cfg["data"]["target"]
     id_col = cfg["data"]["id_column"]
-    expected = [*SCHEMA, target]
+    expected = [*SCHEMA, target] if require_target else list(SCHEMA)
     missing_cols = [c for c in expected if c not in df.columns]
-    unexpected = [c for c in df.columns if c not in expected and c != "lote"]
+    unexpected = [c for c in df.columns if c not in expected and c not in ("lote", target)]
     present = [c for c in SCHEMA if c in df.columns]
 
     errors: list[str] = []
@@ -156,23 +159,31 @@ def validate(df: pd.DataFrame, cfg: dict[str, Any]) -> ValidationReport:
     )
 
 
+def recode_undocumented(df: pd.DataFrame) -> tuple[pd.DataFrame, dict[str, int]]:
+    """Mapeia os codigos fora do dicionario da UCI para a categoria "outros"."""
+    out = df.copy()
+    recoded: dict[str, int] = {}
+    for col, mapping in UNDOCUMENTED_CODES.items():
+        recoded[col] = int(out[col].isin(mapping).sum())
+        out[col] = out[col].replace(mapping)
+    return out, recoded
+
+
+def invalid_rows(df: pd.DataFrame) -> pd.Series:
+    bad = pd.Series(False, index=df.index)
+    for col, rule in SCHEMA.items():
+        bad |= rule.invalid_mask(df[col])
+    return bad
+
+
 def clean(df: pd.DataFrame, cfg: dict[str, Any]) -> tuple[pd.DataFrame, dict[str, int]]:
     """Recodifica codigos nao documentados e remove linhas ainda invalidas.
 
     Falha se a fracao removida passar de `data.validation.max_invalid_row_fraction`.
     """
-    out = df.copy()
-    recoded: dict[str, int] = {}
-    for col, mapping in UNDOCUMENTED_CODES.items():
-        hits = out[col].isin(mapping)
-        recoded[col] = int(hits.sum())
-        out[col] = out[col].replace(mapping)
-
+    out, recoded = recode_undocumented(df)
     target = cfg["data"]["target"]
-    bad = pd.Series(False, index=out.index)
-    for col, rule in SCHEMA.items():
-        bad |= rule.invalid_mask(out[col])
-    bad |= out[target].isna() | TARGET_RULE.invalid_mask(out[target])
+    bad = invalid_rows(out) | out[target].isna() | TARGET_RULE.invalid_mask(out[target])
 
     limit = cfg["data"]["validation"]["max_invalid_row_fraction"]
     if bad.mean() > limit:
@@ -261,3 +272,30 @@ def save_processed(df: pd.DataFrame, ctx: CycleContext, cfg: dict[str, Any], rep
     write_json(ctx.evidence_dir(cfg, root) / "01_etl.json", meta)
     log.info("Dataset processado salvo: %s (%d linhas, %s)", path.name, len(df), ctx.data_version)
     return path
+
+
+def prepare_inference(df: pd.DataFrame, cfg: dict[str, Any]) -> tuple[pd.DataFrame, dict[str, int]]:
+    """Aplica a registros sem rotulo exatamente as transformacoes de linha do ETL de treino.
+
+    Registros fora do dominio nao recebem previsao: sao removidos e contados.
+    """
+    report = validate(df, cfg, require_target=False)
+    if not report.is_valid:
+        raise DataValidationError(report.errors)
+    out, recoded = recode_undocumented(df)
+    bad = invalid_rows(out)
+    out = engineer_features(out.loc[~bad].reset_index(drop=True))
+    return out, {**{f"recodificados_{k}": v for k, v in recoded.items()}, "linhas_sem_previsao": int(bad.sum())}
+
+
+def load_processed(cfg: dict[str, Any], ctx: CycleContext, root: Path | None = None) -> pd.DataFrame:
+    """Carrega o dataset processado e garante que ele foi gerado pelo ciclo corrente."""
+    meta = read_json(resolve_path(cfg, "processed_dir", root) / "etl_metadata.json")
+    if (meta["cycle_id"], meta["data_version"]) != (ctx.cycle_id, ctx.data_version):
+        raise RuntimeError(f"Dataset processado e do ciclo {meta['cycle_id']}, nao de {ctx.cycle_id}. Rode o notebook 01.")
+    return pd.read_parquet(resolve_path(cfg, "processed_dir", root) / meta["arquivo"])
+
+
+def split_xy(df: pd.DataFrame, partition: str, features: list[str], cfg: dict[str, Any]) -> tuple[pd.DataFrame, pd.Series]:
+    part = df[df["particao"] == partition]
+    return part[features], part[cfg["data"]["target"]]
