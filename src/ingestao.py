@@ -40,6 +40,10 @@ class IngestionError(RuntimeError):
     pass
 
 
+class BatchesExhausted(IngestionError):
+    pass
+
+
 def source_file(cfg: dict[str, Any], root: Path | None = None) -> Path:
     return resolve_path(cfg, "source_dir", root) / cfg["data"]["source"]["file_name"]
 
@@ -115,7 +119,7 @@ def release_next_batch(cfg: dict[str, Any], root: Path | None = None) -> Path:
             batch.to_csv(path, index=False)
             log.info("Lote publicado: %s (%d registros)", name, len(batch))
             return path
-    raise IngestionError(f"Todos os {len(batches)} lotes ja foram publicados")
+    raise BatchesExhausted(f"Todos os {len(batches)} lotes ja foram publicados")
 
 
 def ensure_initial_batch(cfg: dict[str, Any], root: Path | None = None) -> list[Path]:
@@ -150,7 +154,10 @@ def main() -> None:
     root = project_root()
     cfg = load_config(root)
     if args.novo_lote:
-        release_next_batch(cfg, root)
+        try:
+            release_next_batch(cfg, root)
+        except BatchesExhausted as exc:
+            log.warning("%s", exc)
     files = ensure_initial_batch(cfg, root)
     log.info("Lotes publicados: %s | data_version=%s", [p.name for p in files], compute_data_version(files))
 
