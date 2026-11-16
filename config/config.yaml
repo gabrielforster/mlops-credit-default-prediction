@@ -1,0 +1,50 @@
+project:
+  name: credit-default-prediction
+  mlflow_experiment: credit-default-prediction
+
+data:
+  source:
+    url: https://archive.ics.uci.edu/static/public/350/default+of+credit+card+clients.zip
+    file_name: default of credit card clients.xls
+    sha256: 30c6be3abd8dcfd3e6096c828bad8c2f011238620f5369220bd60cfc82700933
+    original_target: default payment next month
+  target: default.payment.next.month
+  id_column: ID
+  random_state: 42
+  paths:
+    source_dir: data/raw/source
+    batches_dir: data/raw/batches
+    inference_file: data/raw/inferencia/novos_clientes.csv
+    processed_dir: data/processed
+    evidence_dir: reports/evidencias
+    cycle_pointer: reports/ciclo_atual.json
+  # Particao deterministica da fonte em lotes que "chegam" ao longo do tempo.
+  # A soma das fracoes dos lotes + inference_fraction deve ser 1.
+  batches:
+    fractions: [0.6, 0.2, 0.1]
+    inference_fraction: 0.1
+  validation:
+    max_invalid_row_fraction: 0.01
+
+evaluation:
+  primary_metric: f1
+  direction: maximize
+  test_size: 0.2
+  validation_size: 0.2
+
+features:
+  voting:
+    minimum_votes: 2
+  k_best: 10
+  rfe_features: 10
+  random_forest_features: 10
+
+models:
+  logistic_regression:
+    enabled: true
+  random_forest:
+    enabled: true
+
+promotion:
+  enabled: true
+  minimum_improvement: 0.01
