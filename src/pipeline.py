@@ -61,6 +61,21 @@ def tag_cycle(ctx: CycleContext, cfg: dict[str, Any], root: Path, status: str) -
     mlflow.MlflowClient().set_tag(ctx.parent_run_id, "pipeline_status", status)
 
 
+def restore_manifest(path: Path, content: bytes | None) -> None:
+    """Desfaz uma promocao de um ciclo que falhou depois do notebook 04.
+
+    A versao gravada em `models/versoes/` permanece (nunca e apagada), mas deixa de ser a vigente.
+    """
+    current = path.read_bytes() if path.is_file() else None
+    if current == content:
+        return
+    if content is None:
+        path.unlink()
+    else:
+        path.write_bytes(content)
+    log.warning("Ciclo falhou: manifesto do modelo vigente restaurado ao estado anterior ao ciclo")
+
+
 def cycle_summary(evidence: Path) -> dict[str, Any]:
     """Consolida as evidencias de cada etapa de um ciclo em um unico resumo."""
     def get(name: str) -> dict[str, Any]:
@@ -135,13 +150,17 @@ def run_pipeline(new_batch: bool, root: Path) -> int:
             log.warning("%s. O ciclo roda com os lotes existentes.", exc)
 
     before = current_cycle_id(cfg, root)
+    manifest = resolve_path(cfg, "manifest", root)
+    manifest_before = manifest.read_bytes() if manifest.is_file() else None
     notebooks_dir = root / "notebooks"
     for name in NOTEBOOKS:
         log.info("Executando %s", name)
         try:
             execute_notebook(notebooks_dir / name)
-        except CellExecutionError as exc:
-            log.error("Falha em %s: %s: %s. Pipeline interrompido; saidas gravadas no notebook.", name, exc.ename, exc.evalue)
+        except Exception as exc:
+            detail = f"{exc.ename}: {exc.evalue}" if isinstance(exc, CellExecutionError) else f"{type(exc).__name__}: {exc}"
+            log.error("Falha em %s: %s. Pipeline interrompido; saidas gravadas no notebook.", name, detail)
+            restore_manifest(manifest, manifest_before)
             if (cycle := current_cycle_id(cfg, root)) and cycle != before:
                 tag_cycle(load_cycle(cfg, root), cfg, root, f"falhou_em_{name.removesuffix('.ipynb')}")
             return 1
