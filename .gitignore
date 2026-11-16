@@ -1,0 +1,17 @@
+# Ambiente
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+
+# Arquivo original da UCI: baixado e conferido por SHA-256 em `python -m src.ingestao`
+data/raw/source/
+
+# Derivados: regenerados pelo notebook 01 a cada ciclo
+data/processed/*
+!data/processed/.gitkeep
+reports/ciclo_atual.json
+
+# Segredos
+.env

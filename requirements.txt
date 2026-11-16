@@ -1,0 +1,15 @@
+# Python 3.12 (mesma versao usada no GitHub Actions)
+pandas==3.1.1
+numpy==2.5.5
+scikit-learn==1.9.1
+scipy==1.18.1
+mlflow==3.18.0
+pyyaml==6.0.3
+joblib==1.6.0
+pyarrow==26.0.1
+python-calamine==0.9.1
+jupyter==1.1.1
+nbconvert==7.17.2
+nbformat==5.11.1
+ipykernel==7.4.0
+pytest==9.2.0
