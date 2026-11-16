@@ -1,0 +1,85 @@
+{
+  "cycle_id": "ciclo_20261116T223819Z_2db70707",
+  "data_version": "dv_2db70707140b1359",
+  "primary_metric": "f1",
+  "direction": "maximize",
+  "winner": "modelo_B",
+  "models": [
+    {
+      "algorithm": "logistic_regression",
+      "label": "modelo_A",
+      "params": {
+        "C": 1.0,
+        "class_weight": "balanced",
+        "max_iter": 2000
+      },
+      "random_state": 42,
+      "features": [
+        "LIMIT_BAL",
+        "PAY_0",
+        "PAY_2",
+        "PAY_3",
+        "PAY_6",
+        "PAY_AMT1",
+        "UTILIZACAO_MEDIA",
+        "MESES_EM_ATRASO",
+        "ATRASO_MAXIMO"
+      ],
+      "validation": {
+        "f1": 0.5295043273013376,
+        "precision": 0.4790035587188612,
+        "recall": 0.5919085312225154,
+        "accuracy": 0.7518157294044407,
+        "roc_auc": 0.7500211397098342,
+        "tn": 2950,
+        "fp": 732,
+        "fn": 464,
+        "tp": 673
+      },
+      "train_seconds": 0.029,
+      "n_train": 14475,
+      "n_validation": 4819,
+      "run_id": "bba2f1fd7ed8410ca664c30a1477a8df",
+      "model_uri": "models:/m-6bcc2d7cf61c470cb3464206a5d0ae5e"
+    },
+    {
+      "algorithm": "random_forest",
+      "label": "modelo_B",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 8,
+        "min_samples_leaf": 20,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "random_state": 42,
+      "features": [
+        "LIMIT_BAL",
+        "PAY_0",
+        "PAY_2",
+        "PAY_3",
+        "PAY_6",
+        "PAY_AMT1",
+        "UTILIZACAO_MEDIA",
+        "MESES_EM_ATRASO",
+        "ATRASO_MAXIMO"
+      ],
+      "validation": {
+        "f1": 0.5410094637223974,
+        "precision": 0.49035025017869904,
+        "recall": 0.6033421284080914,
+        "accuracy": 0.7584561112263956,
+        "roc_auc": 0.7783098933364291,
+        "tn": 2969,
+        "fp": 713,
+        "fn": 451,
+        "tp": 686
+      },
+      "train_seconds": 0.301,
+      "n_train": 14475,
+      "n_validation": 4819,
+      "run_id": "53d7c3a4614c425fa8332befcd6daa74",
+      "model_uri": "models:/m-e363acca14c845d9a435b7f58e5c99bf"
+    }
+  ]
+}

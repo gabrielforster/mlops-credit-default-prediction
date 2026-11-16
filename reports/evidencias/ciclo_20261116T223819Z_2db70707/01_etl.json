@@ -1,0 +1,99 @@
+{
+  "cycle_id": "ciclo_20261116T223819Z_2db70707",
+  "data_version": "dv_2db70707140b1359",
+  "arquivo": "dataset_processado.parquet",
+  "n_linhas": 24000,
+  "particoes": {
+    "treino": 14475,
+    "validacao": 4819,
+    "teste": 4706
+  },
+  "validacao": {
+    "n_rows": 24000,
+    "n_columns": 26,
+    "missing_columns": [],
+    "unexpected_columns": [],
+    "missing_values": {},
+    "duplicate_ids": 0,
+    "duplicate_rows_excluding_id": 24,
+    "invalid_values": {
+      "EDUCATION": 272,
+      "MARRIAGE": 45
+    },
+    "undocumented_codes": {
+      "EDUCATION": {
+        "5": 220,
+        "6": 40,
+        "0": 12
+      },
+      "MARRIAGE": {
+        "0": 45
+      }
+    },
+    "class_balance": {
+      "0": 0.7802,
+      "1": 0.2198
+    },
+    "errors": []
+  },
+  "limpeza": {
+    "recodificados_EDUCATION": 272,
+    "recodificados_MARRIAGE": 45,
+    "linhas_removidas": 0
+  },
+  "outliers": {
+    "LIMIT_BAL": 131,
+    "AGE": 212,
+    "BILL_AMT1": 1903,
+    "BILL_AMT2": 1927,
+    "BILL_AMT3": 1983,
+    "BILL_AMT4": 2104,
+    "BILL_AMT5": 2179,
+    "BILL_AMT6": 2148,
+    "PAY_AMT1": 2183,
+    "PAY_AMT2": 2172,
+    "PAY_AMT3": 2093,
+    "PAY_AMT4": 2375,
+    "PAY_AMT5": 2343,
+    "PAY_AMT6": 2347
+  },
+  "atributos_derivados": [
+    "UTILIZACAO_ATUAL",
+    "UTILIZACAO_MEDIA",
+    "RAZAO_PAGAMENTO",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO",
+    "TENDENCIA_FATURA"
+  ],
+  "atributos_candidatos": [
+    "LIMIT_BAL",
+    "SEX",
+    "EDUCATION",
+    "MARRIAGE",
+    "AGE",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_5",
+    "PAY_6",
+    "BILL_AMT1",
+    "BILL_AMT2",
+    "BILL_AMT3",
+    "BILL_AMT4",
+    "BILL_AMT5",
+    "BILL_AMT6",
+    "PAY_AMT1",
+    "PAY_AMT2",
+    "PAY_AMT3",
+    "PAY_AMT4",
+    "PAY_AMT5",
+    "PAY_AMT6",
+    "UTILIZACAO_ATUAL",
+    "UTILIZACAO_MEDIA",
+    "RAZAO_PAGAMENTO",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO",
+    "TENDENCIA_FATURA"
+  ]
+}

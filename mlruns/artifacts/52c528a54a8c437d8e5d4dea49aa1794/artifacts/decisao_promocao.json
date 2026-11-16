@@ -1,0 +1,32 @@
+{
+  "cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "data_version": "dv_a2d3d2d25ce5c5c8",
+  "batches": [
+    "lote_001.csv"
+  ],
+  "timestamp": "2026-11-16T22:38:10.860137+00:00",
+  "winner": "modelo_B",
+  "winner_algorithm": "random_forest",
+  "winner_run_id": "fb83652b405640f9a1d261d8d5a48b00",
+  "decision": "promovido_inicial",
+  "challenger_metric": 0.543859649122807,
+  "champion_metric": null,
+  "minimum_improvement": 0.01,
+  "threshold_relaxed_by_drift": false,
+  "reason": "nao existe modelo vigente: o vencedor do ciclo vira o modelo inicial",
+  "promoted": true,
+  "primary_metric": "f1",
+  "drift_status": "sem_referencia",
+  "active_model_id": "ciclo_20261116T223751Z_a2d3d2d2__random_forest",
+  "active_model_test_metrics": {
+    "f1": 0.5249406175771971,
+    "precision": 0.46379853095487933,
+    "recall": 0.6046511627906976,
+    "accuracy": 0.7737556561085973,
+    "roc_auc": 0.7794160320514227,
+    "tn": 2294,
+    "fp": 511,
+    "fn": 289,
+    "tp": 442
+  }
+}

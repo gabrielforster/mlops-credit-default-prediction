@@ -1,0 +1,15 @@
+{
+  "cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "data_version": "dv_a2d3d2d25ce5c5c8",
+  "model_id": "ciclo_20261116T223751Z_a2d3d2d2__random_forest",
+  "model_cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "n_previsoes": 3000,
+  "taxa_prevista_inadimplencia": 0.277,
+  "probabilidade_media": 0.42654445072249153,
+  "arquivo": "reports/previsoes/previsoes_ciclo_20261116T223751Z_a2d3d2d2.csv",
+  "sha256": "8b5edd52287ee2a8ceb0b0f0495158c6b1626e0898fbfd2656c814a4f020516a",
+  "reproducible": true,
+  "recodificados_EDUCATION": 37,
+  "recodificados_MARRIAGE": 5,
+  "linhas_sem_previsao": 0
+}

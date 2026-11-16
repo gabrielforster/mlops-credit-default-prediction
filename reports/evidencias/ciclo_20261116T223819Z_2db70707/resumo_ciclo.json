@@ -1,0 +1,58 @@
+{
+  "cycle_id": "ciclo_20261116T223819Z_2db70707",
+  "data_version": "dv_2db70707140b1359",
+  "lotes": [
+    "lote_001.csv",
+    "lote_002.csv"
+  ],
+  "n_linhas": 24000,
+  "particoes": {
+    "treino": 14475,
+    "validacao": 4819,
+    "teste": 4706
+  },
+  "drift_status": "estavel",
+  "atributos_eleitos": [
+    "LIMIT_BAL",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_6",
+    "PAY_AMT1",
+    "UTILIZACAO_MEDIA",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO"
+  ],
+  "metrica_primaria": "f1",
+  "modelos": {
+    "modelo_A": {
+      "algorithm": "logistic_regression",
+      "val_f1": 0.5295043273013376,
+      "val_roc_auc": 0.7500211397098342
+    },
+    "modelo_B": {
+      "algorithm": "random_forest",
+      "val_f1": 0.5410094637223974,
+      "val_roc_auc": 0.7783098933364291
+    }
+  },
+  "vencedor": "modelo_B",
+  "decisao": "mantido",
+  "motivo": "reprovado: f1_desafiante 0.5410 vs f1_vigente 0.5403 + 0.0100",
+  "metrica_desafiante": 0.5410094637223974,
+  "metrica_vigente_reavaliada": 0.5403192795742939,
+  "modelo_vigente_apos_ciclo": "ciclo_20261116T223751Z_a2d3d2d2__random_forest",
+  "teste_modelo_vigente": {
+    "f1": 0.5363475177304965,
+    "precision": 0.4745098039215686,
+    "recall": 0.6167176350662589,
+    "accuracy": 0.7777305567360816,
+    "roc_auc": 0.784697165609671,
+    "tn": 3055,
+    "fp": 670,
+    "fn": 376,
+    "tp": 605
+  },
+  "previsoes": 3000,
+  "previsoes_reproduziveis": true
+}

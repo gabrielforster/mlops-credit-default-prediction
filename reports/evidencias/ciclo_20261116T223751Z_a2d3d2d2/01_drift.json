@@ -1,0 +1,12 @@
+{
+  "cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "data_version": "dv_a2d3d2d25ce5c5c8",
+  "status": "sem_referencia",
+  "severe": false,
+  "reference_batches": [],
+  "current_batches": [
+    "lote_001"
+  ],
+  "monitored_features": [],
+  "psi": []
+}

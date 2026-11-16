@@ -1,0 +1,28 @@
+{
+  "n_rows": 24000,
+  "n_columns": 26,
+  "missing_columns": [],
+  "unexpected_columns": [],
+  "missing_values": {},
+  "duplicate_ids": 0,
+  "duplicate_rows_excluding_id": 24,
+  "invalid_values": {
+    "EDUCATION": 272,
+    "MARRIAGE": 45
+  },
+  "undocumented_codes": {
+    "EDUCATION": {
+      "5": 220,
+      "6": 40,
+      "0": 12
+    },
+    "MARRIAGE": {
+      "0": 45
+    }
+  },
+  "class_balance": {
+    "0": 0.7802,
+    "1": 0.2198
+  },
+  "errors": []
+}

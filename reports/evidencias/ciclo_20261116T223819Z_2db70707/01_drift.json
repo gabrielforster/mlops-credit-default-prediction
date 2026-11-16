@@ -1,0 +1,170 @@
+{
+  "cycle_id": "ciclo_20261116T223819Z_2db70707",
+  "data_version": "dv_2db70707140b1359",
+  "status": "estavel",
+  "severe": false,
+  "reference_batches": [
+    "lote_001"
+  ],
+  "current_batches": [
+    "lote_002"
+  ],
+  "monitored_features": [
+    "LIMIT_BAL",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_AMT1",
+    "UTILIZACAO_MEDIA",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO"
+  ],
+  "psi": [
+    {
+      "feature": "AGE",
+      "psi": 0.0032710736520104146,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT2",
+      "psi": 0.0031020162408039818,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT4",
+      "psi": 0.002966661063730603,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT3",
+      "psi": 0.00261193261918862,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT6",
+      "psi": 0.0021949597663879113,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT2",
+      "psi": 0.002137734521291492,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT5",
+      "psi": 0.0018322677830360696,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT1",
+      "psi": 0.001733873582965437,
+      "status": "estavel"
+    },
+    {
+      "feature": "LIMIT_BAL",
+      "psi": 0.0016714972833307142,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_6",
+      "psi": 0.0015761111295346175,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT5",
+      "psi": 0.0015291906279871717,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT3",
+      "psi": 0.0014479061560414115,
+      "status": "estavel"
+    },
+    {
+      "feature": "ATRASO_MAXIMO",
+      "psi": 0.0013932070819976613,
+      "status": "estavel"
+    },
+    {
+      "feature": "UTILIZACAO_ATUAL",
+      "psi": 0.001389664520713559,
+      "status": "estavel"
+    },
+    {
+      "feature": "TENDENCIA_FATURA",
+      "psi": 0.0012321895128268624,
+      "status": "estavel"
+    },
+    {
+      "feature": "RAZAO_PAGAMENTO",
+      "psi": 0.0011548228406090292,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_3",
+      "psi": 0.0010049204113135406,
+      "status": "estavel"
+    },
+    {
+      "feature": "BILL_AMT1",
+      "psi": 0.0009726260295871889,
+      "status": "estavel"
+    },
+    {
+      "feature": "MARRIAGE",
+      "psi": 0.0009510408096861674,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT4",
+      "psi": 0.0009430166199120782,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_AMT6",
+      "psi": 0.0008653727575664731,
+      "status": "estavel"
+    },
+    {
+      "feature": "UTILIZACAO_MEDIA",
+      "psi": 0.0008621732516176767,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_5",
+      "psi": 0.000791614094727346,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_0",
+      "psi": 0.0005548637422541868,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_2",
+      "psi": 0.000550950795273474,
+      "status": "estavel"
+    },
+    {
+      "feature": "PAY_4",
+      "psi": 0.0002753993152663064,
+      "status": "estavel"
+    },
+    {
+      "feature": "EDUCATION",
+      "psi": 0.00017416940533882723,
+      "status": "estavel"
+    },
+    {
+      "feature": "MESES_EM_ATRASO",
+      "psi": 0.00016149177668888117,
+      "status": "estavel"
+    },
+    {
+      "feature": "SEX",
+      "psi": 3.3600044049367917e-05,
+      "status": "estavel"
+    }
+  ]
+}

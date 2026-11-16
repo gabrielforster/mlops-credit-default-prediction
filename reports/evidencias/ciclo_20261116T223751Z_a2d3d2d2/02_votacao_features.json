@@ -1,0 +1,52 @@
+{
+  "cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "data_version": "dv_a2d3d2d25ce5c5c8",
+  "minimum_votes": 2,
+  "methods": [
+    "select_k_best_f_classif",
+    "random_forest_importance",
+    "rfe_logistic_regression"
+  ],
+  "elected_features": [
+    "LIMIT_BAL",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_AMT1",
+    "UTILIZACAO_MEDIA",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO"
+  ],
+  "votes": {
+    "LIMIT_BAL": 3,
+    "SEX": 0,
+    "EDUCATION": 0,
+    "MARRIAGE": 0,
+    "AGE": 0,
+    "PAY_0": 3,
+    "PAY_2": 2,
+    "PAY_3": 2,
+    "PAY_4": 2,
+    "PAY_5": 1,
+    "PAY_6": 1,
+    "BILL_AMT1": 1,
+    "BILL_AMT2": 1,
+    "BILL_AMT3": 0,
+    "BILL_AMT4": 1,
+    "BILL_AMT5": 0,
+    "BILL_AMT6": 0,
+    "PAY_AMT1": 2,
+    "PAY_AMT2": 1,
+    "PAY_AMT3": 0,
+    "PAY_AMT4": 0,
+    "PAY_AMT5": 0,
+    "PAY_AMT6": 0,
+    "UTILIZACAO_ATUAL": 1,
+    "UTILIZACAO_MEDIA": 2,
+    "RAZAO_PAGAMENTO": 1,
+    "MESES_EM_ATRASO": 3,
+    "ATRASO_MAXIMO": 3,
+    "TENDENCIA_FATURA": 0
+  }
+}

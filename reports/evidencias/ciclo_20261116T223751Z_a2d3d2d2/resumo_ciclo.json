@@ -1,0 +1,57 @@
+{
+  "cycle_id": "ciclo_20261116T223751Z_a2d3d2d2",
+  "data_version": "dv_a2d3d2d25ce5c5c8",
+  "lotes": [
+    "lote_001.csv"
+  ],
+  "n_linhas": 18000,
+  "particoes": {
+    "treino": 10851,
+    "validacao": 3613,
+    "teste": 3536
+  },
+  "drift_status": "sem_referencia",
+  "atributos_eleitos": [
+    "LIMIT_BAL",
+    "PAY_0",
+    "PAY_2",
+    "PAY_3",
+    "PAY_4",
+    "PAY_AMT1",
+    "UTILIZACAO_MEDIA",
+    "MESES_EM_ATRASO",
+    "ATRASO_MAXIMO"
+  ],
+  "metrica_primaria": "f1",
+  "modelos": {
+    "modelo_A": {
+      "algorithm": "logistic_regression",
+      "val_f1": 0.5292887029288703,
+      "val_roc_auc": 0.7529952403698523
+    },
+    "modelo_B": {
+      "algorithm": "random_forest",
+      "val_f1": 0.543859649122807,
+      "val_roc_auc": 0.7828550957043912
+    }
+  },
+  "vencedor": "modelo_B",
+  "decisao": "promovido_inicial",
+  "motivo": "nao existe modelo vigente: o vencedor do ciclo vira o modelo inicial",
+  "metrica_desafiante": 0.543859649122807,
+  "metrica_vigente_reavaliada": null,
+  "modelo_vigente_apos_ciclo": "ciclo_20261116T223751Z_a2d3d2d2__random_forest",
+  "teste_modelo_vigente": {
+    "f1": 0.5249406175771971,
+    "precision": 0.46379853095487933,
+    "recall": 0.6046511627906976,
+    "accuracy": 0.7737556561085973,
+    "roc_auc": 0.7794160320514227,
+    "tn": 2294,
+    "fp": 511,
+    "fn": 289,
+    "tp": 442
+  },
+  "previsoes": 3000,
+  "previsoes_reproduziveis": true
+}
