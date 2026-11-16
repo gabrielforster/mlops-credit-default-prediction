@@ -4,6 +4,7 @@ Uso:
     python -m src.pipeline              # novo ciclo com os lotes ja publicados
     python -m src.pipeline --novo-lote  # publica o proximo lote (se houver) e roda o ciclo
     python -m src.pipeline --comparar   # apenas regenera reports/evidencias/comparacao_ciclos.md
+    python -m src.pipeline --mlflow-ui  # abre a interface do MLflow sobre mlruns/ (http://127.0.0.1:5000)
 """
 
 from __future__ import annotations
@@ -11,6 +12,7 @@ from __future__ import annotations
 import argparse
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -160,8 +162,14 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Executa o ciclo MLOps completo (notebooks 01 a 05)")
     parser.add_argument("--novo-lote", action="store_true", help="publica o proximo lote antes do ciclo")
     parser.add_argument("--comparar", action="store_true", help="apenas regenera a comparacao entre ciclos")
+    parser.add_argument("--mlflow-ui", action="store_true", help="abre a interface do MLflow sobre mlruns/")
     args = parser.parse_args()
     root = project_root()
+    if args.mlflow_ui:
+        import mlflow
+
+        configure_mlflow(load_config(root), root)
+        sys.exit(subprocess.call([sys.executable, "-m", "mlflow", "ui", "--backend-store-uri", mlflow.get_tracking_uri()]))
     if args.comparar:
         print(compare_cycles(load_config(root), root))
         return
