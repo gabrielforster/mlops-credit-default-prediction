@@ -1,0 +1,87 @@
+{
+  "cycle_id": "ciclo_gha_43986932580_1",
+  "data_version": "dv_3a043c533b992faa",
+  "primary_metric": "f1",
+  "direction": "maximize",
+  "winner": "modelo_B",
+  "models": [
+    {
+      "algorithm": "logistic_regression",
+      "label": "modelo_A",
+      "params": {
+        "C": 1.0,
+        "class_weight": "balanced",
+        "max_iter": 2000
+      },
+      "random_state": 42,
+      "features": [
+        "LIMIT_BAL",
+        "PAY_0",
+        "PAY_2",
+        "PAY_3",
+        "PAY_4",
+        "PAY_6",
+        "PAY_AMT1",
+        "UTILIZACAO_MEDIA",
+        "MESES_EM_ATRASO",
+        "ATRASO_MAXIMO"
+      ],
+      "validation": {
+        "f1": 0.5246245197345442,
+        "precision": 0.47173366834170855,
+        "recall": 0.5908733280881195,
+        "accuracy": 0.7497701783416069,
+        "roc_auc": 0.7466260678565549,
+        "tn": 3327,
+        "fp": 841,
+        "fn": 520,
+        "tp": 751
+      },
+      "train_seconds": 0.055,
+      "n_train": 16239,
+      "n_validation": 5439,
+      "run_id": "304b8409d5ce47bf83e16b23c97527f4",
+      "model_uri": "models:/m-54accfab2ead4b098b7cd124b37a19b9"
+    },
+    {
+      "algorithm": "random_forest",
+      "label": "modelo_B",
+      "params": {
+        "n_estimators": 150,
+        "max_depth": 8,
+        "min_samples_leaf": 20,
+        "class_weight": "balanced",
+        "n_jobs": -1
+      },
+      "random_state": 42,
+      "features": [
+        "LIMIT_BAL",
+        "PAY_0",
+        "PAY_2",
+        "PAY_3",
+        "PAY_4",
+        "PAY_6",
+        "PAY_AMT1",
+        "UTILIZACAO_MEDIA",
+        "MESES_EM_ATRASO",
+        "ATRASO_MAXIMO"
+      ],
+      "validation": {
+        "f1": 0.5342756183745583,
+        "precision": 0.48492623476587554,
+        "recall": 0.5948072383949646,
+        "accuracy": 0.7576760433903291,
+        "roc_auc": 0.7737640084205313,
+        "tn": 3365,
+        "fp": 803,
+        "fn": 515,
+        "tp": 756
+      },
+      "train_seconds": 0.607,
+      "n_train": 16239,
+      "n_validation": 5439,
+      "run_id": "c8ebc5d040024e4d9f2c796572fc2301",
+      "model_uri": "models:/m-5ce64fb2ca5448f88f77d6cb68bba4bc"
+    }
+  ]
+}

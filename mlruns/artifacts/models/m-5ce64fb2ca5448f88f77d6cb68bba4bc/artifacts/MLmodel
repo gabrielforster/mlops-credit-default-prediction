@@ -1,0 +1,42 @@
+artifact_path: file:///home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction/mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.skops
+    predict_fn: predict
+    python_version: 3.12.16
+  sklearn:
+    code: null
+    pickled_model: model.skops
+    serialization_format: skops
+    sklearn_version: 1.9.1
+    skops_trusted_types:
+    - numpy.dtype
+    - sklearn.tree._tree.Tree
+is_signature_from_type_hint: false
+mlflow_version: 3.18.0
+model_id: m-5ce64fb2ca5448f88f77d6cb68bba4bc
+model_size_bytes: 6251974
+model_uuid: m-5ce64fb2ca5448f88f77d6cb68bba4bc
+prompts: null
+run_id: c8ebc5d040024e4d9f2c796572fc2301
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "long", "name": "LIMIT_BAL", "required": true}, {"type": "long",
+    "name": "PAY_0", "required": true}, {"type": "long", "name": "PAY_2", "required":
+    true}, {"type": "long", "name": "PAY_3", "required": true}, {"type": "long", "name":
+    "PAY_4", "required": true}, {"type": "long", "name": "PAY_6", "required": true},
+    {"type": "long", "name": "PAY_AMT1", "required": true}, {"type": "double", "name":
+    "UTILIZACAO_MEDIA", "required": true}, {"type": "long", "name": "MESES_EM_ATRASO",
+    "required": true}, {"type": "long", "name": "ATRASO_MAXIMO", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "float64", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-11-17 00:22:53.850520'

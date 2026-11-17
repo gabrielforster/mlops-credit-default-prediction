@@ -1,0 +1,34 @@
+{
+  "cycle_id": "ciclo_gha_43986932580_1",
+  "data_version": "dv_3a043c533b992faa",
+  "batches": [
+    "lote_001.csv",
+    "lote_002.csv",
+    "lote_003.csv"
+  ],
+  "timestamp": "2026-11-17T00:23:03.253561+00:00",
+  "winner": "modelo_B",
+  "winner_algorithm": "random_forest",
+  "winner_run_id": "c8ebc5d040024e4d9f2c796572fc2301",
+  "decision": "mantido",
+  "challenger_metric": 0.5342756183745583,
+  "champion_metric": 0.5337738619676946,
+  "minimum_improvement": 0.01,
+  "threshold_relaxed_by_drift": false,
+  "reason": "reprovado: f1_desafiante 0.5343 vs f1_vigente 0.5338 + 0.0100",
+  "promoted": false,
+  "primary_metric": "f1",
+  "drift_status": "estavel",
+  "active_model_id": "ciclo_20261116T223751Z_a2d3d2d2__random_forest",
+  "active_model_test_metrics": {
+    "f1": 0.5455249903138318,
+    "precision": 0.4861878453038674,
+    "recall": 0.6213592233009708,
+    "accuracy": 0.7795941375422774,
+    "roc_auc": 0.7878566295073235,
+    "tn": 3445,
+    "fp": 744,
+    "fn": 429,
+    "tp": 704
+  }
+}
