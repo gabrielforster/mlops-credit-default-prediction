@@ -2,7 +2,7 @@
 
 Trabalho Avaliativo N3 · Análise Preditiva.
 
-Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow agendado roda um **ciclo** completo a cada novo lote de dados:
+Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, disparado manualmente, roda um **ciclo** completo a cada novo lote de dados:
 
 1. validar os dados;
 2. eleger atributos por votação de três métodos;
@@ -88,7 +88,7 @@ Atributos derivados no ETL. Cada um usa apenas a própria linha, então não há
 ## Arquitetura
 
 ```text
-GitHub Actions: .github/workflows/pipeline_mlops.yml  (schedule semanal + workflow_dispatch)
+GitHub Actions: .github/workflows/pipeline_mlops.yml  (workflow_dispatch)
   │  checkout do estado persistido → pip install → pytest
   │
   ├─ python -m src.ingestao --novo-lote   ingestão: publica o próximo lote, data_version = hash do conteúdo
@@ -303,7 +303,7 @@ Um lote novo muda o treino. Por isso, todo ciclo refaz a votação de atributos,
 
 Existe um único workflow, `.github/workflows/pipeline_mlops.yml`:
 
-- **Gatilhos:** `schedule` (`cron: "0 9 * * 1"`, toda segunda às 09:00 UTC) e `workflow_dispatch`, com o input `novo_lote` para depuração manual.
+- **Gatilho:** `workflow_dispatch` (execução manual em Actions → pipeline-mlops → Run workflow), com o input `novo_lote` que publica o próximo lote antes do ciclo.
 - **Passos:** checkout, Python 3.12, `pip install`, cache da fonte UCI, `pytest`, `python -m src.pipeline [--novo-lote]`, resumo no *job summary*, `upload-artifact` das evidências e persistência no repositório.
 - **Parada em falha:** cada passo para o job se falhar. O executor retorna código 1 no primeiro notebook com erro.
 - **Concorrência:** um grupo `concurrency` impede dois ciclos simultâneos.
