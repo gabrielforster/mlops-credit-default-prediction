@@ -2,6 +2,8 @@
 
 Trabalho Avaliativo N3 · Análise Preditiva.
 
+> **Projeto final (Projeto N3 · Aprendizagem de Máquina, turma 8NA):** está na branch [`projeto-final`](https://github.com/gabrielforster/mlops-credit-default-prediction/tree/projeto-final). Ela parte deste pipeline e acrescenta a demonstração de uso (`src/demo.py`), a avaliação final com análise de erros (`notebooks/06_avaliacao_final.ipynb`) e a apresentação (`reports/apresentacao_projeto_final.pdf`). O resumo, as instruções e os resultados estão no README daquela branch.
+
 Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, agendado semanalmente, roda um **ciclo** completo a cada novo lote de dados:
 
 1. validar os dados;
@@ -412,6 +414,8 @@ O ciclo 3 (`ciclo_gha_43986932580_1`) rodou no GitHub Actions, com o `lote_003` 
 | Execução agendada | `evidencias/github_actions/`: logs dos runs do workflow |
 | Histórico MLflow | `mlruns/` (store completo) e `evidencias/mlflow/runs.md` / `runs.csv`, gerados por `python -m src.exportar_mlflow` |
 | Evidências por ciclo | `reports/evidencias/<cycle_id>/` e `reports/evidencias/comparacao_ciclos.md` |
+
+Os entregáveis do projeto final (Aprendizagem de Máquina) ficam na branch [`projeto-final`](https://github.com/gabrielforster/mlops-credit-default-prediction/tree/projeto-final).
 
 O índice completo, ligado ao checklist do enunciado, está em `evidencias/README.md`.
 
