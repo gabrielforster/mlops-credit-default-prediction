@@ -15,3 +15,6 @@ reports/ciclo_atual.json
 
 # Segredos
 .env
+
+# Pasta de entrega: copia montada por scripts/montar_entrega.sh a partir do repositorio
+entrega/
