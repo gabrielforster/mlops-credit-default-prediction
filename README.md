@@ -1,511 +1,323 @@
-# Previsão de Inadimplência em Cartão de Crédito · Pipeline MLOps
+# Predição de Inadimplência em Cartão de Crédito
 
-Trabalho Avaliativo N3 · Análise Preditiva, e Projeto N3 (projeto final de Aprendizagem de Máquina, turma 8NA). O resumo do projeto final está logo abaixo, em [Projeto final: resumo](#projeto-final-resumo).
+**Projeto N3 · projeto final de Aprendizagem de Máquina · turma 8NA · Católica de Santa Catarina**
 
-Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, agendado semanalmente, roda um **ciclo** completo a cada novo lote de dados:
+Uma solução de aprendizagem de máquina que estima, para cada cliente de cartão de crédito, o risco de ele **deixar de pagar a fatura do mês seguinte**. O projeto cobre todo o caminho: preparação dos dados, modelagem, avaliação e uma demonstração em que uma entrada nova produz um resultado compreensível.
 
-1. validar os dados;
-2. eleger atributos por votação de três métodos;
-3. treinar dois algoritmos sob o mesmo protocolo e escolher o vencedor;
-4. comparar o vencedor com o modelo em produção;
-5. promover o vencedor apenas se ele for melhor pela regra configurada;
-6. gerar previsões;
-7. registrar tudo no MLflow.
+| | |
+|---|---|
+| Apresentação | [`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) |
+| Demonstração | [`src/demo.py`](src/demo.py), com instruções em [Demonstração de uso](#7-demonstração-de-uso) |
+| Avaliação completa | [`notebooks/06_avaliacao_final.ipynb`](notebooks/06_avaliacao_final.ipynb) |
+| Pipeline de treino | [`docs/pipeline_mlops.md`](docs/pipeline_mlops.md) |
 
-## Projeto final: resumo
+**Integrantes:** Andre Gustavo Specht · Arthur Vinicius Hassuma · Gabriel F. Rocha · Nicolas Wajima · Pablo Arman Schuller · Victor da Rocha
 
-**Objetivo.** Prever se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte, a partir do perfil e dos últimos seis meses de fatura e pagamento. É uma classificação binária supervisionada, com 22% de inadimplentes.
+## Sumário
 
-**Quem usaria.**
-- Equipe de cobrança: priorizar o contato preventivo.
-- Gestão de crédito: revisar limites antes de aumentar a exposição.
-- Analista de risco: entender a pontuação de um cliente.
+1. [Problema e objetivo](#1-problema-e-objetivo)
+2. [Dados](#2-dados)
+3. [Preparação dos dados](#3-preparação-dos-dados)
+4. [Modelagem](#4-modelagem)
+5. [Avaliação e resultados](#5-avaliação-e-resultados)
+6. [Erros e limitações](#6-erros-e-limitações)
+7. [Demonstração de uso](#7-demonstração-de-uso)
+8. [Apresentação](#8-apresentação)
+9. [Estrutura do repositório](#9-estrutura-do-repositório)
+10. [Reprodutibilidade e testes](#10-reprodutibilidade-e-testes)
+11. [Equipe e contribuições](#11-equipe-e-contribuições)
+12. [Considerações finais](#12-considerações-finais)
+13. [Referências](#13-referências)
 
-**Dados.** [Default of Credit Card Clients](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients) (UCI, id 350): 30.000 clientes de um banco de Taiwan, 2005 (detalhes em [Dataset](#dataset)).
+## 1. Problema e objetivo
 
-**Como executar.**
+Inadimplência é perda direta para um banco. Saber com antecedência quem tende a não pagar permite agir antes do atraso, em vez de cobrar depois.
 
-```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+**Objetivo.** A partir do perfil do cliente e dos seus últimos seis meses de fatura e pagamento, prever se ele ficará inadimplente no mês seguinte. É uma **classificação binária supervisionada** com classes desbalanceadas: 22% de inadimplentes.
 
-# Demonstração: um cliente novo gera pontuação, decisão e explicação
-python -m src.demo --id 11                        # cliente do arquivo de inferência (nunca visto)
-python -m src.demo --modelo-json > cliente.json   # gera um cliente de exemplo para editar
-python -m src.demo --arquivo cliente.json
+**Quem poderia usar:**
+- **Equipe de cobrança:** priorizar o contato preventivo com os clientes de maior risco.
+- **Gestão de crédito:** revisar limites antes de aumentar a exposição.
+- **Analista de risco:** entender por que um cliente recebeu aquela pontuação.
 
-# Avaliação final: teste, alternativas simples, limiar, erros e limitações
-jupyter nbconvert --to notebook --execute --inplace notebooks/06_avaliacao_final.ipynb
+O modelo apoia a decisão, não a substitui. A pontuação ordena os clientes por risco, e são pessoas que decidem a ação.
 
-# Ciclo completo (ETL, votação, competição, promoção, previsões)
-python -m src.pipeline
-```
+## 2. Dados
 
-O modelo vigente e os lotes de dados estão versionados. A demonstração e o notebook 06 rodam num clone novo, sem precisar treinar.
+**[Default of Credit Card Clients](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients)**, UCI Machine Learning Repository, id 350 (Yeh & Lien, 2009). Licença CC BY 4.0, DOI [10.24432/C55S3H](https://doi.org/10.24432/C55S3H).
 
-**Principais resultados**, no teste com 5.322 clientes que o modelo nunca viu (`notebooks/06_avaliacao_final.ipynb`):
+- **30.000 clientes** de um banco de Taiwan, de abril a setembro de 2005. Valores em dólar taiwanês (NT$).
+- **23 atributos:**
+  - limite de crédito (`LIMIT_BAL`);
+  - sexo, escolaridade, estado civil e idade;
+  - para cada mês, o status de pagamento (`PAY_0`, `PAY_2`..`PAY_6`: -1 em dia, n = meses de atraso), o valor da fatura (`BILL_AMT1..6`) e o valor pago (`PAY_AMT1..6`).
+- **Alvo:** `default payment next month` (1 = inadimplente). 22,1% são inadimplentes.
+- **Qualidade:**
+  - não há valores ausentes nem IDs duplicados;
+  - há códigos fora do dicionário: `EDUCATION` 0/5/6, `MARRIAGE` 0, e `PAY_x` = -2 e 0, que são frequentes mas não estão documentados;
+  - de 8% a 10% de outliers nas colunas de fatura e pagamento.
+
+![Classes, inadimplência por status de pagamento e por limite](reports/figuras/01_dados.png)
+
+**O atraso recente é o sinal mais forte.** Quem atrasou dois meses em setembro tem 69% de inadimplência, contra 13% a 17% de quem não estava atrasado. Quanto menor o limite, maior a inadimplência.
+
+Para a demonstração, os dados foram divididos em três lotes de treino (27.000 clientes) e um conjunto de **3.000 clientes sem rótulo** (`data/raw/inferencia/novos_clientes.csv`). Esses 3.000 nunca participam do treino.
+
+## 3. Preparação dos dados
+
+| Tratamento | Justificativa |
+|---|---|
+| Códigos não documentados (`EDUCATION` 0/5/6, `MARRIAGE` 0) → "outros" | São 399 linhas sem significado no dicionário. Agrupar evita descartar clientes sem inventar uma categoria |
+| `PAY_x` = -2 e 0 mantidos como "sem consumo" e "crédito rotativo" | Aparecem em milhares de linhas e têm taxa de inadimplência própria. Tratá-los como erro apagaria sinal real |
+| Outliers mantidos | São valores reais de clientes de alto limite, e não erros de digitação. Os modelos usados são robustos a eles |
+| Atributos derivados: `UTILIZACAO_ATUAL`, `UTILIZACAO_MEDIA`, `RAZAO_PAGAMENTO`, `MESES_EM_ATRASO`, `ATRASO_MAXIMO`, `TENDENCIA_FATURA` | Resumem seis meses de comportamento em sinais que um analista reconheceria. Cada um usa só a própria linha, então não há vazamento |
+| Partição treino / validação / teste (60 / 20 / 20) por hash do ID | Cada cliente cai sempre na mesma partição, mesmo quando chegam dados novos. O teste nunca contamina o treino |
+| Imputação, padronização e one-hot dentro de um `Pipeline`, ajustados só no treino | Evita vazamento e garante que a previsão aplique exatamente a transformação do treino |
+
+O código está em `src/preprocessamento.py`, e a exploração detalhada no notebook `01_etl.ipynb`.
+
+## 4. Modelagem
+
+**Seleção de atributos por votação.** Três métodos independentes escolhem 10 atributos cada:
+- teste estatístico (`SelectKBest` com ANOVA F);
+- importância da Random Forest;
+- eliminação recursiva (RFE) com regressão logística.
+
+São eleitos os atributos com pelo menos 2 votos. Resultado: `LIMIT_BAL`, `PAY_0`, `PAY_2`, `PAY_3`, `PAY_4`, `PAY_AMT1`, `UTILIZACAO_MEDIA`, `MESES_EM_ATRASO` e `ATRASO_MAXIMO`. Nenhum atributo demográfico foi eleito, então o modelo não usa sexo, idade, escolaridade nem estado civil.
+
+**Competição entre dois algoritmos**, com os mesmos atributos, os mesmos dados e a mesma métrica, medida na validação:
+
+| Modelo | Hiperparâmetros | F1 | AUC-ROC |
+|---|---|---|---|
+| A · Regressão logística | `C=1.0`, `class_weight=balanced` | 0,529 | 0,753 |
+| **B · Random Forest** | 150 árvores, `max_depth=8`, `min_samples_leaf=20`, `class_weight=balanced` | **0,544** | **0,783** |
+
+A **Random Forest venceu**: ela capta interações e não linearidades, como o efeito do atraso, que muda de forma abrupta. A profundidade máxima e o mínimo de clientes por folha limitam o sobreajuste. Com `class_weight=balanced`, a classe rara recebe mais peso no treino.
+
+A métrica principal é o **F1** da classe inadimplente. Responder sempre "adimplente" daria 78% de acurácia e não encontraria ninguém, então a acurácia não serve aqui.
+
+O treino roda num pipeline automatizado que, a cada novo lote de dados, repete a seleção e a competição e só troca o modelo em uso se o novo for melhor. Detalhes em [`docs/pipeline_mlops.md`](docs/pipeline_mlops.md).
+
+## 5. Avaliação e resultados
+
+Protocolo:
+- o limiar e as escolhas de modelo são feitos na **validação**;
+- o **teste** (5.322 clientes que o modelo nunca viu, 21,3% inadimplentes) é usado só para a avaliação final;
+- o modelo é comparado com duas alternativas simples.
 
 | | Acurácia | Precisão | Revocação | F1 | AUC-ROC |
 |---|---|---|---|---|---|
 | Sempre "adimplente" | 0,787 | 0 | 0 | 0 | |
 | Regra `PAY_0 ≥ 1` (atrasou no último mês) | 0,779 | 0,483 | 0,522 | 0,502 | |
-| **Random Forest vigente** (limiar 0,5) | 0,780 | 0,486 | **0,621** | **0,546** | **0,788** |
+| **Random Forest** (limiar 0,5) | 0,780 | 0,486 | **0,621** | **0,546** | **0,788** |
 
-- **Melhor que a regra simples.** Com a mesma precisão da regra, o modelo encontra 704 inadimplentes, contra 591.
-- **Ordena bem o risco.** Nos 10% de maior pontuação, 67,7% ficam inadimplentes, 3,2 vezes a média.
-- **Atributos.** O atraso no último mês (`PAY_0`) é o mais importante, seguido do uso do limite e do valor pago. Nenhum atributo demográfico foi eleito.
-- **Principal erro.** 96% dos inadimplentes não detectados não tinham atraso no último mês: nada no histórico indicava risco.
-- **Limitações.**
-  - Dados de 2005, de um único banco.
-  - Nenhuma informação de renda ou de outras dívidas.
-  - A pontuação não é uma probabilidade calibrada.
-  - O limiar ideal depende de custos que o dataset não informa.
+- **Melhor que a regra simples.** Com a mesma precisão da regra, o modelo encontra **704 inadimplentes, contra 591** da regra. Além disso, gera uma pontuação que permite escolher o ponto de operação.
+- **Ordena bem o risco.** Nos 10% de maior pontuação, **67,7%** ficam inadimplentes, 3,2 vezes a média. Nos 10% de menor pontuação, só 3,9%.
+- **O que mais pesa.** Primeiro o atraso no último mês (`PAY_0`), depois o uso do limite (`UTILIZACAO_MEDIA`), o valor pago (`PAY_AMT1`), o maior atraso do semestre e o limite de crédito.
 
-**Apresentação.** `reports/apresentacao_projeto_final.pdf` (fonte: `reports/apresentacao_projeto_final.html`; figuras em `reports/figuras/`, geradas pelo notebook 06).
+![Curvas ROC e precisão × revocação no teste](reports/figuras/02_roc_pr.png)
 
-## Sumário
-
-- [Projeto final: resumo](#projeto-final-resumo)
-- [Dataset](#dataset)
-- [Arquitetura](#arquitetura)
-- [Instalação local](#instalação-local)
-- [Execução local](#execução-local)
-- [MLflow](#mlflow)
-- [Testes](#testes)
-- [Notebooks](#notebooks)
-- [Configuração](#configuração)
-- [Protocolo de avaliação](#protocolo-de-avaliação)
-- [Votação de atributos](#votação-de-atributos)
-- [Competição entre modelos](#competição-entre-modelos)
-- [Promoção de modelo](#promoção-de-modelo)
-- [Versionamento de dados e novos lotes](#versionamento-de-dados-e-novos-lotes)
-- [GitHub Actions e persistência](#github-actions-e-persistência)
-- [Monitoramento de drift (Critério 10)](#monitoramento-de-drift-critério-10)
-- [Demonstração em três ciclos](#demonstração-em-três-ciclos)
-- [Entregáveis](#entregáveis)
-- [Reprodutibilidade](#reprodutibilidade)
-- [Limitações conhecidas](#limitações-conhecidas)
-
-## Dataset
-
-**Default of Credit Card Clients**, UCI Machine Learning Repository, id 350.
-
-- Fonte: <https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients>
-- Licença: Creative Commons Attribution 4.0 International (CC BY 4.0), conforme a página do dataset na UCI.
-- DOI: 10.24432/C55S3H
-- Citação: Yeh, I. C., & Lien, C. H. (2009). *The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients.* Expert Systems with Applications, 36(2), 2473–2480.
-- Contexto: clientes de um banco de Taiwan, abril a setembro de 2005. Valores em dólar taiwanês (NT$).
-
-Números abaixo medidos no arquivo original (`default of credit card clients.xls`, SHA-256 `30c6be3a…`):
-
-| Item | Valor |
+| Matriz de confusão (teste, limiar 0,5) | Métricas por limiar (validação) |
 |---|---|
-| Observações | 30.000 |
-| Colunas | 25 (ID, 23 atributos, 1 alvo), todas inteiras |
-| Alvo | `default payment next month`, renomeado para `default.payment.next.month` |
-| Classe positiva (inadimplente) | 22,12% (desbalanceado) |
-| Valores ausentes | 0 |
-| IDs duplicados | 0 |
-| Linhas idênticas ignorando o ID | 35. São clientes distintos com o mesmo perfil e foram mantidas |
-| Códigos fora do dicionário | `EDUCATION` ∈ {0, 5, 6} (345 linhas) e `MARRIAGE` = 0 (54 linhas). Recodificados para "outros" |
-| `PAY_x` = -2 e 0 | Não documentados, mas frequentes. Aceitos como "sem consumo" e "crédito rotativo" |
-| Outliers (IQR) | De 8% a 10% nas colunas de fatura e pagamento. São valores reais e foram mantidos |
+| ![Matriz de confusão](reports/figuras/04_matriz_confusao.png) | ![Precisão, revocação e F1 por limiar](reports/figuras/03_limiar.png) |
 
-Principais atributos:
+**O limiar é uma decisão de negócio.** Na validação, o F1 é praticamente o mesmo entre 0,5 e 0,6. O que muda é a troca entre precisão e revocação:
+- com limiar 0,3, o modelo encontra 89% dos inadimplentes, mas sinaliza 65% da base;
+- com limiar 0,7, acerta 61% dos sinalizados, mas encontra só 44% dos inadimplentes.
 
-| Variável | Significado |
+| Ordenação e calibração (teste) | Importância por permutação (teste) |
 |---|---|
-| `LIMIT_BAL` | Limite de crédito (titular + família) |
-| `SEX`, `EDUCATION`, `MARRIAGE`, `AGE` | Dados demográficos |
-| `PAY_0`, `PAY_2`..`PAY_6` | Status de pagamento de set/2005 a abr/2005. -1 = em dia, 1..9 = meses de atraso. A fonte não tem `PAY_1` |
-| `BILL_AMT1..6` | Valor da fatura de set/2005 a abr/2005. Negativo = saldo credor |
-| `PAY_AMT1..6` | Valor pago de set/2005 a abr/2005 |
+| ![Pontuação e taxa real por decil](reports/figuras/05_calibracao.png) | ![Importância por permutação](reports/figuras/06_importancia.png) |
 
-Atributos derivados no ETL. Cada um usa apenas a própria linha, então não há vazamento:
+Todos os números e figuras vêm de [`notebooks/06_avaliacao_final.ipynb`](notebooks/06_avaliacao_final.ipynb). O resumo em JSON está em `reports/evidencias/avaliacao_final.json`.
 
-| Atributo | Definição |
-|---|---|
-| `UTILIZACAO_ATUAL` | `BILL_AMT1 / LIMIT_BAL` |
-| `UTILIZACAO_MEDIA` | média(`BILL_AMT1..6`) / `LIMIT_BAL` |
-| `RAZAO_PAGAMENTO` | Σ`PAY_AMT` / Σ max(`BILL_AMT`, 0), limitado a [0, 5] |
-| `MESES_EM_ATRASO` | nº de meses com `PAY_x` ≥ 1 |
-| `ATRASO_MAXIMO` | max(`PAY_x`) |
-| `TENDENCIA_FATURA` | (`BILL_AMT1` − `BILL_AMT6`) / `LIMIT_BAL` |
+## 6. Erros e limitações
 
-**Limitações dos dados.**
-- Os dados vêm de um único banco, em um único país, em 2005, ou seja, de um período e de uma cultura de crédito específicos.
-- A fonte não traz renda nem histórico além de 6 meses.
-- `SEX`, `AGE` e `MARRIAGE` são variáveis sensíveis do ponto de vista de equidade. Um uso real exigiria uma análise de viés.
-- Os "lotes" de chegada são uma simulação: a fonte é estática e foi particionada.
+**Os dois erros não custam o mesmo.**
 
-## Arquitetura
+- **Falsos negativos (429): o erro caro**, um inadimplente tratado como bom pagador. **96%** deles não tinham atraso no último mês: são clientes "com cara de bom pagador", com pontuação mediana de 0,37. Com estes atributos, só dá para alcançá-los baixando o limiar, o que multiplica os falsos positivos.
+- **Falsos positivos (744): o erro mais barato.** Em geral são clientes que já tinham atrasado (atraso máximo mediano de 2 meses) e pagaram no mês seguinte. O custo é uma ação preventiva desnecessária.
+- **Erros por grupo.**
+  - A revocação é parecida entre os sexos: 63% e 61%.
+  - A taxa de falso positivo de quem tem ensino médio é maior: 23,7%, contra 16,2% na pós-graduação.
+  - Antes de qualquer uso real, isso precisa ser monitorado.
 
-```text
-GitHub Actions: .github/workflows/pipeline_mlops.yml  (schedule semanal + workflow_dispatch)
-  │  checkout do estado persistido → pip install → pytest
-  │
-  ├─ python -m src.ingestao --novo-lote   ingestão: publica o próximo lote, data_version = hash do conteúdo
-  │
-  └─ python -m src.pipeline               executa os notebooks em sequência e para no primeiro erro
-       ├─ 01_etl.ipynb               validação → limpeza → atributos derivados → partição
-       │                             → abre o ciclo (cycle_id, run pai no MLflow) → drift (PSI)
-       ├─ 02_votacao_features.ipynb  SelectKBest + importância RF + RFE → votação (≥ 2 de 3)
-       ├─ 03_treino_competicao.ipynb modelo A (LogisticRegression) vs modelo B (RandomForest)
-       ├─ 04_selecao_promocao.ipynb  vencedor vs modelo vigente → promoção → versão + manifesto
-       └─ 05_previsoes.ipynb         previsões com o modelo vigente + prova de reprodutibilidade
-  │
-  ├─ upload-artifact: pacote do run (mlruns, models, reports, notebooks executados)
-  └─ git commit + push: lotes, mlruns/, models/, reports/   (só se tudo acima passou)
-```
+**Limitações.**
+- Os dados são de 2005, de um único banco de Taiwan. O modelo não se transfere para outro contexto sem novo treino.
+- Há só seis meses de histórico e nenhuma informação de renda, emprego ou outras dívidas. Isso limita o teto do F1, em torno de 0,54.
+- A pontuação **não é uma probabilidade calibrada**: o peso `balanced` a desloca para cima. Ela serve para ordenar clientes, não para ler como "X% de chance".
+- O dataset não informa o custo de cada erro. Por isso o limiar de 0,5 é técnico, não de negócio.
+- Os códigos não documentados foram interpretados. Outra leitura poderia mudar o resultado.
 
-`cycle_id` e `data_version` nascem no notebook 01 e ficam em `reports/ciclo_atual.json`. Cada notebook seguinte carrega esse arquivo com `load_cycle` e confere que os artefatos intermediários (dataset processado, atributos eleitos, competição, drift) pertencem ao mesmo ciclo. Um artefato velho interrompe o pipeline em vez de ser usado em silêncio.
+## 7. Demonstração de uso
 
-Os notebooks orquestram e documentam. A lógica reutilizável fica em `src/`:
+O script `src/demo.py` avalia um cliente com o modelo em uso e explica o resultado em linguagem simples. O modelo treinado já está versionado no repositório, então **não é preciso treinar nada** para rodar a demonstração.
 
-| Módulo | Responsabilidade |
-|---|---|
-| `src/utils.py` | Raiz do projeto, configuração, hashing, contexto do ciclo, MLflow (store portátil, run pai e runs filhos) |
-| `src/ingestao.py` | Download verificado, partição em lotes, publicação de lote novo, `data_version` |
-| `src/preprocessamento.py` | Validação por esquema, limpeza, outliers, atributos derivados, partição, `ColumnTransformer` |
-| `src/features.py` | Os três seletores e a votação |
-| `src/modelagem.py` | Registro de algoritmos, treino, métricas, escolha do vencedor, log no MLflow |
-| `src/promocao.py` | Regra de promoção, versões imutáveis de modelo, manifesto |
-| `src/drift.py` | PSI por atributo, status de drift, efeito na promoção |
-| `src/pipeline.py` | Executor dos notebooks, resumo por ciclo e comparação entre ciclos |
+### Instalação
 
-## Instalação local
-
-Requer Python 3.12.
+Requer **Python 3.12**, a mesma versão do CI.
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate          # Linux / macOS
-# .venv\Scripts\activate           # Windows (PowerShell ou cmd)
-pip install -r requirements.txt
-```
-
-## Execução local
-
-```bash
-# Ciclo completo com os lotes já publicados (notebooks 01 a 05)
-python -m src.pipeline
-
-# Simula a chegada de dados novos: publica o próximo lote e roda o ciclo
-python -m src.pipeline --novo-lote
-
-# Regenera reports/evidencias/comparacao_ciclos.md
-python -m src.pipeline --comparar
-```
-
-Na primeira execução, o notebook 01 baixa a fonte da UCI e confere o SHA-256. Cada ciclo grava:
-
-| Saída | Onde |
-|---|---|
-| Notebooks executados | `notebooks/` (sobrescritos) e `reports/evidencias/<cycle_id>/notebooks/` (cópia do ciclo) |
-| Evidências por etapa | `reports/evidencias/<cycle_id>/01_etl.json`, `01_drift.json`, `02_votacao_features.csv/.json`, `03_competicao.json`, `04_promocao.json`, `05_previsoes.json` e `resumo_ciclo.json` |
-| Comparação entre ciclos | `reports/evidencias/comparacao_ciclos.md` |
-| Modelo vigente | `models/modelo_vigente.json`, `models/versoes/<model_id>/` e `models/historico_promocoes.jsonl` |
-| Previsões | `reports/previsoes/previsoes_<cycle_id>.csv` |
-| Rastreamento | `mlruns/mlflow.db` e `mlruns/artifacts/` |
-
-Se qualquer notebook falhar, por erro de célula, timeout ou queda do kernel, o executor para e retorna código 1. Ele também:
-
-- grava o notebook com a saída do erro;
-- marca o run do ciclo no MLflow com `pipeline_status = falhou_em_<notebook>`;
-- **restaura `models/modelo_vigente.json`** ao estado de antes do ciclo. Assim, uma promoção feita no notebook 04 não vale se o notebook 05 falhar. A versão gravada em `models/versoes/` permanece, mas deixa de ser a vigente.
-
-Esse caminho foi testado forçando uma promoção e uma falha no notebook 05.
-
-## MLflow
-
-```bash
-python -m src.pipeline --mlflow-ui      # http://127.0.0.1:5000
-```
-
-O comando abre a interface sobre `sqlite:///mlruns/mlflow.db`. Antes, ele ajusta os caminhos dos artefatos para o diretório atual (detalhes em [persistência](#github-actions-e-persistência)). Equivale a `mlflow ui --backend-store-uri sqlite:///mlruns/mlflow.db` com os caminhos já corrigidos.
-
-Estrutura no experimento `credit-default-prediction`:
-
-```text
-run pai  <cycle_id>                 tags: cycle_id, data_version, lotes, pipeline_status, promotion_decision, active_model_id
-  ├─ etl                            tamanhos, taxa de inadimplência por partição, relatório de validação
-  ├─ drift                          PSI por atributo, status, limiares
-  ├─ votacao_features               métodos, votos mínimos, tabela completa de votos, atributos eleitos
-  ├─ modelo_A_logistic_regression   hiperparâmetros, random_state, atributos, val_* (F1, precisão, recall,
-  ├─ modelo_B_random_forest         acurácia, ROC-AUC, tn/fp/fn/tp), tempo de treino, artefato do modelo
-  ├─ promocao                       métrica do desafiante e do vigente, limiar aplicado, decisão, test_* do vigente
-  └─ previsoes                      modelo usado, nº de previsões, CSV de previsões
-```
-
-Todo run filho tem as tags `cycle_id`, `data_version` e `stage`. Para comparar o modelo A com o B ou um ciclo com outro, filtre por `tags.stage = "treino"` e ordene por `metrics.val_f1`.
-
-## Testes
-
-```bash
-pytest
-```
-
-São 41 testes, sem rede, que rodam em cerca de 2 segundos. 38 usam dados sintéticos e 3 exercitam a demonstração com o modelo versionado. Cobrem:
-- a validação de dados: estrutura, alvo, nulos, códigos não documentados e limite de linhas inválidas;
-- os atributos derivados e a estabilidade da partição;
-- o ajuste do pré-processador só no treino;
-- a votação de atributos: regra configurável, quantidade mínima, desempate e registro de cada voto;
-- a competição: direção da métrica, desempate e mesmos atributos para A e B;
-- a regra de promoção: inicial, margem, limite exato, desligada, drift e minimização;
-- a geração do manifesto: campos, não sobrescrita e detecção de artefato adulterado;
-- o PSI: contínuo, discreto e referência pelo manifesto;
-- a `data_version`;
-- a demonstração: faixas de risco, explicação por atributo e recusa de entradas inválidas.
-
-## Notebooks
-
-A ordem de execução é obrigatória: cada um consome as saídas do anterior no mesmo ciclo.
-
-| Notebook | Entrada | Saída |
-|---|---|---|
-| `01_etl.ipynb` | Lotes publicados | Dataset processado, `cycle_id`, `data_version`, drift |
-| `02_votacao_features.ipynb` | Partição treino | Atributos eleitos e tabela de votos |
-| `03_treino_competicao.ipynb` | Atributos eleitos, treino e validação | Dois modelos no MLflow, vencedor |
-| `04_selecao_promocao.ipynb` | Vencedor, modelo vigente, drift | Decisão, nova versão (se promovido), avaliação final no teste |
-| `05_previsoes.ipynb` | Modelo vigente, `novos_clientes.csv` | Previsões e prova de reprodutibilidade |
-| `06_avaliacao_final.ipynb` | Lotes versionados, modelo vigente | Avaliação final fora do ciclo: comparação com alternativas simples, ROC/PR, limiar, calibração, importância, análise de erros e limitações; figuras em `reports/figuras/` |
-
-Para explorar de forma interativa, rode `jupyter lab` e execute os notebooks na ordem. Cada um explica objetivo, metodologia, entradas, saídas, decisões, resultados e conclusões.
-
-## Configuração
-
-Todos os valores ajustáveis ficam em `config/config.yaml`, e o código não repete nenhum deles:
-
-| Seção | Conteúdo |
-|---|---|
-| `project` | Nome do projeto e do experimento MLflow |
-| `data` | Fonte (URL, SHA-256), alvo, coluna de ID, `random_state: 42`, frações dos lotes, limite de linhas inválidas |
-| `evaluation` | `primary_metric: f1`, `direction: maximize`, `test_size: 0.2`, `validation_size: 0.2`, métricas secundárias |
-| `features` | `voting.minimum_votes: 2`, `voting.minimum_features: 5`, `k_best`, `rfe_features`, `random_forest_features` (10 cada), parâmetros dos estimadores internos dos seletores |
-| `models` | Modelo A e modelo B: `enabled`, `label` e hiperparâmetros. A ordem define o desempate |
-| `promotion` | `enabled: true`, `minimum_improvement: 0.01` |
-| `paths` | Todos os caminhos, relativos à raiz |
-| `drift` | `bins: 10`, `thresholds.moderate: 0.1`, `thresholds.severe: 0.25`, `relax_promotion_on_severe: true` |
-
-Existe um único arquivo de configuração, em `config/config.yaml`. O esqueleto do enunciado também lista um `config.yaml` na raiz. Ele foi omitido de propósito, porque duas cópias divergiriam com o tempo.
-
-## Protocolo de avaliação
-
-Definido no notebook 01, antes de qualquer treino.
-
-- **Partição por hash do ID.** `sha256("42:<ID>")` mapeia cada cliente para [0, 1]: abaixo de 0,2 vai para **teste**, entre 0,2 e 0,4 para **validação**, acima disso para **treino** (60/20/20).
-- **Motivo.** Um `train_test_split` refeito a cada ciclo moveria clientes do teste antigo para o treino novo. Com o hash, cada cliente fica sempre na mesma partição. O teste continua isolado entre ciclos e o modelo vigente nunca treinou com a validação de um ciclo posterior.
-- **Uso.**
-  - Treino: ajusta o pré-processamento, os seletores e os modelos.
-  - Validação: decide a competição e a promoção.
-  - Teste: só é usado depois da decisão, para a avaliação final do modelo que ficou em produção (`active_test_*` no MLflow).
-- **Sem vazamento.** O ETL aplica apenas transformações linha a linha. Imputação, one-hot e padronização ficam em um `ColumnTransformer` dentro do `Pipeline` de cada modelo, ajustado só no treino.
-- **Métrica primária: F1, a ser maximizado.** Com 22% de positivos, um modelo que sempre prevê "adimplente" teria 78% de acurácia e F1 = 0. O F1 equilibra precisão (não negar crédito a bons pagadores) e recall (não deixar passar inadimplentes). Métricas secundárias: precisão, recall, acurácia, ROC-AUC e matriz de confusão.
-
-## Votação de atributos
-
-Os três métodos rodam no mesmo ciclo, sobre o treino imputado e padronizado:
-
-| Método | Critério | Seleciona |
-|---|---|---|
-| 1. `SelectKBest(f_classif)` | Estatística F da ANOVA entre o atributo e a classe | 10 maiores |
-| 2. Importância de `RandomForestClassifier` | Redução média de impureza de Gini | 10 maiores |
-| 3. `RFE(LogisticRegression)` | Eliminação recursiva pelo menor coeficiente absoluto | 10 restantes |
-
-**Regra**, fixada em `config/config.yaml` antes de qualquer execução:
-
-- um atributo é eleito com pelo menos `features.voting.minimum_votes` votos (padrão 2 de 3);
-- **quantidade mínima:** o conjunto tem pelo menos `features.voting.minimum_features` atributos (padrão 5). Se os votos elegerem menos, o conjunto é completado pelos mais votados (`elected_by = "minimo"`);
-- **desempate:** com o mesmo número de votos, vence o menor rank médio entre os três métodos (`mean_rank`); depois, a ordem original das colunas.
-
-Cada ciclo grava `reports/evidencias/<cycle_id>/02_votacao_features.csv`, com uma linha por (método, atributo) e as colunas `cycle_id`, `data_version`, `method`, `feature`, `score`, `rank`, `vote`, `votes`, `mean_rank`, `final_selection` e `elected_by`. A mesma tabela vai para o MLflow. A votação usa as colunas originais, e não as colunas após o one-hot, para que o conjunto eleito seja legível e o mesmo nos dois modelos.
-
-## Competição entre modelos
-
-| | Modelo A | Modelo B |
-|---|---|---|
-| Algoritmo | `LogisticRegression` | `RandomForestClassifier` |
-| Hiperparâmetros | `C=1.0`, `class_weight=balanced`, `max_iter=2000` | `n_estimators=150`, `max_depth=8`, `min_samples_leaf=20`, `class_weight=balanced` |
-| Atributos | Os eleitos | Os mesmos eleitos |
-| Treino / avaliação | Partição treino / partição validação | Idem |
-| Semente | 42 | 42 |
-
-Cada modelo é um `Pipeline(ColumnTransformer, estimador)`. O pré-processador é ajustado no treino e serializado junto com o modelo. O notebook 03 aborta se os dois modelos não tiverem exatamente os mesmos atributos e o mesmo protocolo. O vencedor é o de maior F1 na validação. Em empate, vence o primeiro em `config.models`.
-
-## Promoção de modelo
-
-```text
-promover  ⇔  F1_desafiante(validação do ciclo) ≥ F1_vigente(validação do ciclo) + promotion.minimum_improvement
-```
-
-- O modelo vigente é **reavaliado na validação do ciclo atual**. Assim os dois são medidos na mesma régua. O F1 antigo do vigente veio de outra validação, menor.
-- **Sem modelo vigente:** o vencedor é promovido como modelo inicial (`promovido_inicial`).
-- **Drift severo** nos atributos do vigente: a margem cai para 0 (ver [drift](#monitoramento-de-drift-critério-10)).
-- **`promotion.enabled: false`:** o vigente é sempre mantido.
-- **Promovido:** o pacote (pipeline + atributos + metadados) vai para `models/versoes/<model_id>/modelo.joblib` com um `manifesto.json`, e `models/modelo_vigente.json` passa a apontar para ele. Um diretório de versão nunca é sobrescrito: gravar um `model_id` existente gera erro. O SHA-256 do artefato fica no manifesto e é conferido em toda carga.
-- **Mantido:** o manifesto não muda.
-- **Em todo ciclo:** a decisão e o motivo entram em `models/historico_promocoes.jsonl`, em `04_promocao.json` e no MLflow.
-- **Recuperar uma versão anterior:** todas as versões promovidas continuam em `models/versoes/`. Todo modelo treinado, promovido ou não, continua no MLflow (`model_uri` no manifesto e nos runs de treino).
-
-Exemplo de `models/modelo_vigente.json`: `model_id`, `run_id`, `model_uri`, `cycle_id`, `data_version`, `batches`, `algorithm`, `model_name`, `primary_metric`, `direction`, `metric_value`, `metric_partition`, `test_metrics`, `selected_features`, `hyperparameters`, `random_state`, `promotion_decision`, `decision_reason`, `artifact_path`, `artifact_sha256` e `timestamp`.
-
-## Versionamento de dados e novos lotes
-
-- **Fonte.** O arquivo original da UCI fica em `data/raw/source/`. É baixado uma vez, conferido por SHA-256 e **nunca alterado**. Não vai para o Git: o GitHub Actions o mantém em cache.
-- **Lotes.** A fonte é embaralhada com `random_state` e dividida em `lote_001` (18.000 linhas), `lote_002` (6.000), `lote_003` (3.000) e `data/raw/inferencia/novos_clientes.csv` (3.000 linhas, sem alvo). Esse último arquivo é a base de previsões "nunca vistas".
-- **Lotes publicados.** `data/raw/batches/` contém só os lotes já publicados. Eles vão para o Git e são o estado dos dados.
-- **Novo lote.** `python -m src.pipeline --novo-lote` (ou `python -m src.ingestao --novo-lote`) publica o próximo lote. Quando todos já foram publicados, o ciclo roda com os existentes e registra um aviso.
-- **`data_version`.** `"dv_" + sha256(nome:sha256(conteúdo) de cada lote publicado)[:16]`. Os mesmos lotes sempre geram a mesma versão, e qualquer lote novo ou alterado gera outra.
-- **`cycle_id`.** Localmente, `ciclo_<UTC>_<8 caracteres da data_version>`. No GitHub Actions, `ciclo_gha_<run_id>_<tentativa>`.
-
-Um lote novo muda o treino. Por isso, todo ciclo refaz a votação de atributos, o treino, a competição e a decisão de promoção.
-
-## GitHub Actions e persistência
-
-Existe um único workflow, `.github/workflows/pipeline_mlops.yml`:
-
-- **Gatilhos:** `schedule` com `cron: "0 9 * * 1"` (toda segunda-feira, 09:00 UTC) e `workflow_dispatch` (execução manual em Actions → pipeline-mlops → Run workflow, para testes). O input `novo_lote` publica o próximo lote antes do ciclo. Execuções agendadas sempre tentam publicar o próximo lote. Quando todos já foram publicados, o ciclo roda com os lotes existentes e registra um aviso.
-- **Passos:** checkout, Python 3.12, `pip install`, cache da fonte UCI, `pytest`, `python -m src.pipeline [--novo-lote]`, resumo no *job summary*, `upload-artifact` do pacote do ciclo e persistência no repositório.
-- **Parada em falha:** cada passo para o job se falhar. O executor retorna código 1 no primeiro notebook com erro.
-- **Concorrência:** um grupo `concurrency` impede dois ciclos simultâneos.
-
-**Persistência.** O runner é descartável. Nada de um run anterior existe no disco do próximo. A estratégia é **o próprio repositório como armazenamento de estado**. Ao final de um ciclo bem-sucedido, o workflow faz commit e push de:
-
-| Caminho | Conteúdo |
-|---|---|
-| `data/raw/batches/` | Lotes publicados (definem a `data_version`) |
-| `mlruns/mlflow.db` + `mlruns/artifacts/` | Histórico completo do MLflow e artefatos de modelo |
-| `models/` | Manifesto, versões promovidas e histórico de decisões |
-| `reports/` | Evidências por ciclo, comparação e previsões |
-| `notebooks/` | Notebooks com as saídas do último ciclo |
-
-O próximo run começa com `actions/checkout` e encontra esse estado. Duas escolhas tornam isso seguro:
-
-1. **Promoção atômica.** O passo de persistência só roda se todos os anteriores passaram. Se o notebook 05 falhar depois de uma promoção, o novo manifesto existe só no disco do runner descartado, e o modelo vigente no repositório não muda.
-2. **Caminhos portáveis do MLflow.** O MLflow grava caminhos absolutos de artefato, e o runner clona o repositório em outro diretório. `configure_mlflow` reescreve o prefixo gravado no banco para o diretório atual antes de cada uso. Isso foi verificado movendo um store e recarregando um modelo logado.
-
-Além disso, cada run publica `mlruns/`, `models/`, `reports/` e os notebooks executados como *artifact* baixável do GitHub Actions, inclusive quando falha.
-
-**Localmente** é o mesmo modelo, sem o commit automático. O estado fica em `mlruns/`, `models/` e `reports/`, e você versiona com `git` quando quiser.
-
-Para ativar no GitHub: faça push do repositório e, em *Settings → Actions → General → Workflow permissions*, escolha **Read and write permissions**. O workflow usa o `GITHUB_TOKEN` padrão. Não há segredos no repositório.
-
-## Monitoramento de drift (Critério 10)
-
-**1. Que problema resolve.** Um modelo aprende a relação entre perfil e inadimplência em uma época. Se a população de entrada muda, por exemplo com uma nova política de limite, outro público ou uma crise econômica, os dados deixam de parecer com o treino. O desempenho cai sem que nada no código mude. Esse é o *data drift*, e ele só é percebido se for medido.
-
-**2. Por que importa em crédito.** Concessão de crédito é um domínio clássico de drift. Ciclos econômicos mudam a capacidade de pagamento, e campanhas comerciais mudam o perfil de quem pede crédito. O PSI é o indicador padrão do setor para monitorar a estabilidade de *scorecards*.
-
-**3. Como se integra ao pipeline.**
-
-```text
-lote novo → 01_etl: PSI por atributo (lotes do vigente vs lotes novos)
-          → data/processed/drift.json + 01_drift.json + run "drift" no MLflow
-          → 04_selecao_promocao: drift severo nos atributos do vigente ⇒ margem de promoção = 0
-```
-
-- **Referência:** os lotes com que o modelo vigente foi treinado, registrados no manifesto.
-- **Atual:** os lotes publicados depois.
-- **Faixas:** atributos contínuos usam 10 faixas por quantis da referência; atributos discretos usam um valor por faixa.
-- **Status do ciclo:** o pior status entre os atributos que o modelo vigente consome.
-
-**Decisão.** Com drift severo, o vigente foi treinado em uma população que não existe mais. Exigir que o desafiante supere o vigente por 1 ponto de F1 protegeria um modelo obsoleto. Basta que o desafiante não seja pior.
-
-**4. Limiares** (`drift.thresholds`):
-
-| PSI | Status |
-|---|---|
-| < 0,10 | estável |
-| 0,10 a 0,25 | moderado |
-| ≥ 0,25 | severo |
-
-**5. Evidência de que funciona.**
-- `01_drift.json` e o run `drift` no MLflow de cada ciclo.
-- Os lotes deste projeto são partições aleatórias da mesma fonte, então o resultado esperado e observado é *estável*. Isso mostra que o detector não dispara alarme falso.
-- O notebook 01 traz um **controle positivo**. Ele aplica um deslocamento conhecido a uma cópia da validação: limite 40% menor, um mês a mais de atraso, clientes 8 anos mais velhos. O PSI classifica esses atributos como *severo*, e a mesma amostra sem deslocamento como *estável*. As duas classificações são asserções que param o pipeline se falharem.
-- Testes automatizados cobrem atributos contínuos e discretos, a escolha da referência pelo manifesto e o efeito na regra de promoção.
-
-## Demonstração em três ciclos
-
-Os dois ciclos foram executados localmente, com `python -m src.pipeline` e depois `python -m src.pipeline --novo-lote`. As evidências completas estão em `reports/evidencias/`, e a tabela abaixo resume `reports/evidencias/comparacao_ciclos.md`.
-
-| | Ciclo 1 | Ciclo 2 |
-|---|---|---|
-| `cycle_id` | `ciclo_20261116T223751Z_a2d3d2d2` | `ciclo_20261116T223819Z_2db70707` |
-| `data_version` | `dv_a2d3d2d25ce5c5c8` | `dv_2db70707140b1359` |
-| Lotes | `lote_001` | `lote_001` + `lote_002` |
-| Linhas (treino / validação / teste) | 18.000 (10.851 / 3.613 / 3.536) | 24.000 (14.475 / 4.819 / 4.706) |
-| Drift | sem referência (não havia modelo vigente) | estável (maior PSI: 0,0033 em `AGE`) |
-| Atributos eleitos | 9, incluindo `PAY_4` | 9, `PAY_4` sai e `PAY_6` entra |
-| Modelo A (LogReg) F1 validação | 0,5293 | 0,5295 |
-| Modelo B (RF) F1 validação | 0,5439 | 0,5410 |
-| Vencedor | Modelo B | Modelo B |
-| Vigente reavaliado na validação | - | 0,5403 |
-| Decisão | `promovido_inicial` | `mantido`: 0,5410 < 0,5403 + 0,01 |
-| Modelo vigente | RF do ciclo 1 | RF do ciclo 1 (preservado) |
-| F1 no teste do modelo vigente | 0,5249 | 0,5363 |
-| Previsões (3.000 novos clientes) | reproduzíveis | reproduzíveis |
-
-**O que mudou entre os ciclos.**
-- A chegada do `lote_002` gerou uma nova `data_version` e um novo `cycle_id`.
-- A votação rodou de novo e trocou um atributo.
-- Os dois modelos foram retreinados e comparados de novo.
-- O vencedor do ciclo 2 superou o vigente por apenas 0,0007 de F1, abaixo da margem de 0,01. Por isso a promoção foi **recusada** e o modelo do ciclo 1 continua em produção.
-- O F1 de teste do mesmo modelo mudou de 0,5249 para 0,5363 porque o conjunto de teste cresceu com os clientes do `lote_002`. Os clientes de teste do ciclo 1 continuam todos no teste.
-- O controle positivo de drift do notebook 01 classificou `LIMIT_BAL`, `PAY_0`, `AGE` e `UTILIZACAO_ATUAL` deslocados como severos (PSI de 0,54 a 2,25). Os mesmos atributos sem deslocamento ficaram estáveis (PSI ≤ 0,0035).
-- Os dois ciclos rodaram duas vezes nesta máquina e produziram as mesmas métricas, os mesmos votos e as mesmas decisões até a 4ª casa decimal.
-
-O ciclo 3 (`ciclo_gha_43986932580_1`) rodou no GitHub Actions, com o `lote_003` (27.000 linhas). A votação elegeu 10 atributos (`PAY_4` volta e `PAY_6` fica). O modelo B venceu de novo com F1 0,5343 contra 0,5338 do vigente reavaliado, abaixo da margem de 0,01, então o modelo do ciclo 1 foi **mantido**. O F1 de teste do vigente foi 0,5455. O workflow fez commit do estado (`79d1b2e`), o que comprova a persistência entre runners.
-
-## Entregáveis
-
-| Entregável | Onde |
-|---|---|
-| Repositório Git | este repositório: código (`src/`), notebooks, YAML, `config/config.yaml`, README |
-| Relatório técnico | `reports/relatorio_n3.pdf` (fonte: `reports/relatorio_n3.html`) |
-| Apresentação do projeto final | `reports/apresentacao_projeto_final.pdf` (fonte: `.html`), demonstração em `src/demo.py` |
-| Execução agendada | `evidencias/github_actions/`: logs dos runs do workflow |
-| Histórico MLflow | `mlruns/` (store completo) e `evidencias/mlflow/runs.md` / `runs.csv`, gerados por `python -m src.exportar_mlflow` |
-| Evidências por ciclo | `reports/evidencias/<cycle_id>/` e `reports/evidencias/comparacao_ciclos.md` |
-
-O índice completo, ligado ao checklist do enunciado, está em `evidencias/README.md`.
-
-`bash scripts/montar_entrega.sh` monta a pasta `entrega/` (não versionada) com o pacote para envio: relatório, link do repositório, snapshot zip do commit e evidências. Ela é só uma cópia; a fonte da verdade continua sendo o repositório.
-
-## Reprodutibilidade
-
-```bash
-git clone <url-do-repositorio>
+git clone https://github.com/gabrielforster/mlops-credit-default-prediction.git
 cd mlops-credit-default-prediction
-python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+git switch n3-machine-learning      # o projeto final está nesta branch
+
+python3.12 -m venv .venv
+source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-pytest
-python -m src.pipeline              # novo ciclo sobre o estado versionado
-python -m src.pipeline --mlflow-ui  # inspecionar o histórico
 ```
 
-Para reproduzir do zero, sem o histórico versionado, apague o estado e rode os dois ciclos:
+### Execução
 
 ```bash
-rm -rf mlruns/mlflow.db mlruns/artifacts models/versoes models/modelo_vigente.json models/historico_promocoes.jsonl \
-       reports/evidencias/ciclo_* reports/previsoes data/raw/batches/lote_00[2-9].csv
-python -m src.pipeline              # ciclo 1: lote_001
-python -m src.pipeline --novo-lote  # ciclo 2: lote_001 + lote_002
+# Um cliente do arquivo de 3.000 clientes que o modelo nunca viu
+python -m src.demo --id 11
+
+# Um cliente descrito por você
+python -m src.demo --modelo-json > cliente.json   # gera um cliente de exemplo
+# edite cliente.json (por exemplo PAY_0, LIMIT_BAL, BILL_AMT1)
+python -m src.demo --arquivo cliente.json
+
+# Saída em JSON, para integrar com outro sistema
+python -m src.demo --id 11 --json
 ```
 
-O que garante o mesmo resultado em outra máquina:
-- o checksum da fonte;
-- a semente fixa (42) na partição em lotes, na partição treino/validação/teste, nos seletores e nos modelos;
-- a `data_version` derivada do conteúdo;
-- as dependências com versão fixa;
-- os caminhos relativos à raiz do projeto.
+Outros IDs estão em `data/raw/inferencia/novos_clientes.csv`; o `--id 24`, por exemplo, é um cliente de baixo risco. Um ID inexistente faz o script listar exemplos válidos.
 
-Os `cycle_id` locais incluem o horário de execução, então diferem entre execuções. Métricas, votos e decisões se repetem.
+### Exemplo de saída
 
-## Limitações conhecidas
+O cliente de `--modelo-json` tem limite de 50 mil, dois meses de atraso em setembro e agosto, 75% do limite usado e nenhum pagamento no último mês:
 
-- **Lotes simulados.** Como a fonte é estática, a demonstração não tem drift real. A evidência de detecção vem do controle positivo e dos testes.
-- **Crescimento do repositório.** Cada ciclo adiciona cerca de 6 MB, quase tudo o artefato da Random Forest no MLflow (formato skops). Para um trabalho acadêmico com execução semanal isso é aceitável. Em produção, `mlruns/` iria para um armazenamento de objetos ou um servidor MLflow.
-- **Limiar de decisão.** O limiar de classificação é fixo em 0,5 (com `class_weight=balanced`). Otimizá-lo na validação poderia elevar o F1, mas exigiria uma segunda validação para não enviesar a competição.
-- **Viés leve a favor do desafiante.** O F1 do desafiante é o melhor de dois modelos escolhidos na mesma validação usada para compará-lo ao vigente, então é levemente otimista. A margem de 0,01 também serve para absorver esse viés. Uma alternativa mais rigorosa seria validação cruzada do vencedor no treino.
-- **Agendamento sujeito ao GitHub.** Execuções por `schedule` podem atrasar em horários de pico e só rodam no branch padrão.
+```text
+$ python -m src.demo --arquivo cliente.json
+Modelo vigente : ciclo_20261116T223751Z_a2d3d2d2__random_forest (random_forest)
+Pontuacao      : 86.5%  (risco muito alto)
+Decisao        : PROVAVEL INADIMPLENTE  (limiar 50%)
+
+O que mais pesou (pontos percentuais que o valor do cliente soma ou tira da pontuacao,
+comparado ao valor tipico do treino):
+   +20.7 p.p.  ATRASO_MAXIMO     cliente=       2  tipico=       0  (maior atraso no semestre (meses))
+   +15.9 p.p.  PAY_0             cliente=       2  tipico=       0  (status de pagamento em set/2005 (-1 em dia, n = meses de atraso))
+    +9.6 p.p.  MESES_EM_ATRASO   cliente=       2  tipico=       0  (meses com atraso no semestre)
+    -2.1 p.p.  PAY_AMT1          cliente=       0  tipico=   2.100  (valor pago em set/2005 (NT$))
+    +1.3 p.p.  UTILIZACAO_MEDIA  cliente=    0.75  tipico=    0.28  (fatura media do semestre / limite)
+```
+
+### Como ler a saída
+
+- **Pontuação e faixa de risco.** As faixas são baixo (< 30%), moderado (30–50%), alto (50–70%) e muito alto (≥ 70%). A pontuação ordena os clientes por risco, mas não é uma probabilidade calibrada (seção 6).
+- **Decisão.** Inadimplente ou não, no limiar de 50% do modelo.
+- **O que mais pesou.** Para cada atributo usado pelo modelo, quantos pontos percentuais a pontuação muda se o valor do cliente for trocado pelo valor típico do treino (a mediana). Um valor positivo empurra para "inadimplente". A explicação é local, vale para aquele cliente, e funciona com qualquer algoritmo.
+- **Entradas inválidas.** Uma entrada incompleta ou fora do dicionário da UCI, como `AGE: 7` ou `EDUCATION: 9`, é recusada com uma mensagem que aponta o campo.
+
+A mesma lógica pode ser usada como função Python:
+
+```python
+from src.demo import avaliar_cliente, explicar, EXEMPLO
+resultado = avaliar_cliente({**EXEMPLO, "PAY_0": -1})
+print(explicar(resultado))
+```
+
+## 8. Apresentação
+
+[`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) tem 16 slides, organizados pelos critérios de avaliação:
+
+| Slides | Conteúdo |
+|---|---|
+| 1 | Título e integrantes |
+| 2–3 | Introdução: problema, quem usa, dados |
+| 4 | Conceitos: métricas com classes desbalanceadas, modelos, boas práticas |
+| 5 | Organização da atividade: pipeline e estrutura do repositório |
+| 6–7 | Preparação e modelagem: tratamentos, votação de atributos, competição |
+| 8–11 | Avaliação: comparação com alternativas simples, matriz de confusão, limiar, ordenação, importância, erros e limitações |
+| 12 | Demonstração de uso |
+| 13 | Criatividade: retreino automático, promoção com critério, rastreabilidade |
+| 14 | Contribuição de cada integrante |
+| 15 | Considerações finais e trabalhos futuros |
+| 16 | Referências |
+
+**Roteiro sugerido para a demonstração ao vivo** (slide 12):
+
+1. `python -m src.demo --id 11`: um cliente real nunca visto, de risco moderado.
+2. `python -m src.demo --arquivo cliente.json`: o exemplo de risco muito alto.
+3. Editar `cliente.json` ao vivo, trocando `"PAY_0": 2` por `"PAY_0": -1` (pagou em dia), e rodar de novo para mostrar a pontuação cair.
+4. Editar `"AGE": 7` para mostrar a validação da entrada.
+
+A fonte dos slides é `reports/apresentacao_projeto_final.html`. As figuras ficam em `reports/figuras/` e são geradas pelo notebook 06. Para gerar o PDF de novo depois de editar:
+
+```bash
+chromium --headless --no-pdf-header-footer \
+  --print-to-pdf=reports/apresentacao_projeto_final.pdf reports/apresentacao_projeto_final.html
+```
+
+## 9. Estrutura do repositório
+
+```text
+config/config.yaml        parâmetros (métrica, partição, atributos, modelos), sem caminhos fixos
+data/raw/                 lotes versionados e os 3.000 clientes sem rótulo
+src/
+  preprocessamento.py     validação, limpeza, atributos derivados, partição
+  features.py             três métodos de seleção e votação
+  modelagem.py            treino, métricas e competição
+  promocao.py             modelo vigente, versões e manifesto
+  demo.py                 demonstração de uso
+notebooks/
+  01_etl.ipynb .. 05_previsoes.ipynb   ciclo de treino (ver docs/pipeline_mlops.md)
+  06_avaliacao_final.ipynb             avaliação final, erros e limitações
+models/                   modelo vigente (joblib) e histórico de decisões
+reports/
+  apresentacao_projeto_final.pdf       apresentação
+  figuras/                             gráficos do notebook 06
+  evidencias/                          resultados de cada etapa
+tests/                    41 testes (pytest)
+docs/pipeline_mlops.md    documentação técnica do pipeline de treino
+```
+
+## 10. Reprodutibilidade e testes
+
+```bash
+pytest                                                                         # 41 testes, ~2 s
+jupyter nbconvert --to notebook --execute --inplace notebooks/06_avaliacao_final.ipynb   # refaz a avaliação e as figuras
+python -m src.pipeline                                                         # novo ciclo de treino completo
+```
+
+- **Clone novo.** A demonstração e o notebook 06 rodam num clone novo, a partir dos lotes e do modelo versionados.
+- **Mesmos resultados.** A semente fixa (42), a partição por hash do ID e as dependências com versão fixa garantem os mesmos números em outra máquina.
+- **Mais detalhes.** O pipeline completo, com MLflow, GitHub Actions e monitoramento de drift, está documentado em [`docs/pipeline_mlops.md`](docs/pipeline_mlops.md).
+
+## 11. Equipe e contribuições
+
+| Integrante | Contribuição |
+|---|---|
+| Andre Gustavo Specht | *a preencher* |
+| Arthur Vinicius Hassuma | *a preencher* |
+| Gabriel F. Rocha | *a preencher* |
+| Nicolas Wajima | *a preencher* |
+| Pablo Arman Schuller | *a preencher* |
+| Victor da Rocha | *a preencher* |
+
+## 12. Considerações finais
+
+- **Problema e solução são coerentes.** O modelo responde à pergunta da cobrança ("quem priorizar?") e é melhor do que a regra simples que um analista usaria.
+- **Útil para priorizar, sem certeza individual.** Com F1 de 0,546 e AUC de 0,788, a solução prioriza clientes de forma útil. Em 96% dos casos, o inadimplente que escapa não tinha atraso recente, e esse é o limite do que os dados permitem ver.
+- **A métrica certa muda a leitura.** A acurácia de 78% de "sempre adimplente" não vale nada.
+- **Reprodutível.** Automatizar o treino deixou cada número deste README reproduzível a partir do repositório.
+
+**Trabalhos futuros:**
+- calibrar a pontuação;
+- definir o limiar a partir do custo real de cada erro;
+- testar gradient boosting e novos atributos, como renda e outras dívidas;
+- monitorar a equidade entre grupos a cada ciclo;
+- expor a demonstração numa interface web simples.
+
+## 13. Referências
+
+- BREIMAN, L. Random forests. *Machine Learning*, v. 45, n. 1, p. 5–32, 2001.
+- GUYON, I.; WESTON, J.; BARNHILL, S.; VAPNIK, V. Gene selection for cancer classification using support vector machines. *Machine Learning*, v. 46, p. 389–422, 2002.
+- HOSMER, D. W.; LEMESHOW, S.; STURDIVANT, R. X. *Applied logistic regression*. 3. ed. Hoboken: Wiley, 2013.
+- PEDREGOSA, F. et al. Scikit-learn: machine learning in Python. *Journal of Machine Learning Research*, v. 12, p. 2825–2830, 2011.
+- SAITO, T.; REHMSMEIER, M. The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets. *PLoS ONE*, v. 10, n. 3, e0118432, 2015.
+- SCULLEY, D. et al. Hidden technical debt in machine learning systems. In: *Advances in Neural Information Processing Systems* 28, 2015.
+- YEH, I. C. Default of credit card clients [conjunto de dados]. UCI Machine Learning Repository, 2009. DOI: 10.24432/C55S3H.
+- YEH, I. C.; LIEN, C. H. The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients. *Expert Systems with Applications*, v. 36, n. 2, p. 2473–2480, 2009.
+- ZAHARIA, M. et al. Accelerating the machine learning lifecycle with MLflow. *IEEE Data Engineering Bulletin*, v. 41, n. 4, p. 39–45, 2018.
