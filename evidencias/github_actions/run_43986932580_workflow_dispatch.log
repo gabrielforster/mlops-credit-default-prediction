@@ -1,0 +1,921 @@
+ciclo	Set up job	﻿2026-11-17T00:21:21.6924498Z Current runner version: '2.338.2'
+ciclo	Set up job	2026-11-17T00:21:21.6961890Z ##[group]Runner Image Provisioner
+ciclo	Set up job	2026-11-17T00:21:21.6963476Z Hosted Compute Agent
+ciclo	Set up job	2026-11-17T00:21:21.6964573Z Version: 20261103.629
+ciclo	Set up job	2026-11-17T00:21:21.6965884Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+ciclo	Set up job	2026-11-17T00:21:21.6967274Z Build Date: 2026-11-03T17:26:59Z
+ciclo	Set up job	2026-11-17T00:21:21.6968559Z Worker ID: {4c1e93f7-f428-4e25-9588-b7bd7b710c9e}
+ciclo	Set up job	2026-11-17T00:21:21.6970289Z Region: centralus
+ciclo	Set up job	2026-11-17T00:21:21.6971345Z Cloud: Azure
+ciclo	Set up job	2026-11-17T00:21:21.6972280Z ##[endgroup]
+ciclo	Set up job	2026-11-17T00:21:21.6974831Z ##[group]Operating System
+ciclo	Set up job	2026-11-17T00:21:21.6975997Z Ubuntu
+ciclo	Set up job	2026-11-17T00:21:21.6977135Z 26.04.1
+ciclo	Set up job	2026-11-17T00:21:21.6978135Z LTS
+ciclo	Set up job	2026-11-17T00:21:21.6979109Z ##[endgroup]
+ciclo	Set up job	2026-11-17T00:21:21.6980418Z ##[group]Runner Image
+ciclo	Set up job	2026-11-17T00:21:21.6981133Z Image: ubuntu-26.04
+ciclo	Set up job	2026-11-17T00:21:21.6981784Z Version: 20261111.196.1
+ciclo	Set up job	2026-11-17T00:21:21.6982953Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+ciclo	Set up job	2026-11-17T00:21:21.6984821Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+ciclo	Set up job	2026-11-17T00:21:21.6985808Z ##[endgroup]
+ciclo	Set up job	2026-11-17T00:21:21.6986982Z ##[group]GITHUB_TOKEN Permissions
+ciclo	Set up job	2026-11-17T00:21:21.6989155Z Contents: write
+ciclo	Set up job	2026-11-17T00:21:21.6990492Z Metadata: read
+ciclo	Set up job	2026-11-17T00:21:21.6991161Z ##[endgroup]
+ciclo	Set up job	2026-11-17T00:21:21.6993253Z Secret source: Actions
+ciclo	Set up job	2026-11-17T00:21:21.6994433Z Cache mode: write
+ciclo	Set up job	2026-11-17T00:21:21.6995437Z Prepare workflow directory
+ciclo	Set up job	2026-11-17T00:21:21.7491174Z Prepare all required actions
+ciclo	Set up job	2026-11-17T00:21:21.7564635Z Getting action download info
+ciclo	Set up job	2026-11-17T00:21:21.9969427Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+ciclo	Set up job	2026-11-17T00:21:22.1096684Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+ciclo	Set up job	2026-11-17T00:21:22.1725772Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+ciclo	Set up job	2026-11-17T00:21:22.2466088Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+ciclo	Set up job	2026-11-17T00:21:22.4394991Z Complete job name: ciclo
+ciclo	Checkout (estado persistido do ciclo anterior)	﻿2026-11-17T00:21:22.5291924Z ##[group]Run actions/checkout@v4
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5293054Z with:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5293663Z   repository: gabrielforster/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5297631Z   token: ***
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5298059Z   ssh-strict: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5298484Z   ssh-user: git
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5298913Z   persist-credentials: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5299390Z   clean: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5299824Z   sparse-checkout-cone-mode: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5300489Z   fetch-depth: 1
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5300906Z   fetch-tags: false
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5301336Z   show-progress: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5301771Z   lfs: false
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5302172Z   submodules: false
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5302605Z   set-safe-directory: true
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5303098Z   allow-unsafe-pr-checkout: false
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5303881Z env:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5304314Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5304805Z   PYTHONUNBUFFERED: 1
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.5305237Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8479439Z Syncing repository: gabrielforster/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8482878Z ##[group]Getting Git version info
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8484720Z Working directory is '/home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction'
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8487259Z [command]/usr/bin/git version
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8493162Z git version 2.56.1
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8516123Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8541807Z Temporarily overriding HOME='/home/runner/work/_temp/29e3c09c-7397-477f-a8e9-efb478dd970d' before making global git config changes
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8545133Z Adding repository directory to the temporary git global config as a safe directory
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8548612Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8613782Z Deleting the contents of '/home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction'
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8617903Z ##[group]Initializing the repository
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8623778Z [command]/usr/bin/git init /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8786354Z hint: Using 'master' as the name for the initial branch. This default branch name
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8788351Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8789359Z hint: to use in all of your new repositories, which will suppress this warning,
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8790412Z hint: call:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8791043Z hint:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8791800Z hint: 	git config --global init.defaultBranch <name>
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8792420Z hint:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8792993Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8793953Z hint: 'development'. The just-created branch can be renamed via this command:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8794853Z hint:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8795440Z hint: 	git branch -m <name>
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8795948Z hint:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8796574Z hint: Disable this message with "git config set advice.defaultBranchName false"
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8802175Z Initialized empty Git repository in /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction/.git/
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8815448Z [command]/usr/bin/git remote add origin https://github.com/gabrielforster/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8874760Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8876049Z ##[group]Disabling automatic garbage collection
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8877843Z [command]/usr/bin/git config --local gc.auto 0
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8913325Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8914484Z ##[group]Setting up auth
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8920908Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.8958934Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.9473700Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.9510366Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.9791494Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:22.9828527Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.0101118Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.0141497Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.0142499Z ##[group]Fetching the repository
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.0151007Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +ad2603223e2738695c3bf86ebae9a762925a4477:refs/remotes/origin/master
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5145414Z From https://github.com/gabrielforster/mlops-credit-default-prediction
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5151786Z  * [new ref]         ad2603223e2738695c3bf86ebae9a762925a4477 -> origin/master
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5156980Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5159013Z ##[group]Determining the checkout info
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5161505Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5172440Z [command]/usr/bin/git sparse-checkout disable
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5233971Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5268266Z ##[group]Checking out the ref
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5281655Z [command]/usr/bin/git checkout --progress --force -B master refs/remotes/origin/master
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5898501Z Reset branch 'master'
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5904439Z branch 'master' set up to track 'origin/master'.
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5917477Z ##[endgroup]
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5968947Z [command]/usr/bin/git log -1 --format=%H
+ciclo	Checkout (estado persistido do ciclo anterior)	2026-11-17T00:21:23.5994628Z ad2603223e2738695c3bf86ebae9a762925a4477
+ciclo	Python 3.12	﻿2026-11-17T00:21:23.6447146Z ##[group]Run actions/setup-python@v5
+ciclo	Python 3.12	2026-11-17T00:21:23.6448509Z with:
+ciclo	Python 3.12	2026-11-17T00:21:23.6449472Z   python-version: 3.12
+ciclo	Python 3.12	2026-11-17T00:21:23.6450682Z   cache: pip
+ciclo	Python 3.12	2026-11-17T00:21:23.6451685Z   check-latest: false
+ciclo	Python 3.12	2026-11-17T00:21:23.6460922Z   token: ***
+ciclo	Python 3.12	2026-11-17T00:21:23.6461958Z   update-environment: true
+ciclo	Python 3.12	2026-11-17T00:21:23.6463120Z   allow-prereleases: false
+ciclo	Python 3.12	2026-11-17T00:21:23.6464252Z   freethreaded: false
+ciclo	Python 3.12	2026-11-17T00:21:23.6465279Z env:
+ciclo	Python 3.12	2026-11-17T00:21:23.6466236Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Python 3.12	2026-11-17T00:21:23.6467436Z   PYTHONUNBUFFERED: 1
+ciclo	Python 3.12	2026-11-17T00:21:23.6468438Z ##[endgroup]
+ciclo	Python 3.12	2026-11-17T00:21:23.7927442Z ##[group]Installed versions
+ciclo	Python 3.12	2026-11-17T00:21:23.8052130Z (node:2435) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ciclo	Python 3.12	2026-11-17T00:21:23.8055234Z Successfully set up CPython (3.12.16)
+ciclo	Python 3.12	2026-11-17T00:21:23.8056942Z ##[endgroup]
+ciclo	Python 3.12	2026-11-17T00:21:23.8058745Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ciclo	Python 3.12	2026-11-17T00:21:23.9102397Z [command]/opt/hostedtoolcache/Python/3.12.16/x64/bin/pip cache dir
+ciclo	Python 3.12	2026-11-17T00:21:25.3643905Z /home/runner/.cache/pip
+ciclo	Python 3.12	2026-11-17T00:21:25.5374256Z pip cache is not found
+ciclo	Instalar dependencias	﻿2026-11-17T00:21:25.5536564Z ##[group]Run pip install -r requirements.txt
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5537040Z ^[[36;1mpip install -r requirements.txt^[[0m
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5594266Z shell: /usr/bin/bash -e {0}
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5594553Z env:
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5594761Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5595013Z   PYTHONUNBUFFERED: 1
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5595303Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5595746Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5596208Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5596607Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5596995Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5597380Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Instalar dependencias	2026-11-17T00:21:25.5597709Z ##[endgroup]
+ciclo	Instalar dependencias	2026-11-17T00:21:26.9658229Z Collecting pandas==3.1.1 (from -r requirements.txt (line 2))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.0190951Z   Downloading pandas-3.1.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (16 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.2317389Z Collecting numpy==2.5.5 (from -r requirements.txt (line 3))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.2455017Z   Downloading numpy-2.5.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (6.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.3321377Z Collecting scikit-learn==1.9.1 (from -r requirements.txt (line 4))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.3462835Z   Downloading scikit_learn-1.9.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.4764174Z Collecting scipy==1.18.1 (from -r requirements.txt (line 5))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.4900528Z   Downloading scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.5523023Z Collecting mlflow==3.18.0 (from -r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.5655537Z   Downloading mlflow-3.18.0-py3-none-any.whl.metadata (50 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.6195528Z Collecting pyyaml==6.0.3 (from -r requirements.txt (line 7))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.6329213Z   Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.6612553Z Collecting joblib==1.6.0 (from -r requirements.txt (line 8))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.6765936Z   Downloading joblib-1.6.0-py3-none-any.whl.metadata (6.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.7683506Z Collecting pyarrow==26.0.1 (from -r requirements.txt (line 9))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.7820726Z   Downloading pyarrow-26.0.1-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (3.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.9519606Z Collecting python-calamine==0.9.1 (from -r requirements.txt (line 10))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.9658924Z   Downloading python_calamine-0.9.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:27.9861090Z Collecting jupyter==1.1.1 (from -r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:27.9993160Z   Downloading jupyter-1.1.1-py2.py3-none-any.whl.metadata (2.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.0275879Z Collecting nbconvert==7.17.2 (from -r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.0409117Z   Downloading nbconvert-7.17.2-py3-none-any.whl.metadata (8.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.0676116Z Collecting nbformat==5.11.1 (from -r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.0807978Z   Downloading nbformat-5.11.1-py3-none-any.whl.metadata (3.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.1155623Z Collecting ipykernel==7.4.0 (from -r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.1288214Z   Downloading ipykernel-7.4.0-py3-none-any.whl.metadata (3.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.1634150Z Collecting pytest==9.2.0 (from -r requirements.txt (line 15))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.1766829Z   Downloading pytest-9.2.0-py3-none-any.whl.metadata (7.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.2022667Z Collecting python-dateutil>=2.9.0 (from pandas==3.1.1->-r requirements.txt (line 2))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.2155535Z   Downloading python_dateutil-4.0.0-py3-none-any.whl.metadata (7.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.2594808Z Collecting narwhals>=2.0.1 (from scikit-learn==1.9.1->-r requirements.txt (line 4))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.2727871Z   Downloading narwhals-2.28.0-py3-none-any.whl.metadata (15 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.2965031Z Collecting threadpoolctl>=3.5.0 (from scikit-learn==1.9.1->-r requirements.txt (line 4))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.3099098Z   Downloading threadpoolctl-3.8.0-py3-none-any.whl.metadata (29 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.3451858Z Collecting mlflow-skinny==3.18.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.3586591Z   Downloading mlflow_skinny-3.18.0-py3-none-any.whl.metadata (51 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.3893701Z Collecting mlflow-tracing==3.18.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.4026830Z   Downloading mlflow_tracing-3.18.0-py3-none-any.whl.metadata (19 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.4311755Z Collecting Flask-CORS<7 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.4447387Z   Downloading flask_cors-6.0.5-py3-none-any.whl.metadata (5.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:28.4709554Z Collecting Flask<4 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:28.4843740Z   Downloading flask-3.1.3-py3-none-any.whl.metadata (3.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.0194678Z Collecting aiohttp<4,>=3.7.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.0346588Z   Downloading aiohttp-3.14.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.0680082Z Collecting alembic!=1.10.0,<2 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.0822295Z   Downloading alembic-1.20.1-py3-none-any.whl.metadata (7.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.2663887Z Collecting cryptography<51,>=43.0.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.2806354Z   Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl.metadata (4.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.3071905Z Collecting docker<8,>=4.0.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.3207835Z   Downloading docker-7.2.0-py3-none-any.whl.metadata (3.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.3482751Z Collecting graphene<4 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.3616009Z   Downloading graphene-3.4.3-py2.py3-none-any.whl.metadata (6.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.3907097Z Collecting gunicorn<27 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.4039618Z   Downloading gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.4320343Z Collecting huey<4,>=2.5.4 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.4453692Z   Downloading huey-3.5.4-py3-none-any.whl.metadata (5.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.5855757Z Collecting matplotlib<4 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.5989061Z   Downloading matplotlib-3.11.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (80 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.6421504Z Collecting skops<1 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:29.6554502Z   Downloading skops-0.16.0-py3-none-any.whl.metadata (4.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:29.9978699Z Collecting sqlalchemy<3,>=1.4.0 (from mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.0116173Z   Downloading sqlalchemy-2.1.9-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (9.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.0400503Z Collecting cloudpickle>=3.0 (from joblib==1.6.0->-r requirements.txt (line 8))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.0531852Z   Downloading cloudpickle-3.1.2-py3-none-any.whl.metadata (7.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.0974530Z Collecting notebook (from jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.1111178Z   Downloading notebook-7.6.5-py3-none-any.whl.metadata (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.1364955Z Collecting jupyter-console (from jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.1500646Z   Downloading jupyter_console-6.6.3-py3-none-any.whl.metadata (5.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.1862088Z Collecting ipywidgets (from jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.2002948Z   Downloading ipywidgets-8.1.9-py3-none-any.whl.metadata (2.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.2849106Z Collecting jupyterlab (from jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.2987400Z   Downloading jupyterlab-4.6.6-py3-none-any.whl.metadata (16 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.3293515Z Collecting beautifulsoup4 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.3424389Z   Downloading beautifulsoup4-4.15.0-py3-none-any.whl.metadata (3.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.3677102Z Collecting bleach!=5.0.0 (from bleach[css]!=5.0.0->nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.3808973Z   Downloading bleach-6.4.0-py3-none-any.whl.metadata (32 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4043075Z Collecting defusedxml (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4174848Z   Downloading defusedxml-0.7.1-py2.py3-none-any.whl.metadata (32 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4431212Z Collecting jinja2>=3.0 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4564165Z   Downloading jinja2-3.1.6-py3-none-any.whl.metadata (2.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4829497Z Collecting jupyter-core>=4.7 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.4962455Z   Downloading jupyter_core-5.9.1-py3-none-any.whl.metadata (1.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.5168137Z Collecting jupyterlab-pygments (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.5301378Z   Downloading jupyterlab_pygments-0.3.0-py3-none-any.whl.metadata (4.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.5950395Z Collecting markupsafe>=2.0 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.6083424Z   Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (2.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.6346847Z Collecting mistune<4,>=2.0.3 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.6481198Z   Downloading mistune-3.4.0-py3-none-any.whl.metadata (2.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.6732556Z Collecting nbclient>=0.5.0 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.6870753Z   Downloading nbclient-0.11.0-py3-none-any.whl.metadata (7.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.7169412Z Collecting packaging (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.7307180Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.7511731Z Collecting pandocfilters>=1.4.1 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.7643159Z   Downloading pandocfilters-1.5.1-py2.py3-none-any.whl.metadata (9.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.7920430Z Collecting pygments>=2.4.1 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.8052384Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.8310770Z Collecting traitlets>=5.1 (from nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.8443702Z   Downloading traitlets-5.16.1-py3-none-any.whl.metadata (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.8704404Z Collecting fastjsonschema>=2.15 (from nbformat==5.11.1->-r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.8837152Z   Downloading fastjsonschema-2.22.3-py3-none-any.whl.metadata (2.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.9156436Z Collecting jsonschema>=2.6 (from nbformat==5.11.1->-r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.9293321Z   Downloading jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:30.9542898Z Collecting comm>=0.1.1 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:30.9688008Z   Downloading comm-0.2.3-py3-none-any.whl.metadata (3.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.0626424Z Collecting debugpy>=1.6.5 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.0764821Z   Downloading debugpy-1.8.22-cp312-cp312-manylinux_2_34_x86_64.whl.metadata (1.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.1202873Z Collecting ipython>=7.23.1 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.1336424Z   Downloading ipython-9.18.1-py3-none-any.whl.metadata (4.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.1705103Z Collecting jupyter-client>=8.9.0 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.1848857Z   Downloading jupyter_client-8.10.0-py3-none-any.whl.metadata (8.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.2125813Z Collecting matplotlib-inline>=0.1 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.2263666Z   Downloading matplotlib_inline-0.2.2-py3-none-any.whl.metadata (2.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.2478500Z Collecting nest-asyncio2>=1.7.0 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.2611354Z   Downloading nest_asyncio2-1.7.4-py3-none-any.whl.metadata (7.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.5269533Z Collecting pyzmq>=25 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.5405462Z   Downloading pyzmq-27.3.0-cp312-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.5933815Z Collecting tornado>=6.5.7 (from ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.6067340Z   Downloading tornado-6.6.1-cp311-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (2.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.6291820Z Collecting iniconfig>=2 (from pytest==9.2.0->-r requirements.txt (line 15))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.6423850Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.6645087Z Collecting pluggy<2,>=1.6 (from pytest==9.2.0->-r requirements.txt (line 15))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.6778939Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.7068459Z Collecting anyio!=4.15.0,<5,>=3.6.2 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.7204007Z   Downloading anyio-4.16.0-py3-none-any.whl.metadata (4.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.7493085Z Collecting cachetools<8,>=5.0.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.7625297Z   Downloading cachetools-7.3.2-py3-none-any.whl.metadata (5.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.7890452Z Collecting click<9,>=7.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.8022793Z   Downloading click-8.5.1-py3-none-any.whl.metadata (2.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.8433724Z Collecting databricks-sdk<1,>=0.20.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.8567581Z   Downloading databricks_sdk-0.167.0-py3-none-any.whl.metadata (44 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.9217557Z Collecting fastapi<1 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.9357290Z   Downloading fastapi-0.163.1-py3-none-any.whl.metadata (27 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:31.9702306Z Collecting gitpython<4,>=3.1.9 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:31.9835234Z   Downloading gitpython-3.2.1-py3-none-any.whl.metadata (13 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.0187284Z Collecting importlib_metadata!=4.7.0,<11,>=3.7.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.0320666Z   Downloading importlib_metadata-10.2.0-py3-none-any.whl.metadata (4.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.0618683Z Collecting opentelemetry-api<3,>=1.9.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.0750662Z   Downloading opentelemetry_api-1.45.2-py3-none-any.whl.metadata (1.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.1037973Z Collecting opentelemetry-proto<3,>=1.9.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.1171023Z   Downloading opentelemetry_proto-1.45.2-py3-none-any.whl.metadata (2.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.1458639Z Collecting opentelemetry-sdk<3,>=1.9.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.1589149Z   Downloading opentelemetry_sdk-1.45.2-py3-none-any.whl.metadata (1.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.3118283Z Collecting protobuf<8,>=3.12.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.3256219Z   Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl.metadata (595 bytes)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.4374891Z Collecting pydantic<3,>=2.0.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.4512075Z   Downloading pydantic-2.14.3-py3-none-any.whl.metadata (141 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.4839228Z Collecting python-dotenv<2,>=0.19.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.4972933Z   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.5224914Z Collecting python-multipart<1,>=0.0.18 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.5359074Z   Downloading python_multipart-0.0.34-py3-none-any.whl.metadata (6.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.5665589Z Collecting requests<3,>=2.17.3 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.5797179Z   Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.6023692Z Collecting sqlparse<1,>=0.4.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.6156562Z   Downloading sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.7026621Z Collecting starlette<2 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.7164685Z   Downloading starlette-1.10.0-py3-none-any.whl.metadata (6.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.7436323Z Collecting typing-extensions<5,>=4.0.0 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.7570232Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.7925633Z Collecting uvicorn<1 (from mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.8254307Z   Downloading uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.8553378Z Collecting aiohappyeyeballs>=2.5.0 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.8691363Z   Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl.metadata (5.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.8902889Z Collecting aiosignal>=1.4.0 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.9035006Z   Downloading aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:32.9279835Z Collecting attrs>=17.3.0 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:32.9417728Z   Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.0137240Z Collecting frozenlist>=1.1.1 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.0272049Z   Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.3176511Z Collecting multidict<8.0,>=4.5 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.3321026Z   Downloading multidict-7.2.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (6.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.4085194Z Collecting propcache>=0.2.0 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.4220726Z   Downloading propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (25 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.7318177Z Collecting yarl<2.0,>=1.25.1 (from aiohttp<4,>=3.7.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.7455031Z   Downloading yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (111 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.7852246Z Collecting Mako (from alembic!=1.10.0,<2->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.7985110Z   Downloading mako-1.4.3-py3-none-any.whl.metadata (2.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.8240508Z Collecting idna>=2.8 (from anyio!=4.15.0,<5,>=3.6.2->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.8373998Z   Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.9497332Z Collecting cffi>=2.0.0 (from cryptography<51,>=43.0.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:33.9640571Z   Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:33.9914294Z Collecting certifi>=2026.10.19 (from databricks-sdk<1,>=0.20.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.0047582Z   Downloading certifi-2026.10.23-py3-none-any.whl.metadata (2.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.0481616Z Collecting google-auth~=2.0 (from databricks-sdk<1,>=0.20.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.0616170Z   Downloading google_auth-2.62.2-py3-none-any.whl.metadata (6.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1001915Z Collecting urllib3<3,>=1.26 (from databricks-sdk<1,>=0.20.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1137148Z   Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1456386Z Collecting typing-inspection>=0.4.2 (from fastapi<1->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1598741Z   Downloading typing_inspection-0.4.5-py3-none-any.whl.metadata (2.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1806882Z Collecting annotated-doc>=0.0.2 (from fastapi<1->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.1941650Z   Downloading annotated_doc-0.0.6-py3-none-any.whl.metadata (6.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.2191443Z Collecting blinker>=1.9.0 (from Flask<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.2325670Z   Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.2547820Z Collecting itsdangerous>=2.2.0 (from Flask<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.2685930Z   Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.2976683Z Collecting werkzeug>=3.1.0 (from Flask<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.3112385Z   Downloading werkzeug-3.1.9-py3-none-any.whl.metadata (4.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.3393333Z Collecting gitdb<5,>=4.0.1 (from gitpython<4,>=3.1.9->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.3525395Z   Downloading gitdb-4.0.12-py3-none-any.whl.metadata (1.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.3753977Z Collecting smmap<6,>=3.0.1 (from gitdb<5,>=4.0.1->gitpython<4,>=3.1.9->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.3886310Z   Downloading smmap-5.0.3-py3-none-any.whl.metadata (4.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.4178885Z Collecting pyasn1-modules>=0.2.1 (from google-auth~=2.0->databricks-sdk<1,>=0.20.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.4311964Z   Downloading pyasn1_modules-0.4.2-py3-none-any.whl.metadata (3.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.4696734Z Collecting graphql-core<3.3,>=3.1 (from graphene<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.4845166Z   Downloading graphql_core-3.2.14-py3-none-any.whl.metadata (11 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5067089Z Collecting graphql-relay<3.3,>=3.1 (from graphene<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5200719Z   Downloading graphql_relay-3.2.0-py3-none-any.whl.metadata (12 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5250862Z Collecting python-dateutil>=2.9.0 (from pandas==3.1.1->-r requirements.txt (line 2))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5401912Z   Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5726835Z Collecting zipp>=3.20 (from importlib_metadata!=4.7.0,<11,>=3.7.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.5862777Z   Downloading zipp-4.1.2-py3-none-any.whl.metadata (3.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.6072367Z Collecting lazy-importer>=0.1 (from importlib_metadata!=4.7.0,<11,>=3.7.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.6223070Z   Downloading lazy_importer-0.1.0-py3-none-any.whl.metadata (7.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.6987648Z Collecting contourpy>=1.0.1 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.7126895Z   Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.7348960Z Collecting cycler>=0.10 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.7484197Z   Downloading cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:34.9081756Z Collecting fonttools>=4.28.2 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:34.9221316Z   Downloading fonttools-4.68.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (139 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:35.0060511Z Collecting kiwisolver>=1.3.1 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:35.0196339Z   Downloading kiwisolver-1.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (5.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:35.2741085Z Collecting pillow>=9 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:35.2876773Z   Downloading pillow-13.0.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:35.3222224Z Collecting pyparsing>=3 (from matplotlib<4->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:35.3354029Z   Downloading pyparsing-3.3.3-py3-none-any.whl.metadata (5.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:35.3712618Z Collecting opentelemetry-semantic-conventions==0.66b2 (from opentelemetry-sdk<3,>=1.9.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:35.3845034Z   Downloading opentelemetry_semantic_conventions-0.66b2-py3-none-any.whl.metadata (2.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:35.4105192Z Collecting annotated-types>=0.6.0 (from pydantic<3,>=2.0.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:35.4236335Z   Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.1738059Z Collecting pydantic-core==2.50.4 (from pydantic<3,>=2.0.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.1876438Z   Downloading pydantic_core-2.50.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (6.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.2147680Z Collecting six>=1.5 (from python-dateutil>=2.9.0->pandas==3.1.1->-r requirements.txt (line 2))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.2279461Z   Downloading six-1.17.0-py2.py3-none-any.whl.metadata (1.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.3560950Z Collecting charset_normalizer<4,>=2 (from requests<3,>=2.17.3->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.3698569Z   Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.4028999Z Collecting prettytable>=3.9 (from skops<1->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.4168216Z   Downloading prettytable-3.18.0-py3-none-any.whl.metadata (37 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.4511826Z Collecting h11>=0.8 (from uvicorn<1->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.4652464Z   Downloading h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.4998206Z Collecting webencodings (from bleach!=5.0.0->bleach[css]!=5.0.0->nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.5135372Z   Downloading webencodings-0.6.1-py3-none-any.whl.metadata (3.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.5362054Z Collecting tinycss2>=1.1.0 (from bleach[css]!=5.0.0->nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.5504884Z   Downloading tinycss2-1.5.1-py3-none-any.whl.metadata (3.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.5742956Z Collecting pycparser (from cffi>=2.0.0->cryptography<51,>=43.0.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.5878858Z   Downloading pycparser-3.12-py3-none-any.whl.metadata (9.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.6180995Z Collecting ipython-pygments-lexers>=1.0.0 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.6318273Z   Downloading ipython_pygments_lexers-1.1.1-py3-none-any.whl.metadata (1.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.6544683Z Collecting jedi>=0.18.2 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.6679757Z   Downloading jedi-0.20.1-py2.py3-none-any.whl.metadata (23 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.6929056Z Collecting pexpect>4.6 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.7064586Z   Downloading pexpect-4.9.0-py2.py3-none-any.whl.metadata (2.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.7398304Z Collecting prompt_toolkit<3.1.0,>=3.0.41 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.7533979Z   Downloading prompt_toolkit-3.0.53-py3-none-any.whl.metadata (6.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.8267518Z Collecting psutil>=7 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.8407785Z   Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl.metadata (22 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.8668293Z Collecting stack_data>=0.6.0 (from ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.8801713Z   Downloading stack_data-0.6.3-py3-none-any.whl.metadata (18 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.9134758Z Collecting wcwidth>=0.1.4 (from prompt_toolkit<3.1.0,>=3.0.41->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.9273681Z   Downloading wcwidth-0.9.4-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (23 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.9539413Z Collecting parso<0.9.0,>=0.8.7 (from jedi>=0.18.2->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:36.9683851Z   Downloading parso-0.8.7-py2.py3-none-any.whl.metadata (8.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:36.9957012Z Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=2.6->nbformat==5.11.1->-r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.0090862Z   Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.0388764Z Collecting referencing>=0.28.4 (from jsonschema>=2.6->nbformat==5.11.1->-r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.0522675Z   Downloading referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.3081109Z Collecting rpds-py>=0.25.0 (from jsonschema>=2.6->nbformat==5.11.1->-r requirements.txt (line 13))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.3218270Z   Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.3620909Z Collecting platformdirs>=2.5 (from jupyter-core>=4.7->nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.3755465Z   Downloading platformdirs-4.14.5-py3-none-any.whl.metadata (5.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.4086576Z Collecting ptyprocess>=0.5 (from pexpect>4.6->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.4218775Z   Downloading ptyprocess-0.7.0-py2.py3-none-any.whl.metadata (1.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.4595697Z Collecting pyasn1<0.7.0,>=0.6.1 (from pyasn1-modules>=0.2.1->google-auth~=2.0->databricks-sdk<1,>=0.20.0->mlflow-skinny==3.18.0->mlflow==3.18.0->-r requirements.txt (line 6))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.4732924Z   Downloading pyasn1-0.6.5-py3-none-any.whl.metadata (8.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5063049Z Collecting executing>=1.2.0 (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5195215Z   Downloading executing-2.3.0-py3-none-any.whl.metadata (9.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5435821Z Collecting asttokens>=2.1.0 (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5576032Z   Downloading asttokens-3.0.2-py3-none-any.whl.metadata (5.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5782991Z Collecting pure-eval (from stack_data>=0.6.0->ipython>=7.23.1->ipykernel==7.4.0->-r requirements.txt (line 14))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.5927130Z   Downloading pure_eval-0.2.4-py3-none-any.whl.metadata (6.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.6333554Z Collecting soupsieve>=1.6.1 (from beautifulsoup4->nbconvert==7.17.2->-r requirements.txt (line 12))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.6464500Z   Downloading soupsieve-4.1.1-py3-none-any.whl.metadata (4.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.6900529Z Collecting widgetsnbextension~=4.0.16 (from ipywidgets->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.7038230Z   Downloading widgetsnbextension-4.0.16-py3-none-any.whl.metadata (1.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.7296726Z Collecting jupyterlab_widgets~=3.0.17 (from ipywidgets->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.7434888Z   Downloading jupyterlab_widgets-3.0.17-py3-none-any.whl.metadata (20 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.7805794Z Collecting async-lru>=1.0.0 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.8034464Z   Downloading async_lru-2.4.0-py3-none-any.whl.metadata (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.8306824Z Collecting httpx<1,>=0.25.0 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.8439406Z   Downloading httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.8692923Z Collecting jupyter-builder>=1.0.2 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.8826528Z   Downloading jupyter_builder-1.3.0-py3-none-any.whl.metadata (8.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.9075530Z Collecting jupyter-lsp>=2.0.0 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.9208017Z   Downloading jupyter_lsp-2.3.1-py3-none-any.whl.metadata (1.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:37.9640918Z Collecting jupyter-server<3,>=2.19.0 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:37.9776483Z   Downloading jupyter_server-2.21.1-py3-none-any.whl.metadata (8.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.0090679Z Collecting jupyterlab-server<3,>=2.28.0 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.0224929Z   Downloading jupyterlab_server-2.28.1-py3-none-any.whl.metadata (5.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.0448944Z Collecting notebook-shim>=0.2 (from jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.0584040Z   Downloading notebook_shim-0.2.4-py3-none-any.whl.metadata (4.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.0878492Z Collecting httpcore==1.* (from httpx<1,>=0.25.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.1013278Z   Downloading httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.1377336Z Collecting argon2-cffi>=21.1 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.1509115Z   Downloading argon2_cffi-25.1.0-py3-none-any.whl.metadata (4.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.1731509Z Collecting jupyter-events>=0.11.0 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.1864057Z   Downloading jupyter_events-0.12.1-py3-none-any.whl.metadata (5.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.2939071Z Collecting jupyter-server-terminals>=0.4.4 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.3072627Z   Downloading jupyter_server_terminals-0.5.4-py3-none-any.whl.metadata (5.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.3332026Z Collecting prometheus-client>=0.9 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.3464696Z   Downloading prometheus_client-0.26.0-py3-none-any.whl.metadata (2.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.3697343Z Collecting send2trash>=1.8.2 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.3829363Z   Downloading send2trash-2.2.0-py3-none-any.whl.metadata (4.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4060947Z Collecting terminado>=0.8.3 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4194376Z   Downloading terminado-0.18.1-py3-none-any.whl.metadata (5.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4464242Z Collecting websocket-client>=1.7 (from jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4598423Z   Downloading websocket_client-1.9.2-py3-none-any.whl.metadata (8.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4863224Z Collecting babel>=2.10 (from jupyterlab-server<3,>=2.28.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.4997618Z   Downloading babel-2.18.0-py3-none-any.whl.metadata (2.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.5282169Z Collecting json5>=0.9.0 (from jupyterlab-server<3,>=2.28.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.5416944Z   Downloading json5-0.17.3-py3-none-any.whl.metadata (27 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.5757759Z Collecting argon2-cffi-bindings (from argon2-cffi>=21.1->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.5893211Z   Downloading argon2_cffi_bindings-26.2.0-cp310-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (7.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.6195797Z Collecting python-json-logger>=2.0.4 (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.6330322Z   Downloading python_json_logger-4.2.0-py3-none-any.whl.metadata (2.9 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.6535120Z Collecting rfc3339-validator (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.6668880Z   Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl.metadata (1.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.6864773Z Collecting rfc3986-validator>=0.1.1 (from jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.7001187Z   Downloading rfc3986_validator-0.1.1-py2.py3-none-any.whl.metadata (1.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.7257315Z Collecting fqdn (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.7393619Z   Downloading fqdn-1.6.0-py3-none-any.whl.metadata (9.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.7614954Z Collecting isoduration (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.7917124Z   Downloading isoduration-20.11.0-py3-none-any.whl.metadata (5.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8159060Z Collecting jsonpointer>1.13 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8291346Z   Downloading jsonpointer-3.12-py3-none-any.whl.metadata (2.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8493047Z Collecting rfc3987-syntax>=1.1.0 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8625188Z   Downloading rfc3987_syntax-1.1.0-py3-none-any.whl.metadata (7.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8830942Z Collecting uri-template (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.8963894Z   Downloading uri_template-1.3.0-py3-none-any.whl.metadata (8.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.9213611Z Collecting webcolors>=24.6.0 (from jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.9360991Z   Downloading webcolors-25.10.0-py3-none-any.whl.metadata (2.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:38.9697366Z Collecting lark>=1.2.2 (from rfc3987-syntax>=1.1.0->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:38.9829501Z   Downloading lark-1.3.1-py3-none-any.whl.metadata (1.8 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.0246320Z Collecting arrow>=0.15.0 (from isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:39.0377831Z   Downloading arrow-1.4.0-py3-none-any.whl.metadata (7.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.0667355Z Collecting tzdata (from arrow>=0.15.0->isoduration->jsonschema[format-nongpl]>=4.18.0->jupyter-events>=0.11.0->jupyter-server<3,>=2.19.0->jupyterlab->jupyter==1.1.1->-r requirements.txt (line 11))
+ciclo	Instalar dependencias	2026-11-17T00:21:39.0802708Z   Downloading tzdata-2026.6-py2.py3-none-any.whl.metadata (1.4 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.1136640Z Downloading pandas-3.1.1-cp312-cp312-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (12.0 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.2012618Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.0/12.0 MB 153.4 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.2155251Z Downloading numpy-2.5.5-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (15.7 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.2688502Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 15.7/15.7 MB 307.9 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.2853841Z Downloading scikit_learn-1.9.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (9.2 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.3174099Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.2/9.2 MB 308.4 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.3308825Z Downloading scipy-1.18.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (35.3 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.4463246Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 35.3/35.3 MB 311.5 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.4598660Z Downloading mlflow-3.18.0-py3-none-any.whl (12.6 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.5097291Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.6/12.6 MB 264.2 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.5237032Z Downloading pyarrow-26.0.1-cp312-cp312-manylinux_2_28_x86_64.whl (55.0 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.6845724Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 55.0/55.0 MB 346.0 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.6986127Z Downloading pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7047187Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.9/807.9 kB 154.0 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7191480Z Downloading joblib-1.6.0-py3-none-any.whl (306 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7361040Z Downloading python_calamine-0.9.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (953 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7421425Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 953.4/953.4 kB 182.2 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7553109Z Downloading jupyter-1.1.1-py2.py3-none-any.whl (2.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7709252Z Downloading nbconvert-7.17.2-py3-none-any.whl (262 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.7907450Z Downloading nbformat-5.11.1-py3-none-any.whl (79 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8061940Z Downloading ipykernel-7.4.0-py3-none-any.whl (123 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8217392Z Downloading pytest-9.2.0-py3-none-any.whl (411 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8423093Z Downloading mlflow_skinny-3.18.0-py3-none-any.whl (4.4 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8586034Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.4/4.4 MB 296.7 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8718702Z Downloading mlflow_tracing-3.18.0-py3-none-any.whl (2.1 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8801550Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 295.3 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.8935782Z Downloading aiohttp-3.14.5-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.9 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9021752Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 269.9 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9157033Z Downloading alembic-1.20.1-py3-none-any.whl (270 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9317629Z Downloading anyio-4.16.0-py3-none-any.whl (134 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9472214Z Downloading cachetools-7.3.2-py3-none-any.whl (19 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9628620Z Downloading click-8.5.1-py3-none-any.whl (126 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9787022Z Downloading cloudpickle-3.1.2-py3-none-any.whl (22 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:39.9938882Z Downloading cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (4.8 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0093401Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.8/4.8 MB 347.7 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0230904Z Downloading databricks_sdk-0.167.0-py3-none-any.whl (1.2 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0301295Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.2/1.2 MB 203.2 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0435667Z Downloading docker-7.2.0-py3-none-any.whl (148 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0593670Z Downloading fastapi-0.163.1-py3-none-any.whl (154 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0752920Z Downloading flask-3.1.3-py3-none-any.whl (103 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.0906423Z Downloading flask_cors-6.0.5-py3-none-any.whl (16 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1123307Z Downloading gitpython-3.2.1-py3-none-any.whl (231 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1292050Z Downloading gitdb-4.0.12-py3-none-any.whl (62 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1455324Z Downloading google_auth-2.62.2-py3-none-any.whl (270 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1618290Z Downloading graphene-3.4.3-py2.py3-none-any.whl (114 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1805463Z Downloading graphql_core-3.2.14-py3-none-any.whl (279 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.1965230Z Downloading graphql_relay-3.2.0-py3-none-any.whl (16 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.2122841Z Downloading gunicorn-26.2.0-py3-none-any.whl (228 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.2286032Z Downloading huey-3.5.4-py3-none-any.whl (135 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.2448392Z Downloading importlib_metadata-10.2.0-py3-none-any.whl (34 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.2603943Z Downloading matplotlib-3.11.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (9.9 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3139221Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 9.9/9.9 MB 188.5 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3273832Z Downloading mistune-3.4.0-py3-none-any.whl (70 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3432925Z Downloading multidict-7.2.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (516 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3597610Z Downloading opentelemetry_api-1.45.2-py3-none-any.whl (60 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3752654Z Downloading opentelemetry_proto-1.45.2-py3-none-any.whl (72 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.3907958Z Downloading opentelemetry_sdk-1.45.2-py3-none-any.whl (141 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4069518Z Downloading opentelemetry_semantic_conventions-0.66b2-py3-none-any.whl (206 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4228617Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4384740Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4540404Z Downloading protobuf-7.36.2-cp310-abi3-manylinux2014_x86_64.whl (343 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4703323Z Downloading pydantic-2.14.3-py3-none-any.whl (494 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4871393Z Downloading pydantic_core-2.50.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.4966632Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 294.8 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5123270Z Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5290739Z Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5444822Z Downloading python_multipart-0.0.34-py3-none-any.whl (32 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5598613Z Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5756037Z Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.5915744Z Downloading idna-3.20-py3-none-any.whl (69 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6070956Z Downloading skops-0.16.0-py3-none-any.whl (148 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6240213Z Downloading smmap-5.0.3-py3-none-any.whl (24 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6402913Z Downloading sqlalchemy-2.1.9-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (4.7 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6554181Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.7/4.7 MB 359.4 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6686233Z Downloading sqlparse-0.6.1-py3-none-any.whl (51 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.6842888Z Downloading starlette-1.10.0-py3-none-any.whl (80 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7002690Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7165818Z Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7335836Z Downloading uvicorn-0.54.0-py3-none-any.whl (87 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7501712Z Downloading yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (117 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7659078Z Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.7880536Z Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8038217Z Downloading annotated_doc-0.0.6-py3-none-any.whl (5.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8195947Z Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8359223Z Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8513112Z Downloading bleach-6.4.0-py3-none-any.whl (165 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8672950Z Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8827268Z Downloading certifi-2026.10.23-py3-none-any.whl (135 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.8983498Z Downloading cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (221 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9145071Z Downloading comm-0.2.3-py3-none-any.whl (7.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9301975Z Downloading contourpy-1.4.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (383 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9465569Z Downloading cycler-0.12.1-py3-none-any.whl (8.3 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9619146Z Downloading debugpy-1.8.22-cp312-cp312-manylinux_2_34_x86_64.whl (4.0 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9747528Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.0/4.0 MB 357.8 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:40.9883133Z Downloading fastjsonschema-2.22.3-py3-none-any.whl (28 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0043867Z Downloading fonttools-4.68.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.4 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0217620Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.4/5.4 MB 344.3 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0356600Z Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (242 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0518188Z Downloading h11-0.16.0-py3-none-any.whl (37 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0675265Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0829036Z Downloading ipython-9.18.1-py3-none-any.whl (649 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.0881994Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 649.8/649.8 kB 135.5 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1012907Z Downloading prompt_toolkit-3.0.53-py3-none-any.whl (392 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1174703Z Downloading ipython_pygments_lexers-1.1.1-py3-none-any.whl (8.1 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1334831Z Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1489782Z Downloading jedi-0.20.1-py2.py3-none-any.whl (4.9 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1649621Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 4.9/4.9 MB 341.0 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1792431Z Downloading parso-0.8.7-py2.py3-none-any.whl (107 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.1954759Z Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2115463Z Downloading jsonschema-4.26.0-py3-none-any.whl (90 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2272274Z Downloading jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2427794Z Downloading jupyter_client-8.10.0-py3-none-any.whl (110 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2585770Z Downloading jupyter_core-5.9.1-py3-none-any.whl (29 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2737625Z Downloading kiwisolver-1.5.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (1.5 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2811176Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.5/1.5 MB 248.9 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.2947052Z Downloading lazy_importer-0.1.0-py3-none-any.whl (12 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3099447Z Downloading markupsafe-3.0.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (22 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3252667Z Downloading matplotlib_inline-0.2.2-py3-none-any.whl (9.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3406729Z Downloading narwhals-2.28.0-py3-none-any.whl (490 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3583207Z Downloading nbclient-0.11.0-py3-none-any.whl (25 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3737486Z Downloading nest_asyncio2-1.7.4-py3-none-any.whl (8.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.3892889Z Downloading pandocfilters-1.5.1-py2.py3-none-any.whl (8.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4048001Z Downloading pexpect-4.9.0-py2.py3-none-any.whl (63 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4203917Z Downloading pillow-13.0.0-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4418138Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 360.3 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4552265Z Downloading platformdirs-4.14.5-py3-none-any.whl (35 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4705977Z Downloading prettytable-3.18.0-py3-none-any.whl (37 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.4866576Z Downloading propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (250 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5024470Z Downloading psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl (155 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5189622Z Downloading ptyprocess-0.7.0-py2.py3-none-any.whl (13 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5344752Z Downloading pyasn1_modules-0.4.2-py3-none-any.whl (181 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5501760Z Downloading pyasn1-0.6.5-py3-none-any.whl (84 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5658345Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5725859Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 234.3 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.5859208Z Downloading pyparsing-3.3.3-py3-none-any.whl (126 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6015907Z Downloading pyzmq-27.3.0-cp312-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (855 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6083271Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 855.2/855.2 kB 128.1 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6218428Z Downloading referencing-0.37.0-py3-none-any.whl (26 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6373326Z Downloading rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (371 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6533264Z Downloading six-1.17.0-py2.py3-none-any.whl (11 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6684557Z Downloading stack_data-0.6.3-py3-none-any.whl (24 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6834276Z Downloading asttokens-3.0.2-py3-none-any.whl (28 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.6985233Z Downloading executing-2.3.0-py3-none-any.whl (29 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7148846Z Downloading threadpoolctl-3.8.0-py3-none-any.whl (32 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7316414Z Downloading tinycss2-1.5.1-py3-none-any.whl (28 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7472908Z Downloading tornado-6.6.1-cp311-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (534 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7521540Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 534.5/534.5 kB 103.7 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7653954Z Downloading traitlets-5.16.1-py3-none-any.whl (86 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.7868421Z Downloading typing_inspection-0.4.5-py3-none-any.whl (14 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8025386Z Downloading wcwidth-0.9.4-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (785 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8084158Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 785.9/785.9 kB 154.2 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8218325Z Downloading webencodings-0.6.1-py3-none-any.whl (8.7 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8372544Z Downloading werkzeug-3.1.9-py3-none-any.whl (228 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8530668Z Downloading zipp-4.1.2-py3-none-any.whl (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8688226Z Downloading beautifulsoup4-4.15.0-py3-none-any.whl (109 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8844165Z Downloading soupsieve-4.1.1-py3-none-any.whl (55 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.8999611Z Downloading defusedxml-0.7.1-py2.py3-none-any.whl (25 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9156968Z Downloading ipywidgets-8.1.9-py3-none-any.whl (140 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9313905Z Downloading jupyterlab_widgets-3.0.17-py3-none-any.whl (217 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9481599Z Downloading widgetsnbextension-4.0.16-py3-none-any.whl (2.2 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9575236Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 281.6 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9713123Z Downloading jupyter_console-6.6.3-py3-none-any.whl (24 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:41.9868818Z Downloading jupyterlab-4.6.6-py3-none-any.whl (17.3 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.0443401Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 17.3/17.3 MB 313.4 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:42.0591418Z Downloading httpx-0.28.1-py3-none-any.whl (73 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.0748890Z Downloading httpcore-1.0.9-py3-none-any.whl (78 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.0905210Z Downloading jupyter_server-2.21.1-py3-none-any.whl (394 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.1064694Z Downloading jupyterlab_server-2.28.1-py3-none-any.whl (60 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.1224730Z Downloading argon2_cffi-25.1.0-py3-none-any.whl (14 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.1377064Z Downloading async_lru-2.4.0-py3-none-any.whl (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.1534642Z Downloading babel-2.18.0-py3-none-any.whl (10.2 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.1881224Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 10.2/10.2 MB 310.4 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2017331Z Downloading json5-0.17.3-py3-none-any.whl (34 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2183196Z Downloading jupyter_builder-1.3.0-py3-none-any.whl (950 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2244510Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 950.3/950.3 kB 188.5 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2382330Z Downloading jupyter_events-0.12.1-py3-none-any.whl (19 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2535315Z Downloading jsonpointer-3.12-py3-none-any.whl (10 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2690516Z Downloading jupyter_lsp-2.3.1-py3-none-any.whl (77 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.2861821Z Downloading jupyter_server_terminals-0.5.4-py3-none-any.whl (13 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3014154Z Downloading notebook_shim-0.2.4-py3-none-any.whl (13 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3168758Z Downloading prometheus_client-0.26.0-py3-none-any.whl (64 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3330592Z Downloading python_json_logger-4.2.0-py3-none-any.whl (14 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3488223Z Downloading rfc3986_validator-0.1.1-py2.py3-none-any.whl (4.2 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3638925Z Downloading rfc3987_syntax-1.1.0-py3-none-any.whl (8.0 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3795593Z Downloading lark-1.3.1-py3-none-any.whl (113 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.3972352Z Downloading send2trash-2.2.0-py3-none-any.whl (17 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4124342Z Downloading terminado-0.18.1-py3-none-any.whl (14 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4284159Z Downloading webcolors-25.10.0-py3-none-any.whl (14 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4441879Z Downloading websocket_client-1.9.2-py3-none-any.whl (95 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4597371Z Downloading argon2_cffi_bindings-26.2.0-cp310-abi3-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (26 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4751343Z Downloading fqdn-1.6.0-py3-none-any.whl (12 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.4902661Z Downloading isoduration-20.11.0-py3-none-any.whl (11 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5076970Z Downloading arrow-1.4.0-py3-none-any.whl (68 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5232159Z Downloading jupyterlab_pygments-0.3.0-py3-none-any.whl (15 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5387433Z Downloading mako-1.4.3-py3-none-any.whl (80 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5545442Z Downloading notebook-7.6.5-py3-none-any.whl (5.6 MB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5731867Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.6/5.6 MB 339.2 MB/s  0:00:00
+ciclo	Instalar dependencias	2026-11-17T00:21:42.5864621Z Downloading pure_eval-0.2.4-py3-none-any.whl (11 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.6016319Z Downloading pycparser-3.12-py3-none-any.whl (62 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.6173650Z Downloading rfc3339_validator-0.1.4-py2.py3-none-any.whl (3.5 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.6335287Z Downloading tzdata-2026.6-py2.py3-none-any.whl (348 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:42.6495775Z Downloading uri_template-1.3.0-py3-none-any.whl (11 kB)
+ciclo	Instalar dependencias	2026-11-17T00:21:43.8966889Z Installing collected packages: pure-eval, ptyprocess, huey, zipp, widgetsnbextension, websocket-client, webencodings, webcolors, wcwidth, urllib3, uri-template, tzdata, typing-extensions, traitlets, tornado, threadpoolctl, sqlparse, soupsieve, smmap, six, send2trash, rpds-py, rfc3986-validator, pyzmq, pyyaml, python-multipart, python-json-logger, python-dotenv, python-calamine, pyparsing, pygments, pycparser, pyasn1, pyarrow, psutil, protobuf, propcache, prometheus-client, pluggy, platformdirs, pillow, pexpect, parso, pandocfilters, packaging, numpy, nest-asyncio2, narwhals, multidict, mistune, markupsafe, lazy-importer, lark, kiwisolver, jupyterlab_widgets, jupyterlab-pygments, jsonpointer, json5, itsdangerous, iniconfig, idna, h11, gunicorn, graphql-core, frozenlist, fqdn, fonttools, fastjsonschema, executing, defusedxml, debugpy, cycler, comm, cloudpickle, click, charset_normalizer, certifi, cachetools, blinker, babel, attrs, async-lru, asttokens, annotated-types, annotated-doc, aiohappyeyeballs, yarl, werkzeug, uvicorn, typing-inspection, tinycss2, terminado, stack_data, sqlalchemy, scipy, rfc3987-syntax, rfc3339-validator, requests, referencing, python-dateutil, pytest, pydantic-core, pyasn1-modules, prompt_toolkit, prettytable, opentelemetry-proto, opentelemetry-api, matplotlib-inline, Mako, jupyter-core, joblib, jinja2, jedi, ipython-pygments-lexers, importlib_metadata, httpcore, graphql-relay, gitdb, contourpy, cffi, bleach, beautifulsoup4, anyio, aiosignal, starlette, scikit-learn, pydantic, pandas, opentelemetry-semantic-conventions, matplotlib, jupyter-server-terminals, jupyter-client, jupyter-builder, jsonschema-specifications, ipython, httpx, graphene, gitpython, Flask, docker, cryptography, arrow, argon2-cffi-bindings, alembic, aiohttp, skops, opentelemetry-sdk, jsonschema, isoduration, ipywidgets, ipykernel, google-auth, Flask-CORS, fastapi, argon2-cffi, nbformat, jupyter-console, databricks-sdk, nbclient, mlflow-tracing, mlflow-skinny, jupyter-events, nbconvert, mlflow, jupyter-server, notebook-shim, jupyterlab-server, jupyter-lsp, jupyterlab, notebook, jupyter
+ciclo	Instalar dependencias	2026-11-17T00:22:23.0040365Z 
+ciclo	Instalar dependencias	2026-11-17T00:22:23.0170067Z Successfully installed Flask-3.1.3 Flask-CORS-6.0.5 Mako-1.4.3 aiohappyeyeballs-2.7.1 aiohttp-3.14.5 aiosignal-1.4.0 alembic-1.20.1 annotated-doc-0.0.6 annotated-types-0.8.0 anyio-4.16.0 argon2-cffi-25.1.0 argon2-cffi-bindings-26.2.0 arrow-1.4.0 asttokens-3.0.2 async-lru-2.4.0 attrs-26.1.0 babel-2.18.0 beautifulsoup4-4.15.0 bleach-6.4.0 blinker-1.9.0 cachetools-7.3.2 certifi-2026.10.23 cffi-2.1.1 charset_normalizer-3.5.2 click-8.5.1 cloudpickle-3.1.2 comm-0.2.3 contourpy-1.4.0 cryptography-50.0.2 cycler-0.12.1 databricks-sdk-0.167.0 debugpy-1.8.22 defusedxml-0.7.1 docker-7.2.0 executing-2.3.0 fastapi-0.163.1 fastjsonschema-2.22.3 fonttools-4.68.0 fqdn-1.6.0 frozenlist-1.8.0 gitdb-4.0.12 gitpython-3.2.1 google-auth-2.62.2 graphene-3.4.3 graphql-core-3.2.14 graphql-relay-3.2.0 gunicorn-26.2.0 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 huey-3.5.4 idna-3.20 importlib_metadata-10.2.0 iniconfig-2.3.1 ipykernel-7.4.0 ipython-9.18.1 ipython-pygments-lexers-1.1.1 ipywidgets-8.1.9 isoduration-20.11.0 itsdangerous-2.2.0 jedi-0.20.1 jinja2-3.1.6 joblib-1.6.0 json5-0.17.3 jsonpointer-3.12 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 jupyter-1.1.1 jupyter-builder-1.3.0 jupyter-client-8.10.0 jupyter-console-6.6.3 jupyter-core-5.9.1 jupyter-events-0.12.1 jupyter-lsp-2.3.1 jupyter-server-2.21.1 jupyter-server-terminals-0.5.4 jupyterlab-4.6.6 jupyterlab-pygments-0.3.0 jupyterlab-server-2.28.1 jupyterlab_widgets-3.0.17 kiwisolver-1.5.1 lark-1.3.1 lazy-importer-0.1.0 markupsafe-3.0.4 matplotlib-3.11.2 matplotlib-inline-0.2.2 mistune-3.4.0 mlflow-3.18.0 mlflow-skinny-3.18.0 mlflow-tracing-3.18.0 multidict-7.2.1 narwhals-2.28.0 nbclient-0.11.0 nbconvert-7.17.2 nbformat-5.11.1 nest-asyncio2-1.7.4 notebook-7.6.5 notebook-shim-0.2.4 numpy-2.5.5 opentelemetry-api-1.45.2 opentelemetry-proto-1.45.2 opentelemetry-sdk-1.45.2 opentelemetry-semantic-conventions-0.66b2 packaging-26.3 pandas-3.1.1 pandocfilters-1.5.1 parso-0.8.7 pexpect-4.9.0 pillow-13.0.0 platformdirs-4.14.5 pluggy-1.7.0 prettytable-3.18.0 prometheus-client-0.26.0 prompt_toolkit-3.0.53 propcache-0.5.4 protobuf-7.36.2 psutil-7.2.2 ptyprocess-0.7.0 pure-eval-0.2.4 pyarrow-26.0.1 pyasn1-0.6.5 pyasn1-modules-0.4.2 pycparser-3.12 pydantic-2.14.3 pydantic-core-2.50.4 pygments-2.21.0 pyparsing-3.3.3 pytest-9.2.0 python-calamine-0.9.1 python-dateutil-2.9.0.post0 python-dotenv-1.2.4 python-json-logger-4.2.0 python-multipart-0.0.34 pyyaml-6.0.3 pyzmq-27.3.0 referencing-0.37.0 requests-2.34.2 rfc3339-validator-0.1.4 rfc3986-validator-0.1.1 rfc3987-syntax-1.1.0 rpds-py-2026.9.1 scikit-learn-1.9.1 scipy-1.18.1 send2trash-2.2.0 six-1.17.0 skops-0.16.0 smmap-5.0.3 soupsieve-4.1.1 sqlalchemy-2.1.9 sqlparse-0.6.1 stack_data-0.6.3 starlette-1.10.0 terminado-0.18.1 threadpoolctl-3.8.0 tinycss2-1.5.1 tornado-6.6.1 traitlets-5.16.1 typing-extensions-4.16.0 typing-inspection-0.4.5 tzdata-2026.6 uri-template-1.3.0 urllib3-2.8.0 uvicorn-0.54.0 wcwidth-0.9.4 webcolors-25.10.0 webencodings-0.6.1 websocket-client-1.9.2 werkzeug-3.1.9 widgetsnbextension-4.0.16 yarl-1.25.1 zipp-4.1.2
+ciclo	Restaurar arquivo original da UCI	﻿2026-11-17T00:22:23.5489581Z ##[group]Run actions/cache@v4
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5490082Z with:
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5490304Z   path: data/raw/source
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5490538Z   key: uci-350-30c6be3abd8dcfd3
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5490798Z   enableCrossOsArchive: false
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5491046Z   fail-on-cache-miss: false
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5491272Z   lookup-only: false
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5491476Z   save-always: false
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5491670Z env:
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5491854Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5492091Z   PYTHONUNBUFFERED: 1
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5492374Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5492813Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5493262Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5493665Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5494051Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5494454Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.5494809Z ##[endgroup]
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.6547870Z (node:2532) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.6548772Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ciclo	Restaurar arquivo original da UCI	2026-11-17T00:22:23.7939387Z Cache not found for input keys: uci-350-30c6be3abd8dcfd3
+ciclo	Testes automatizados	﻿2026-11-17T00:22:23.8051274Z ##[group]Run pytest -q
+ciclo	Testes automatizados	2026-11-17T00:22:23.8051564Z ^[[36;1mpytest -q^[[0m
+ciclo	Testes automatizados	2026-11-17T00:22:23.8104439Z shell: /usr/bin/bash -e {0}
+ciclo	Testes automatizados	2026-11-17T00:22:23.8104701Z env:
+ciclo	Testes automatizados	2026-11-17T00:22:23.8104897Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Testes automatizados	2026-11-17T00:22:23.8105143Z   PYTHONUNBUFFERED: 1
+ciclo	Testes automatizados	2026-11-17T00:22:23.8105436Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Testes automatizados	2026-11-17T00:22:23.8105883Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Testes automatizados	2026-11-17T00:22:23.8106301Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Testes automatizados	2026-11-17T00:22:23.8106699Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Testes automatizados	2026-11-17T00:22:23.8107078Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Testes automatizados	2026-11-17T00:22:23.8107451Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Testes automatizados	2026-11-17T00:22:23.8107765Z ##[endgroup]
+ciclo	Testes automatizados	2026-11-17T00:22:27.8170894Z .....................................                                    [100%]
+ciclo	Testes automatizados	2026-11-17T00:22:27.8180398Z 37 passed in 3.06s
+ciclo	Executar ciclo (notebooks 01 a 05)	﻿2026-11-17T00:22:28.0853665Z ##[group]Run if [ "$NOVO_LOTE" = "true" ]; then
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0854078Z ^[[36;1mif [ "$NOVO_LOTE" = "true" ]; then^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0854415Z ^[[36;1m  python -m src.pipeline --novo-lote^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0854698Z ^[[36;1melse^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0854908Z ^[[36;1m  python -m src.pipeline^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0855161Z ^[[36;1mfi^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0855436Z ^[[36;1mecho "cycle_id=$PIPELINE_CYCLE_ID" >> "$GITHUB_OUTPUT"^[[0m
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0905824Z shell: /usr/bin/bash -e {0}
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0906102Z env:
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0906303Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0906563Z   PYTHONUNBUFFERED: 1
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0906862Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0907309Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0907746Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0908131Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0908554Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0908945Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0909271Z   NOVO_LOTE: true
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0909505Z   PIPELINE_CYCLE_ID: ciclo_gha_43986932580_1
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:28.0909783Z ##[endgroup]
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:29.8531743Z 2026-11-17 00:22:29,852 INFO src.ingestao: Baixando dataset de https://archive.ics.uci.edu/static/public/350/default+of+credit+card+clients.zip
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:30.7925767Z 2026-11-17 00:22:30,792 INFO src.ingestao: Fonte verificada: default of credit card clients.xls (sha256 30c6be3abd8d...)
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:31.2326399Z 2026-11-17 00:22:31,232 INFO src.ingestao: Lote publicado: lote_003.csv (3000 registros)
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:31.2330702Z 2026-11-17 00:22:31,232 INFO __main__: Executando 01_etl.ipynb
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:31.5819141Z [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:31.9349332Z 2026-11-17 00:22:31,934 INFO traitlets: Executing notebook with kernel: python3
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:36.8168957Z 2026-11-17 00:22:36,816 INFO __main__: Executando 02_votacao_features.ipynb
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:37.0204622Z [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:37.3661081Z 2026-11-17 00:22:37,365 INFO traitlets: Executing notebook with kernel: python3
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:44.8501052Z 2026-11-17 00:22:44,849 INFO __main__: Executando 03_treino_competicao.ipynb
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:45.0534414Z [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:45.4355753Z 2026-11-17 00:22:45,435 INFO traitlets: Executing notebook with kernel: python3
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:58.5252886Z 2026-11-17 00:22:58,525 INFO __main__: Executando 04_selecao_promocao.ipynb
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:58.7308656Z [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:22:59.0719037Z 2026-11-17 00:22:59,071 INFO traitlets: Executing notebook with kernel: python3
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:23:04.1955950Z 2026-11-17 00:23:04,195 INFO __main__: Executando 05_previsoes.ipynb
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:23:04.4016637Z [IPKernelApp] WARNING | Kernel is running over TCP without encryption. All communication (including code and outputs) is sent in plain text and is susceptible to eavesdropping. Use IPC transport or launch with kernel manager-provisioned CurveZMQ keys to enable transport encryption.
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:23:04.6895011Z 2026-11-17 00:23:04,689 INFO traitlets: Executing notebook with kernel: python3
+ciclo	Executar ciclo (notebooks 01 a 05)	2026-11-17T00:23:11.8433302Z 2026-11-17 00:23:11,843 INFO __main__: Ciclo ciclo_gha_43986932580_1 concluido. Comparacao: reports/evidencias/comparacao_ciclos.md
+ciclo	Resumo do ciclo	﻿2026-11-17T00:23:12.3921750Z ##[group]Run cat reports/evidencias/comparacao_ciclos.md >> "$GITHUB_STEP_SUMMARY"
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3922370Z ^[[36;1mcat reports/evidencias/comparacao_ciclos.md >> "$GITHUB_STEP_SUMMARY"^[[0m
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3922802Z ^[[36;1mecho '```json' >> "$GITHUB_STEP_SUMMARY"^[[0m
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3923308Z ^[[36;1mcat "reports/evidencias/ciclo_gha_43986932580_1/04_promocao.json" >> "$GITHUB_STEP_SUMMARY"^[[0m
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3923803Z ^[[36;1mecho '```' >> "$GITHUB_STEP_SUMMARY"^[[0m
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3974725Z shell: /usr/bin/bash -e {0}
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3975079Z env:
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3975361Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3975799Z   PYTHONUNBUFFERED: 1
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3976226Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3976806Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.3977316Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.4031309Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.4032119Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.4032543Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Resumo do ciclo	2026-11-17T00:23:12.4032866Z ##[endgroup]
+ciclo	Publicar evidencias do run	﻿2026-11-17T00:23:12.4235014Z ##[group]Run actions/upload-artifact@v4
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4235341Z with:
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4235552Z   name: evidencias-43986932580-1
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4235985Z   path: reports/
+ciclo	Publicar evidencias do run	notebooks/
+ciclo	Publicar evidencias do run	models/modelo_vigente.json
+ciclo	Publicar evidencias do run	models/historico_promocoes.jsonl
+ciclo	Publicar evidencias do run	
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4236447Z   if-no-files-found: warn
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4236685Z   compression-level: 6
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4236902Z   overwrite: false
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4237119Z   include-hidden-files: false
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4237352Z env:
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4237544Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4237788Z   PYTHONUNBUFFERED: 1
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4238078Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4238527Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4238959Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4239337Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4239712Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4240384Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.4240707Z ##[endgroup]
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.5946473Z (node:2962) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.5947911Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.6231199Z Multiple search paths detected. Calculating the least common ancestor of all paths
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.6234102Z The least common ancestor is /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction. This will be the root directory of the artifact
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.6235598Z With the provided path, there will be 51 files uploaded
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.6236515Z Artifact name is valid!
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.6237069Z Root directory input is valid!
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.8734139Z Beginning upload of artifact content to blob storage
+ciclo	Publicar evidencias do run	2026-11-17T00:23:12.9675314Z (node:2962) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.2387091Z Uploaded bytes 234854
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.2869332Z Finished uploading artifact content to blob storage!
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.2870932Z SHA256 digest of uploaded artifact zip is 15ed228aca336fd2a95031146108d68560b3e44aab5b2c1a7b6f636ea9c02c4d
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.2872809Z Finalizing artifact upload
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.7070886Z Artifact evidencias-43986932580-1.zip successfully finalized. Artifact ID 14286545168
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.7072237Z Artifact evidencias-43986932580-1 has been successfully uploaded! Final size is 234854 bytes. Artifact ID is 14286545168
+ciclo	Publicar evidencias do run	2026-11-17T00:23:13.7073863Z Artifact download URL: https://github.com/gabrielforster/mlops-credit-default-prediction/actions/runs/43986932580/artifacts/14286545168
+ciclo	Persistir estado no repositorio	﻿2026-11-17T00:23:13.7235689Z ##[group]Run git config user.name "github-actions[bot]"
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7236149Z ^[[36;1mgit config user.name "github-actions[bot]"^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7236608Z ^[[36;1mgit config user.email "41898282+github-actions[bot]@users.noreply.github.com"^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7237120Z ^[[36;1mgit add data/raw/batches mlruns models reports notebooks^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7237522Z ^[[36;1mif git diff --cached --quiet; then^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7237830Z ^[[36;1m  echo "Nada a persistir."^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7238099Z ^[[36;1m  exit 0^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7238302Z ^[[36;1mfi^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7238644Z ^[[36;1mgit commit -m "chore(pipeline): registrar ciclo_gha_43986932580_1 [skip ci]"^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7239293Z ^[[36;1mgit pull --rebase origin "$GITHUB_REF_NAME"^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7239641Z ^[[36;1mgit push origin "HEAD:$GITHUB_REF_NAME"^[[0m
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7289060Z shell: /usr/bin/bash -e {0}
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7289321Z env:
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7289532Z   MLFLOW_DISABLE_AGENT_HINT: 1
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7290245Z   PYTHONUNBUFFERED: 1
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7290553Z   pythonLocation: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7291038Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib/pkgconfig
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7291501Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7291899Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7292302Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.16/x64
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7292702Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.16/x64/lib
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.7293038Z ##[endgroup]
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9088526Z [master 79d1b2e] chore(pipeline): registrar ciclo_gha_43986932580_1 [skip ci]
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9089444Z  46 files changed, 15483 insertions(+), 830 deletions(-)
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9089841Z  create mode 100644 data/raw/batches/lote_003.csv
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9091061Z  create mode 100644 mlruns/artifacts/304b8409d5ce47bf83e16b23c97527f4/artifacts/selected_features.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9092263Z  create mode 100644 mlruns/artifacts/3548ceed42194137be650426e3d31cde/artifacts/limpeza.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9093380Z  create mode 100644 mlruns/artifacts/3548ceed42194137be650426e3d31cde/artifacts/validacao.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9094699Z  create mode 100644 mlruns/artifacts/90ca68862aab4924852f8a9677833418/artifacts/previsoes_ciclo_gha_43986932580_1.csv
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9095675Z  create mode 100644 mlruns/artifacts/9385e9aff06c47cc8a7abcd48cadc0ed/artifacts/features_eleitas.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9096378Z  create mode 100644 mlruns/artifacts/9385e9aff06c47cc8a7abcd48cadc0ed/artifacts/votacao_features.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9097136Z  create mode 100644 mlruns/artifacts/c8ebc5d040024e4d9f2c796572fc2301/artifacts/selected_features.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9098389Z  create mode 100644 mlruns/artifacts/e7baf34540694fd298675b0edba000ef/artifacts/decisao_promocao.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9099392Z  create mode 100644 mlruns/artifacts/fd45888b656b478cae8ffe5200d48672/artifacts/drift_psi.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9100985Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/MLmodel
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9102291Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/conda.yaml
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9103589Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/input_example.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9104906Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/model.skops
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9106151Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/python_env.yaml
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9107400Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/requirements.txt
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9108797Z  create mode 100644 mlruns/artifacts/models/m-54accfab2ead4b098b7cd124b37a19b9/artifacts/serving_input_example.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9110394Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/MLmodel
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9111999Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/conda.yaml
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9113289Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/input_example.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9114173Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/model.skops
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9114869Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/python_env.yaml
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9115573Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/requirements.txt
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9116499Z  create mode 100644 mlruns/artifacts/models/m-5ce64fb2ca5448f88f77d6cb68bba4bc/artifacts/serving_input_example.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9117834Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/01_drift.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9118413Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/01_etl.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9118935Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/02_votacao_features.csv
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9119490Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/02_votacao_features.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9120307Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/03_competicao.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9120945Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/04_promocao.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9121875Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/05_previsoes.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9122842Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/notebooks/01_etl.ipynb
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9123915Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/notebooks/02_votacao_features.ipynb
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9125044Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/notebooks/03_treino_competicao.ipynb
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9126183Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/notebooks/04_selecao_promocao.ipynb
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9127257Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/notebooks/05_previsoes.ipynb
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9128235Z  create mode 100644 reports/evidencias/ciclo_gha_43986932580_1/resumo_ciclo.json
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:13.9129140Z  create mode 100644 reports/previsoes/previsoes_ciclo_gha_43986932580_1.csv
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:14.1983286Z From https://github.com/gabrielforster/mlops-credit-default-prediction
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:14.1984088Z  * branch            master     -> FETCH_HEAD
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:14.2070189Z Current branch master is up to date.
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:15.9359693Z To https://github.com/gabrielforster/mlops-credit-default-prediction
+ciclo	Persistir estado no repositorio	2026-11-17T00:23:15.9360977Z    ad26032..79d1b2e  HEAD -> master
+ciclo	Post Restaurar arquivo original da UCI	﻿2026-11-17T00:23:15.9482923Z Post job cleanup.
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.0516813Z (node:2999) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.0517711Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.0718934Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction --files-from manifest.txt --use-compress-program zstdmt
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.2754981Z (node:2999) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.7125353Z Sent 1502335 of 1502335 (100.0%), 3.2 MBs/sec
+ciclo	Post Restaurar arquivo original da UCI	2026-11-17T00:23:16.8850353Z Cache saved with key: uci-350-30c6be3abd8dcfd3
+ciclo	Post Python 3.12	﻿2026-11-17T00:23:16.8974248Z Post job cleanup.
+ciclo	Post Python 3.12	2026-11-17T00:23:17.0324468Z (node:3019) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+ciclo	Post Python 3.12	2026-11-17T00:23:17.0325767Z (Use `node --trace-deprecation ...` to show where the warning was created)
+ciclo	Post Python 3.12	2026-11-17T00:23:17.0560068Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction --files-from manifest.txt --use-compress-program zstdmt
+ciclo	Post Python 3.12	2026-11-17T00:23:17.7180205Z (node:3019) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+ciclo	Post Python 3.12	2026-11-17T00:23:18.7034652Z Sent 0 of 259749954 (0.0%), 0.0 MBs/sec
+ciclo	Post Python 3.12	2026-11-17T00:23:19.7035934Z Sent 259749954 of 259749954 (100.0%), 123.9 MBs/sec
+ciclo	Post Python 3.12	2026-11-17T00:23:19.8940559Z Cache saved with the key: setup-python-Linux-x64-26.04-Ubuntu-python-3.12.16-pip-522397552ef53254d73c264bee47f8ac5ea00c35ffba91ae45b5d09b28d4ec36
+ciclo	Post Checkout (estado persistido do ciclo anterior)	﻿2026-11-17T00:23:19.9115246Z Post job cleanup.
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:19.9974031Z [command]/usr/bin/git version
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0022688Z git version 2.56.1
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0069791Z Temporarily overriding HOME='/home/runner/work/_temp/9e3a6be2-38f2-4b8f-9467-d4826504a603' before making global git config changes
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0071470Z Adding repository directory to the temporary git global config as a safe directory
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0077653Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/mlops-credit-default-prediction/mlops-credit-default-prediction
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0138160Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0246830Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0631175Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0664335Z http.https://github.com/.extraheader
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0691795Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.0745120Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.1054389Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+ciclo	Post Checkout (estado persistido do ciclo anterior)	2026-11-17T00:23:20.1089388Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+ciclo	Complete job	﻿2026-11-17T00:23:20.1508874Z Cleaning up orphan processes
+ciclo	Complete job	2026-11-17T00:23:20.1875569Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
