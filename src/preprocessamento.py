@@ -239,6 +239,17 @@ def assign_split(ids: pd.Series, cfg: dict[str, Any]) -> pd.Series:
     return pd.Series(np.select([buckets < test, buckets < test + val], ["teste", "validacao"], "treino"), index=ids.index)
 
 
+def build_dataset(raw: pd.DataFrame, cfg: dict[str, Any]) -> pd.DataFrame:
+    """Mesmas transformacoes de linha do notebook 01: limpeza, atributos derivados e particao por ID.
+
+    Permite reconstruir treino/validacao/teste a partir dos lotes versionados, sem depender
+    de `data/processed/` (que nao e versionado).
+    """
+    cleaned, _ = clean(rename_target(raw, cfg), cfg)
+    out = engineer_features(cleaned)
+    return out.assign(particao=assign_split(out[cfg["data"]["id_column"]], cfg))
+
+
 def feature_columns(cfg: dict[str, Any], df: pd.DataFrame) -> list[str]:
     """Colunas candidatas a atributo: tudo exceto ID, alvo e metadados de linhagem."""
     exclude = {cfg["data"]["id_column"], cfg["data"]["target"], "lote", "particao"}
