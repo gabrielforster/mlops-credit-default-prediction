@@ -143,8 +143,10 @@ def make_ctx(cycle_id="ciclo_teste", data_version="dv_teste", batches=("lote_001
                         batches=list(batches))
 
 
-def votes_frame(selected_by_method: dict[str, set[str]], features=("a", "b", "c", "d")) -> pd.DataFrame:
-    return pd.DataFrame([{"method": m, "feature": f, "selected": f in chosen}
+def votes_frame(selected_by_method: dict[str, set[str]], features=("a", "b", "c", "d"),
+                ranks: dict[str, int] | None = None) -> pd.DataFrame:
+    ranks = ranks or {f: i + 1 for i, f in enumerate(features)}
+    return pd.DataFrame([{"method": m, "feature": f, "selected": f in chosen, "rank": ranks[f]}
                          for m, chosen in selected_by_method.items() for f in features])
 
 
@@ -156,9 +158,19 @@ def test_tally_votes_applies_configurable_minimum(minimum_votes, expected):
     assert dict(zip(tally["feature"], tally["votes"])) == {"a": 3, "b": 2, "c": 1, "d": 0}
 
 
+def test_tally_votes_fills_minimum_features_breaking_ties_by_mean_rank():
+    # So "a" tem 2 votos; "c" e "d" empatam com 1 voto e "d" tem rank medio melhor.
+    votes = votes_frame({"m1": {"a", "c"}, "m2": {"a", "d"}, "m3": set()}, ranks={"a": 1, "b": 2, "c": 4, "d": 3})
+    tally = fs.tally_votes(votes, minimum_votes=2, minimum_features=2)
+    assert tally.loc[tally["elected"], "feature"].tolist() == ["a", "d"]
+    assert dict(zip(tally["feature"], tally["elected_by"])) == {"a": "votos", "b": "", "c": "", "d": "minimo"}
+
+
 def test_tally_votes_rejects_impossible_minimum():
     with pytest.raises(ValueError):
         fs.tally_votes(votes_frame({"m1": {"a"}, "m2": {"a"}, "m3": {"a"}}), 4)
+    with pytest.raises(ValueError):
+        fs.tally_votes(votes_frame({"m1": {"a"}, "m2": {"a"}, "m3": {"a"}}), 2, minimum_features=5)
 
 
 @pytest.fixture(scope="module")
@@ -173,7 +185,8 @@ def test_feature_voting_runs_three_methods_and_records_every_vote(cfg, train_fra
     candidates = pp.feature_columns(cfg, train_frame)
     result = fs.run_feature_voting(train_frame[candidates], train_frame[cfg["data"]["target"]], cfg, make_ctx())
     rec = result.records
-    assert list(rec.columns) == ["cycle_id", "data_version", "method", "feature", "score", "rank", "vote", "votes", "final_selection"]
+    assert list(rec.columns) == ["cycle_id", "data_version", "method", "feature", "score", "rank", "vote", "votes", "mean_rank",
+                                "final_selection", "elected_by"]
     assert set(rec["method"]) == set(fs.SELECTORS) and len(rec) == 3 * len(candidates)
     per_method = rec.groupby("method")["vote"].sum().to_dict()
     assert per_method == {"select_k_best_f_classif": cfg["features"]["k_best"],

@@ -1,7 +1,8 @@
 """Selecao de atributos por tres metodos independentes e votacao.
 
 Cada metodo devolve uma linha por atributo: `feature`, `score`, `rank` (1 = melhor) e `selected`.
-A votacao elege os atributos selecionados por pelo menos `features.voting.minimum_votes` metodos.
+A votacao elege os atributos selecionados por pelo menos `features.voting.minimum_votes` metodos e
+garante `features.voting.minimum_features` atributos, desempatando pelo menor rank medio.
 Todos os metodos sao ajustados apenas na particao de treino.
 """
 
@@ -73,13 +74,32 @@ def selection_matrix(X: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(prep.transform(X), columns=X.columns, index=X.index)
 
 
-def tally_votes(results: pd.DataFrame, minimum_votes: int) -> pd.DataFrame:
-    """Agrega o resultado longo (metodo x atributo) em votos por atributo, preservando a ordem original."""
+def tally_votes(results: pd.DataFrame, minimum_votes: int, minimum_features: int = 1) -> pd.DataFrame:
+    """Agrega o resultado longo (metodo x atributo) em votos por atributo, preservando a ordem original.
+
+    Regra: eleito com `votes >= minimum_votes`. Se isso eleger menos que `minimum_features`, o conjunto
+    e completado pelos atributos de mais votos; o desempate e o menor rank medio entre os metodos
+    (`elected_by = "minimo"`). Empate restante: ordem original das colunas.
+    """
     if not 1 <= minimum_votes <= results["method"].nunique():
         raise ValueError(f"minimum_votes={minimum_votes} fora de [1, {results['method'].nunique()}]")
     order = list(dict.fromkeys(results["feature"]))
-    votes = results.groupby("feature")["selected"].sum().reindex(order).astype(int)
-    return pd.DataFrame({"feature": order, "votes": votes.to_numpy(), "elected": (votes >= minimum_votes).to_numpy()})
+    if not 1 <= minimum_features <= len(order):
+        raise ValueError(f"minimum_features={minimum_features} fora de [1, {len(order)}]")
+    grouped = results.groupby("feature")
+    tally = pd.DataFrame({
+        "feature": order,
+        "votes": grouped["selected"].sum().reindex(order).astype(int).to_numpy(),
+        "mean_rank": grouped["rank"].mean().reindex(order).to_numpy(),
+    })
+    tally["elected"] = tally["votes"] >= minimum_votes
+    tally["elected_by"] = np.where(tally["elected"], "votos", "")
+    missing = minimum_features - int(tally["elected"].sum())
+    if missing > 0:
+        fill = (tally[~tally["elected"]].assign(_pos=lambda d: range(len(d)))
+                .sort_values(["votes", "mean_rank", "_pos"], ascending=[False, True, True]).index[:missing])
+        tally.loc[fill, ["elected", "elected_by"]] = [True, "minimo"]
+    return tally
 
 
 @dataclass(frozen=True)
@@ -94,15 +114,15 @@ def run_feature_voting(X_train: pd.DataFrame, y_train: pd.Series, cfg: dict[str,
     Xs = selection_matrix(X_train)
     per_method = [fn(Xs, y_train, cfg).assign(method=name) for name, fn in SELECTORS.items()]
     long = pd.concat(per_method, ignore_index=True)
-    tally = tally_votes(long, cfg["features"]["voting"]["minimum_votes"])
+    voting = cfg["features"]["voting"]
+    tally = tally_votes(long, voting["minimum_votes"], voting["minimum_features"])
     elected = tally.loc[tally["elected"], "feature"].tolist()
-    if not elected:
-        raise ValueError("Nenhum atributo atingiu o minimo de votos; o ciclo nao pode treinar modelos")
-    records = long.merge(tally[["feature", "votes", "elected"]], on="feature").rename(
+    records = long.merge(tally[["feature", "votes", "mean_rank", "elected", "elected_by"]], on="feature").rename(
         columns={"selected": "vote", "elected": "final_selection"})
     records.insert(0, "data_version", ctx.data_version)
     records.insert(0, "cycle_id", ctx.cycle_id)
-    records = records[["cycle_id", "data_version", "method", "feature", "score", "rank", "vote", "votes", "final_selection"]]
+    records = records[["cycle_id", "data_version", "method", "feature", "score", "rank", "vote", "votes", "mean_rank",
+                       "final_selection", "elected_by"]]
     return VotingResult(records=records, tally=tally, elected=elected)
 
 
@@ -112,7 +132,9 @@ def elected_features_path(cfg: dict[str, Any], root: Path | None = None) -> Path
 
 def save_voting(result: VotingResult, ctx: CycleContext, cfg: dict[str, Any], root: Path | None = None) -> dict[str, Any]:
     payload = {**ctx.tags, "minimum_votes": cfg["features"]["voting"]["minimum_votes"],
-               "methods": list(SELECTORS), "elected_features": result.elected,
+               "minimum_features": cfg["features"]["voting"]["minimum_features"],
+               "tie_break": "mean_rank", "methods": list(SELECTORS), "elected_features": result.elected,
+               "elected_by_minimum": result.tally.loc[result.tally["elected_by"] == "minimo", "feature"].tolist(),
                "votes": dict(zip(result.tally["feature"], result.tally["votes"].astype(int).tolist()))}
     write_json(elected_features_path(cfg, root), payload)
     evidence = ctx.evidence_dir(cfg, root)

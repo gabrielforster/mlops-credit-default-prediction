@@ -31,6 +31,9 @@ evaluation:
 features:
   voting:
     minimum_votes: 2
+    # Quantidade minima de atributos. Se a regra de votos eleger menos, o conjunto e completado
+    # pelos mais votados; empate em votos e decidido pelo menor rank medio entre os tres metodos.
+    minimum_features: 5
   k_best: 10
   rfe_features: 10
   random_forest_features: 10
