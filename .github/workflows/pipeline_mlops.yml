@@ -4,6 +4,8 @@ name: pipeline-mlops
 # -> promocao -> previsoes -> MLflow. Qualquer falha interrompe o job antes da persistencia,
 # entao uma promocao so passa a valer se o ciclo inteiro terminar com sucesso.
 on:
+  schedule:
+    - cron: "0 9 * * 1" # toda segunda-feira, 09:00 UTC
   workflow_dispatch:
     inputs:
       novo_lote:
@@ -50,7 +52,7 @@ jobs:
       - name: Executar ciclo (notebooks 01 a 05)
         id: ciclo
         env:
-          NOVO_LOTE: ${{ inputs.novo_lote }}
+          NOVO_LOTE: ${{ github.event_name == 'schedule' || inputs.novo_lote }}
           PIPELINE_CYCLE_ID: ciclo_gha_${{ github.run_id }}_${{ github.run_attempt }}
         run: |
           if [ "$NOVO_LOTE" = "true" ]; then
@@ -75,8 +77,8 @@ jobs:
           path: |
             reports/
             notebooks/
-            models/modelo_vigente.json
-            models/historico_promocoes.jsonl
+            models/
+            mlruns/
           if-no-files-found: warn
 
       - name: Persistir estado no repositorio
