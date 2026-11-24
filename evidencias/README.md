@@ -8,6 +8,8 @@
 |---|---|
 | `github_actions/run_43986932580_workflow_dispatch.log` | Log completo de um ciclo no GitHub Actions: instalação, 37 testes, notebooks 01→05, upload das evidências e commit do estado (`79d1b2e`) |
 | `github_actions/run_<id>_schedule.log` | **Pendente.** Log da primeira execução disparada pelo `schedule` (segunda-feira, 09:00 UTC) |
+| `capturas/run_43986932580_workflow_dispatch.png` | Página do run no GitHub Actions: gatilho, sucesso, duração e artefato |
+| `capturas/workflow_schedule_cron.png` | Workflow no GitHub com o gatilho `schedule` (`cron: "0 9 * * 1"`) |
 | `mlflow/runs.md` | Histórico do MLflow por ciclo: run pai, etapas, `run_id`, métricas e decisão |
 | `mlflow/runs.csv` | Os mesmos 24+ runs em tabela, com todas as tags e métricas |
 
