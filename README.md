@@ -1,6 +1,6 @@
 # Previsão de Inadimplência em Cartão de Crédito · Pipeline MLOps
 
-Trabalho Avaliativo N3 · Análise Preditiva.
+Trabalho Avaliativo N3 · Análise Preditiva, e Projeto N3 (projeto final de Aprendizagem de Máquina, turma 8NA). O resumo do projeto final está logo abaixo, em [Projeto final: resumo](#projeto-final-resumo).
 
 Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, agendado semanalmente, roda um **ciclo** completo a cada novo lote de dados:
 
@@ -12,8 +12,60 @@ Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a f
 6. gerar previsões;
 7. registrar tudo no MLflow.
 
+## Projeto final: resumo
+
+**Objetivo.** Prever se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte, a partir do perfil e dos últimos seis meses de fatura e pagamento. É uma classificação binária supervisionada, com 22% de inadimplentes.
+
+**Quem usaria.**
+- Equipe de cobrança: priorizar o contato preventivo.
+- Gestão de crédito: revisar limites antes de aumentar a exposição.
+- Analista de risco: entender a pontuação de um cliente.
+
+**Dados.** [Default of Credit Card Clients](https://archive.ics.uci.edu/dataset/350/default+of+credit+card+clients) (UCI, id 350): 30.000 clientes de um banco de Taiwan, 2005 (detalhes em [Dataset](#dataset)).
+
+**Como executar.**
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# Demonstração: um cliente novo gera pontuação, decisão e explicação
+python -m src.demo --id 11                        # cliente do arquivo de inferência (nunca visto)
+python -m src.demo --modelo-json > cliente.json   # gera um cliente de exemplo para editar
+python -m src.demo --arquivo cliente.json
+
+# Avaliação final: teste, alternativas simples, limiar, erros e limitações
+jupyter nbconvert --to notebook --execute --inplace notebooks/06_avaliacao_final.ipynb
+
+# Ciclo completo (ETL, votação, competição, promoção, previsões)
+python -m src.pipeline
+```
+
+O modelo vigente e os lotes de dados estão versionados. A demonstração e o notebook 06 rodam num clone novo, sem precisar treinar.
+
+**Principais resultados**, no teste com 5.322 clientes que o modelo nunca viu (`notebooks/06_avaliacao_final.ipynb`):
+
+| | Acurácia | Precisão | Revocação | F1 | AUC-ROC |
+|---|---|---|---|---|---|
+| Sempre "adimplente" | 0,787 | 0 | 0 | 0 | |
+| Regra `PAY_0 ≥ 1` (atrasou no último mês) | 0,779 | 0,483 | 0,522 | 0,502 | |
+| **Random Forest vigente** (limiar 0,5) | 0,780 | 0,486 | **0,621** | **0,546** | **0,788** |
+
+- **Melhor que a regra simples.** Com a mesma precisão da regra, o modelo encontra 704 inadimplentes, contra 591.
+- **Ordena bem o risco.** Nos 10% de maior pontuação, 67,7% ficam inadimplentes, 3,2 vezes a média.
+- **Atributos.** O atraso no último mês (`PAY_0`) é o mais importante, seguido do uso do limite e do valor pago. Nenhum atributo demográfico foi eleito.
+- **Principal erro.** 96% dos inadimplentes não detectados não tinham atraso no último mês: nada no histórico indicava risco.
+- **Limitações.**
+  - Dados de 2005, de um único banco.
+  - Nenhuma informação de renda ou de outras dívidas.
+  - A pontuação não é uma probabilidade calibrada.
+  - O limiar ideal depende de custos que o dataset não informa.
+
+**Apresentação.** `reports/apresentacao_projeto_final.pdf` (fonte: `reports/apresentacao_projeto_final.html`; figuras em `reports/figuras/`, geradas pelo notebook 06).
+
 ## Sumário
 
+- [Projeto final: resumo](#projeto-final-resumo)
 - [Dataset](#dataset)
 - [Arquitetura](#arquitetura)
 - [Instalação local](#instalação-local)
@@ -193,7 +245,7 @@ Todo run filho tem as tags `cycle_id`, `data_version` e `stage`. Para comparar o
 pytest
 ```
 
-São 38 testes com dados sintéticos, sem rede, que rodam em cerca de 2 segundos. Cobrem:
+São 41 testes, sem rede, que rodam em cerca de 2 segundos. 38 usam dados sintéticos e 3 exercitam a demonstração com o modelo versionado. Cobrem:
 - a validação de dados: estrutura, alvo, nulos, códigos não documentados e limite de linhas inválidas;
 - os atributos derivados e a estabilidade da partição;
 - o ajuste do pré-processador só no treino;
@@ -202,7 +254,8 @@ São 38 testes com dados sintéticos, sem rede, que rodam em cerca de 2 segundos
 - a regra de promoção: inicial, margem, limite exato, desligada, drift e minimização;
 - a geração do manifesto: campos, não sobrescrita e detecção de artefato adulterado;
 - o PSI: contínuo, discreto e referência pelo manifesto;
-- a `data_version`.
+- a `data_version`;
+- a demonstração: faixas de risco, explicação por atributo e recusa de entradas inválidas.
 
 ## Notebooks
 
@@ -215,6 +268,7 @@ A ordem de execução é obrigatória: cada um consome as saídas do anterior no
 | `03_treino_competicao.ipynb` | Atributos eleitos, treino e validação | Dois modelos no MLflow, vencedor |
 | `04_selecao_promocao.ipynb` | Vencedor, modelo vigente, drift | Decisão, nova versão (se promovido), avaliação final no teste |
 | `05_previsoes.ipynb` | Modelo vigente, `novos_clientes.csv` | Previsões e prova de reprodutibilidade |
+| `06_avaliacao_final.ipynb` | Lotes versionados, modelo vigente | Avaliação final fora do ciclo: comparação com alternativas simples, ROC/PR, limiar, calibração, importância, análise de erros e limitações; figuras em `reports/figuras/` |
 
 Para explorar de forma interativa, rode `jupyter lab` e execute os notebooks na ordem. Cada um explica objetivo, metodologia, entradas, saídas, decisões, resultados e conclusões.
 
@@ -409,6 +463,7 @@ O ciclo 3 (`ciclo_gha_43986932580_1`) rodou no GitHub Actions, com o `lote_003` 
 |---|---|
 | Repositório Git | este repositório: código (`src/`), notebooks, YAML, `config/config.yaml`, README |
 | Relatório técnico | `reports/relatorio_n3.pdf` (fonte: `reports/relatorio_n3.html`) |
+| Apresentação do projeto final | `reports/apresentacao_projeto_final.pdf` (fonte: `.html`), demonstração em `src/demo.py` |
 | Execução agendada | `evidencias/github_actions/`: logs dos runs do workflow |
 | Histórico MLflow | `mlruns/` (store completo) e `evidencias/mlflow/runs.md` / `runs.csv`, gerados por `python -m src.exportar_mlflow` |
 | Evidências por ciclo | `reports/evidencias/<cycle_id>/` e `reports/evidencias/comparacao_ciclos.md` |
