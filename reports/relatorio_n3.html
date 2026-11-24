@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Relatório Técnico N3</title>
+<style>
+  @page { size: A4; margin: 20mm 18mm 20mm 18mm; }
+  :root { --ink: #1d232b; --muted: #5b6573; --line: #d5dae1; --accent: #731B34; --soft: #F7F3F4; }
+  * { box-sizing: border-box; }
+  body { font-family: "Liberation Serif", "Times New Roman", serif; color: var(--ink); background: #fff;
+         font-size: 11pt; line-height: 1.45; margin: 0; }
+  h1, h2, h3 { font-family: "Liberation Sans", Arial, sans-serif; color: var(--ink); line-height: 1.2; }
+  h1 { font-size: 22pt; margin: 0 0 6pt; }
+  h2 { font-size: 14pt; margin: 20pt 0 6pt; padding-bottom: 3pt; border-bottom: 1.5pt solid var(--accent); break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 7pt; text-align: justify; }
+  ul, ol { margin: 0 0 7pt; padding-left: 18pt; }
+  li { margin-bottom: 2pt; }
+  code { font-family: "Liberation Mono", monospace; font-size: 9pt; background: var(--soft); padding: 0 2pt; border-radius: 2pt; }
+  pre { font-family: "Liberation Mono", monospace; font-size: 8.5pt; background: var(--soft); padding: 7pt 9pt;
+        border-left: 2pt solid var(--accent); white-space: pre-wrap; break-inside: avoid; margin: 0 0 8pt; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; font-size: 9.5pt; break-inside: avoid; }
+  th, td { border: 0.6pt solid var(--line); padding: 3pt 5pt; text-align: left; vertical-align: top; }
+  th { background: var(--soft); font-family: "Liberation Sans", Arial, sans-serif; font-weight: bold; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .cover { height: 245mm; display: flex; flex-direction: column; justify-content: space-between; break-after: page; }
+  .cover .inst { font-family: "Liberation Sans", Arial, sans-serif; color: var(--muted); font-size: 11pt; }
+  .cover .title { margin-top: 60mm; }
+  .cover .sub { font-size: 13pt; color: var(--muted); margin-top: 4pt; }
+  .cover .meta { font-family: "Liberation Sans", Arial, sans-serif; font-size: 10.5pt; }
+  .cover .meta td { vertical-align: top; border: none; padding: 2pt 8pt 2pt 0; }
+  .todo { background: #fff4cc; padding: 0 3pt; }
+  .note { border: 0.6pt solid var(--line); background: var(--soft); padding: 6pt 9pt; margin: 4pt 0 10pt; font-size: 10pt; }
+  .toc { columns: 2; font-size: 10pt; }
+  .toc li { break-inside: avoid; }
+  .crit { font-family: "Liberation Sans", Arial, sans-serif; font-size: 8.5pt; color: var(--accent); font-weight: bold;
+          letter-spacing: .03em; text-transform: uppercase; margin-top: 18pt; }
+  .crit + h2 { margin-top: 2pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div class="inst">Católica de Santa Catarina · Engenharia de Software e Engenharia de IA · Análise Preditiva</div>
+  <div class="title">
+    <h1>Previsão de Inadimplência em Cartão de Crédito com Pipeline MLOps</h1>
+    <div class="sub">Relatório técnico do Trabalho Avaliativo N3 · votação de features, competição de modelos e retreinamento automatizado</div>
+  </div>
+  <table class="meta">
+    <tr><td><b>Integrantes</b></td><td>Andre Gustavo Specht<br>Arthur Vinicius Hassuma<br>Gabriel F. Rocha<br>Nicolas Wajima<br>Pablo Arman Schuller<br>Victor da Rocha</td></tr>
+    <tr><td><b>Professor</b></td><td>Prof. M. Sc. Rodrigo Hagstrom</td></tr>
+    <tr><td><b>Repositório</b></td><td><code>https://github.com/gabrielforster/mlops-credit-default-prediction</code></td></tr>
+  </table>
+</section>
+
+<h2>Sumário</h2>
+<ol class="toc">
+  <li>Visão geral e arquitetura</li>
+  <li>Problema, dados e avaliação</li>
+  <li>ETL e engenharia de atributos</li>
+  <li>Três métodos de seleção de atributos</li>
+  <li>Votação e eleição dos atributos</li>
+  <li>Treinamento dos dois algoritmos</li>
+  <li>MLflow e rastreabilidade</li>
+  <li>Workflow único e agendamento</li>
+  <li>Eleição, promoção e previsões</li>
+  <li>Repositório, evidências e reprodutibilidade</li>
+  <li>Recurso adicional: monitoramento de drift</li>
+  <li>Resultados dos ciclos</li>
+  <li>Limitações e trabalhos futuros</li>
+  <li>Conclusões</li>
+</ol>
+
+<h2>1. Visão geral e arquitetura</h2>
+<p>O projeto prevê se um cliente de cartão de crédito deixará de pagar a fatura do mês seguinte. O foco não é a maior acurácia possível, mas um processo confiável de evolução do modelo: a cada novo lote de dados, um único workflow do GitHub Actions executa um <b>ciclo</b> completo, de ponta a ponta, e decide automaticamente se o modelo em produção deve ser substituído.</p>
+<pre>GitHub Actions: .github/workflows/pipeline_mlops.yml   (schedule semanal + workflow_dispatch)
+  checkout do estado persistido → pip install → pytest
+  python -m src.pipeline [--novo-lote]
+    01_etl.ipynb                 lote novo, data_version, validação, limpeza, atributos, partição, drift
+    02_votacao_features.ipynb    SelectKBest + importância RF + RFE → votação (≥ 2 de 3)
+    03_treino_competicao.ipynb   modelo A (LogisticRegression) vs modelo B (RandomForest)
+    04_selecao_promocao.ipynb    vencedor vs modelo vigente → promover ou manter
+    05_previsoes.ipynb           previsões com o modelo vigente
+  upload-artifact (evidências) → commit + push do estado (lotes, mlruns, models, reports)</pre>
+<p>Cada ciclo recebe um <code>cycle_id</code> e uma <code>data_version</code> no notebook 01. Os notebooks seguintes carregam esse contexto e recusam artefatos de outro ciclo, de modo que os dois modelos usam sempre os mesmos atributos eleitos e a mesma partição. A lógica reutilizável fica em <code>src/</code> (<code>ingestao.py</code>, <code>preprocessamento.py</code>, <code>features.py</code>, <code>modelagem.py</code>, <code>promocao.py</code>, <code>drift.py</code>, <code>pipeline.py</code>), e os notebooks orquestram e documentam as decisões. Todos os parâmetros ficam em <code>config/config.yaml</code>.</p>
+
+<div class="crit">Critério 1</div>
+<h2>2. Problema, dados e avaliação</h2>
+<h3>Problema</h3>
+<p>Classificação binária: dado o perfil e o histórico de seis meses de um cliente, prever a inadimplência no mês seguinte. A aplicação é a gestão de risco de crédito: identificar com antecedência clientes com alta probabilidade de não pagar, para renegociar, ajustar limites ou priorizar cobrança. Classificação é adequada porque a decisão de negócio é discreta (agir ou não agir sobre o cliente).</p>
+<h3>Fonte</h3>
+<table>
+  <tr><th>Item</th><th>Valor</th></tr>
+  <tr><td>Dataset</td><td>Default of Credit Card Clients, UCI Machine Learning Repository, id 350 (DOI 10.24432/C55S3H)</td></tr>
+  <tr><td>Licença</td><td>Creative Commons Attribution 4.0 International (CC BY 4.0)</td></tr>
+  <tr><td>Citação</td><td>Yeh, I. C.; Lien, C. H. (2009). Expert Systems with Applications, 36(2), 2473–2480</td></tr>
+  <tr><td>Contexto</td><td>Clientes de um banco de Taiwan, abril a setembro de 2005, valores em NT$</td></tr>
+  <tr><td>Unidade de observação</td><td>Um cliente (uma linha, identificada por <code>ID</code>)</td></tr>
+  <tr><td>Variável-alvo</td><td><code>default payment next month</code> (1 = inadimplente), renomeada para <code>default.payment.next.month</code></td></tr>
+  <tr><td>Tamanho</td><td>30.000 linhas, 23 atributos, sem valores ausentes</td></tr>
+  <tr><td>Classe positiva</td><td>22,12% (desbalanceado)</td></tr>
+  <tr><td>Integridade</td><td>Arquivo baixado da UCI e conferido por SHA-256 (<code>30c6be3a…</code>) a cada ciclo</td></tr>
+</table>
+<h3>Métrica principal</h3>
+<p><b>F1 da classe inadimplente, a maximizar.</b> Com 22% de positivos, um modelo que sempre prevê “adimplente” teria 78% de acurácia e F1 igual a zero. O F1 equilibra precisão (não negar crédito a bons pagadores) e recall (não deixar passar inadimplentes). Precisão, recall, acurácia, ROC-AUC e matriz de confusão são registradas como métricas secundárias.</p>
+<h3>Estratégia de treino, validação e teste</h3>
+<p>Cada cliente é atribuído a uma partição pelo hash <code>sha256("42:&lt;ID&gt;")</code> mapeado para [0, 1]: abaixo de 0,2 vai para <b>teste</b>, de 0,2 a 0,4 para <b>validação</b> e o restante para <b>treino</b> (60/20/20). Um <code>train_test_split</code> refeito a cada ciclo moveria clientes do teste antigo para o treino novo; com o hash, cada cliente fica sempre na mesma partição, mesmo quando chegam lotes novos.</p>
+<ul>
+  <li><b>Treino:</b> ajusta o pré-processamento, os seletores de atributos e os modelos.</li>
+  <li><b>Validação:</b> decide a competição entre A e B e a promoção.</li>
+  <li><b>Teste:</b> usado só depois da decisão, para a avaliação final do modelo que ficou em produção.</li>
+</ul>
+<h3>Novos registros nos próximos ciclos</h3>
+<p>A fonte é estática, então a chegada de dados é simulada: o arquivo é embaralhado com semente fixa e dividido em <code>lote_001</code> (18.000 linhas), <code>lote_002</code> (6.000), <code>lote_003</code> (3.000) e <code>novos_clientes.csv</code> (3.000 linhas sem alvo, usadas só para previsão). <code>python -m src.ingestao --novo-lote</code> publica o próximo lote em <code>data/raw/batches/</code>. O ciclo seguinte usa todos os lotes publicados, e a <code>data_version</code> é um hash do conteúdo desses lotes: os mesmos lotes geram sempre a mesma versão, e qualquer lote novo ou alterado gera outra.</p>
+
+<div class="crit">Critério 2</div>
+<h2>3. ETL e engenharia de atributos</h2>
+<h3>Inspeção</h3>
+<p>O notebook 01 valida cada ciclo contra um esquema: colunas esperadas, tipos, nulos, IDs duplicados, domínio de cada código e proporção de linhas inválidas (limite de 1%). Valores medidos no ciclo 3 (27.000 linhas):</p>
+<table>
+  <tr><th>Verificação</th><th>Resultado</th><th>Tratamento</th></tr>
+  <tr><td>Valores ausentes</td><td>0</td><td>Imputação por mediana/moda mantida no pipeline como proteção</td></tr>
+  <tr><td>IDs duplicados</td><td>0</td><td>-</td></tr>
+  <tr><td>Linhas idênticas ignorando o ID</td><td>25</td><td>Mantidas: clientes distintos com o mesmo perfil</td></tr>
+  <tr><td><code>EDUCATION</code> ∈ {0, 5, 6}</td><td>308 linhas</td><td>Recodificado para “outros” (4)</td></tr>
+  <tr><td><code>MARRIAGE</code> = 0</td><td>49 linhas</td><td>Recodificado para “outros” (3)</td></tr>
+  <tr><td><code>PAY_x</code> = -2 e 0</td><td>frequentes</td><td>Aceitos como “sem consumo” e “crédito rotativo”</td></tr>
+  <tr><td>Outliers (IQR)</td><td>8% a 10% nas colunas de fatura e pagamento</td><td>Mantidos: são valores reais; registrados por coluna</td></tr>
+</table>
+<h3>Transformação e atributos derivados</h3>
+<p>O ETL aplica apenas transformações linha a linha e cria seis atributos, cada um calculado só com a própria linha:</p>
+<table>
+  <tr><th>Atributo</th><th>Definição</th></tr>
+  <tr><td><code>UTILIZACAO_ATUAL</code></td><td><code>BILL_AMT1 / LIMIT_BAL</code></td></tr>
+  <tr><td><code>UTILIZACAO_MEDIA</code></td><td>média(<code>BILL_AMT1..6</code>) / <code>LIMIT_BAL</code></td></tr>
+  <tr><td><code>RAZAO_PAGAMENTO</code></td><td>Σ<code>PAY_AMT</code> / Σ max(<code>BILL_AMT</code>, 0), limitado a [0, 5]</td></tr>
+  <tr><td><code>MESES_EM_ATRASO</code></td><td>número de meses com <code>PAY_x</code> ≥ 1</td></tr>
+  <tr><td><code>ATRASO_MAXIMO</code></td><td>max(<code>PAY_x</code>)</td></tr>
+  <tr><td><code>TENDENCIA_FATURA</code></td><td>(<code>BILL_AMT1</code> − <code>BILL_AMT6</code>) / <code>LIMIT_BAL</code></td></tr>
+</table>
+<h3>Prevenção de vazamento</h3>
+<p>Tudo o que aprende com os dados (imputação, one-hot de <code>SEX</code>/<code>EDUCATION</code>/<code>MARRIAGE</code> e padronização) fica em um <code>ColumnTransformer</code> dentro do <code>Pipeline</code> de cada modelo e é ajustado só na partição de treino. O pré-processador é serializado junto com o modelo, de modo que a inferência aplica exatamente a mesma transformação. Um teste automatizado verifica que o pré-processador não vê validação nem teste.</p>
+<h3>Versionamento</h3>
+<p>Cada ciclo grava <code>data_version</code>, a lista de lotes e as contagens de cada partição em <code>reports/evidencias/&lt;cycle_id&gt;/01_etl.json</code> e no run <code>etl</code> do MLflow.</p>
+
+<div class="crit">Critério 3</div>
+<h2>4. Três métodos de seleção de atributos</h2>
+<p>Os três métodos rodam no notebook <code>02_votacao_features.ipynb</code>, sobre o treino imputado e padronizado, com 29 atributos candidatos (23 originais e 6 derivados):</p>
+<table>
+  <tr><th>Método</th><th>Critério</th><th>Seleciona</th></tr>
+  <tr><td>1. <code>SelectKBest(f_classif)</code></td><td>Estatística F da ANOVA entre atributo e classe</td><td>10 maiores</td></tr>
+  <tr><td>2. Importância de <code>RandomForestClassifier</code></td><td>Redução média de impureza de Gini (200 árvores, <code>class_weight=balanced</code>)</td><td>10 maiores</td></tr>
+  <tr><td>3. <code>RFE(LogisticRegression)</code></td><td>Eliminação recursiva pelo menor coeficiente absoluto</td><td>10 restantes</td></tr>
+</table>
+<p>Os métodos são complementares: um teste estatístico univariado, uma importância não linear baseada em árvores e uma eliminação multivariada linear. Cada método entrega pontuação, ranking e lista de aprovados. A seleção usa as colunas originais (e não as colunas após one-hot), para que o conjunto eleito seja legível e idêntico nos dois modelos.</p>
+
+<div class="crit">Critério 4</div>
+<h2>5. Votação e eleição dos atributos</h2>
+<p><b>Regra definida antes da execução</b> (<code>features.voting.minimum_votes: 2</code>): um atributo é eleito se for aprovado por pelo menos 2 dos 3 métodos. Duas regras complementares também foram fixadas antes da execução:</p>
+<ul>
+  <li><b>Quantidade mínima</b> (<code>minimum_features: 5</code>): se a regra de votos eleger menos de 5 atributos, o conjunto é completado pelos mais votados, marcados com <code>elected_by = "minimo"</code>. Isso garante que os modelos nunca treinem com um conjunto degenerado.</li>
+  <li><b>Desempate:</b> entre atributos com o mesmo número de votos, vence o de menor rank médio nos três métodos (<code>mean_rank</code>); persistindo o empate, vale a ordem original das colunas.</li>
+</ul>
+<p>Nos três ciclos, a regra de 2 votos já elegeu 9 ou 10 atributos, então o mínimo e o desempate não precisaram agir. Cada ciclo grava a tabela completa em <code>02_votacao_features.csv</code>, com uma linha por par (método, atributo) e as colunas <code>score</code>, <code>rank</code>, <code>vote</code>, <code>votes</code>, <code>mean_rank</code>, <code>final_selection</code> e <code>elected_by</code>, e a mesma tabela, com os parâmetros da regra e o <code>cycle_id</code>, vai para o MLflow.</p>
+<p>Tabela de votos do ciclo 3 (<code>ciclo_gha_43986932580_1</code>), atributos com pelo menos um voto:</p>
+<table>
+  <tr><th>Atributo</th><th class="n">SelectKBest</th><th class="n">Random Forest</th><th class="n">RFE</th><th class="n">Votos</th><th>Eleito</th></tr>
+  <tr><td><code>PAY_0</code></td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">3</td><td>sim</td></tr>
+  <tr><td><code>ATRASO_MAXIMO</code></td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">3</td><td>sim</td></tr>
+  <tr><td><code>MESES_EM_ATRASO</code></td><td class="n">1</td><td class="n">1</td><td class="n">1</td><td class="n">3</td><td>sim</td></tr>
+  <tr><td><code>LIMIT_BAL</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_2</code></td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_3</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_4</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_6</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>UTILIZACAO_MEDIA</code></td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_AMT1</code></td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td class="n">2</td><td>sim</td></tr>
+  <tr><td><code>PAY_5</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td>não</td></tr>
+  <tr><td><code>PAY_AMT2</code>, <code>TENDENCIA_FATURA</code>, <code>RAZAO_PAGAMENTO</code>, <code>UTILIZACAO_ATUAL</code></td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td>não</td></tr>
+  <tr><td><code>BILL_AMT2</code>, <code>BILL_AMT5</code></td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">1</td><td>não</td></tr>
+</table>
+<p>Os 12 atributos restantes, incluindo <code>SEX</code>, <code>AGE</code>, <code>EDUCATION</code> e <code>MARRIAGE</code>, não receberam votos. A votação se repete a cada ciclo e o resultado muda com os dados: no ciclo 1 foram eleitos 9 atributos com <code>PAY_4</code>; no ciclo 2, <code>PAY_4</code> saiu e <code>PAY_6</code> entrou; no ciclo 3, os dois ficaram (10 atributos). Três atributos derivados no ETL foram eleitos em todos os ciclos.</p>
+
+<div class="crit">Critério 5</div>
+<h2>6. Treinamento dos dois algoritmos</h2>
+<table>
+  <tr><th></th><th>Modelo A</th><th>Modelo B</th></tr>
+  <tr><td>Algoritmo</td><td><code>LogisticRegression</code></td><td><code>RandomForestClassifier</code></td></tr>
+  <tr><td>Hiperparâmetros</td><td><code>C=1.0</code>, <code>class_weight=balanced</code>, <code>max_iter=2000</code></td><td><code>n_estimators=150</code>, <code>max_depth=8</code>, <code>min_samples_leaf=20</code>, <code>class_weight=balanced</code></td></tr>
+  <tr><td>Atributos</td><td colspan="2">Os mesmos atributos eleitos no ciclo</td></tr>
+  <tr><td>Partição</td><td colspan="2">Treino para ajustar, validação para comparar</td></tr>
+  <tr><td>Métrica</td><td colspan="2">F1 na validação (e métricas secundárias)</td></tr>
+  <tr><td>Semente</td><td colspan="2">42</td></tr>
+</table>
+<p>A escolha contrapõe um modelo linear interpretável a um conjunto de árvores capaz de capturar interações (por exemplo, atraso combinado com alta utilização do limite). <code>class_weight=balanced</code> trata o desbalanceamento sem reamostragem, mantendo a validação com a distribuição real. Cada modelo é um <code>Pipeline(ColumnTransformer, estimador)</code>, e o notebook 03 aborta se os dois não tiverem exatamente os mesmos atributos e o mesmo protocolo. O vencedor do ciclo é o de maior F1 na validação; em empate, vence o primeiro na ordem de <code>config.models</code>.</p>
+
+<div class="crit">Critério 6</div>
+<h2>7. MLflow e rastreabilidade</h2>
+<p>Cada ciclo é um run pai no experimento <code>credit-default-prediction</code>, com um run filho por etapa. Todo run carrega as tags <code>cycle_id</code>, <code>data_version</code> e <code>stage</code>.</p>
+<table>
+  <tr><th>Run</th><th>Conteúdo registrado</th></tr>
+  <tr><td>pai <code>&lt;cycle_id&gt;</code></td><td>Lotes, <code>pipeline_status</code>, <code>promotion_decision</code>, <code>active_model_id</code>, <code>github_run_id</code> (no Actions)</td></tr>
+  <tr><td><code>etl</code></td><td>Tamanho e taxa de inadimplência de cada partição, relatório de validação</td></tr>
+  <tr><td><code>drift</code></td><td>PSI por atributo, status, limiares</td></tr>
+  <tr><td><code>votacao_features</code></td><td>Métodos, votos mínimos, tabela de votos, atributos eleitos</td></tr>
+  <tr><td><code>modelo_A_logistic_regression</code>, <code>modelo_B_random_forest</code></td><td>Algoritmo, hiperparâmetros, atributos, <code>val_*</code> (F1, precisão, recall, acurácia, ROC-AUC, matriz de confusão), tempo de treino, artefato do modelo</td></tr>
+  <tr><td><code>promocao</code></td><td>Métrica do desafiante e do vigente, limiar aplicado, decisão e motivo, <code>active_test_*</code> do modelo vigente</td></tr>
+  <tr><td><code>previsoes</code></td><td>Modelo usado, número de previsões, taxa prevista, CSV de previsões, prova de reprodutibilidade</td></tr>
+</table>
+<p><b>Persistência entre runners.</b> Os runners do GitHub Actions são descartáveis. O store do MLflow é um SQLite (<code>mlruns/mlflow.db</code>) com artefatos em <code>mlruns/artifacts/</code>, versionado no próprio repositório: ao final de um ciclo bem-sucedido o workflow faz commit e push desse diretório, e o próximo run o recupera com o checkout. Além disso, todo run publica <code>mlruns/</code>, <code>models/</code>, <code>reports/</code> e os notebooks executados como <i>artifact</i> baixável do GitHub Actions, inclusive quando falha. Como o MLflow grava caminhos absolutos de artefato e cada runner clona em outro diretório, <code>configure_mlflow</code> reescreve esse prefixo para o diretório atual antes de cada uso. Isso foi verificado no ciclo 3: o runner do GitHub carregou do MLflow o modelo vigente treinado localmente no ciclo 1 e o reavaliou.</p>
+<p>Hoje o store tem 24 runs (3 ciclos × 8). <code>python -m src.pipeline --mlflow-ui</code> abre a interface, e <code>python -m src.exportar_mlflow</code> gera <code>evidencias/mlflow/runs.md</code> e <code>runs.csv</code> com todos os runs, tags e métricas.</p>
+
+<div class="crit">Critério 7</div>
+<h2>8. Workflow único e agendamento</h2>
+<p>Existe um único workflow, <code>.github/workflows/pipeline_mlops.yml</code>:</p>
+<ul>
+  <li><b>Gatilhos:</b> <code>schedule</code> com <code>cron: "0 9 * * 1"</code> (toda segunda-feira, 09:00 UTC) e <code>workflow_dispatch</code> para testes, com o input <code>novo_lote</code>. Execuções agendadas sempre tentam publicar o próximo lote.</li>
+  <li><b>Passos:</b> checkout do estado persistido → Python 3.12 → <code>pip install -r requirements.txt</code> → cache da fonte UCI → <code>pytest</code> (38 testes) → <code>python -m src.pipeline [--novo-lote]</code>, que executa os notebooks 01 a 05 → resumo do ciclo no <i>job summary</i> → <code>upload-artifact</code> das evidências (também em falha) → commit e push do estado.</li>
+  <li><b>Parada em falha:</b> qualquer passo que falhe interrompe o job. O executor para no primeiro notebook com erro, marca o run do MLflow com <code>pipeline_status = falhou_em_&lt;notebook&gt;</code> e restaura o manifesto do modelo vigente. Como a persistência é o último passo, uma promoção só vale se o ciclo inteiro terminar.</li>
+  <li><b>Concorrência:</b> um grupo <code>concurrency</code> impede dois ciclos simultâneos sobre o mesmo estado.</li>
+  <li><b>Segredos:</b> nenhum. O workflow usa só o <code>GITHUB_TOKEN</code> padrão com <code>contents: write</code>.</li>
+</ul>
+<p><b>Execuções comprovadas.</b> O run <code>43986932580</code> (disparado por <code>workflow_dispatch</code> em 17/11/2026) executou o ciclo 3 completo em cerca de 2 minutos, com todos os passos bem-sucedidos, e fez o commit <code>79d1b2e</code> com o novo estado. O log completo está em <code>evidencias/github_actions/</code>.</p>
+<div class="note"><span class="todo">[Pendente: inserir aqui o run disparado por <code>schedule</code> (id, data, duração, decisão) e o print da página do Actions mostrando o evento “schedule”, após a primeira execução agendada.]</span></div>
+
+<div class="crit">Critério 8</div>
+<h2>9. Eleição, promoção e previsões</h2>
+<p>O notebook 04 compara o vencedor do ciclo (desafiante) com o modelo vigente:</p>
+<pre>promover  ⇔  F1_desafiante(validação do ciclo) ≥ F1_vigente(validação do ciclo) + 0,01</pre>
+<ul>
+  <li>O vigente é <b>reavaliado na validação do ciclo atual</b>, para que os dois sejam medidos na mesma régua.</li>
+  <li>Sem modelo vigente, o vencedor é promovido como modelo inicial (<code>promovido_inicial</code>).</li>
+  <li>A margem de 0,01 evita trocar o modelo em produção por ruído e absorve o leve otimismo de escolher o desafiante na mesma validação.</li>
+  <li>Com drift severo nos atributos do vigente, a margem cai para 0 (seção 11).</li>
+</ul>
+<p><b>Promovido:</b> o pacote (pipeline, atributos e metadados) é gravado em <code>models/versoes/&lt;model_id&gt;/</code>, que nunca é sobrescrito, e <code>models/modelo_vigente.json</code> passa a apontar para ele, com o SHA-256 do artefato conferido em toda carga. <b>Mantido:</b> o manifesto não muda. Em ambos os casos, a decisão e o motivo vão para <code>models/historico_promocoes.jsonl</code>, <code>04_promocao.json</code> e o MLflow.</p>
+<p><b>Previsões.</b> O notebook 05 carrega o modelo apontado pelo manifesto, confere o hash, aplica o mesmo ETL a <code>novos_clientes.csv</code> (3.000 clientes nunca vistos) e grava <code>reports/previsoes/previsoes_&lt;cycle_id&gt;.csv</code> com probabilidade e classe. O notebook recarrega o modelo do disco (<code>joblib</code>) e do MLflow e relê o CSV gravado; as três fontes precisam reproduzir as mesmas classes e probabilidades, caso contrário o ciclo falha. Nos três ciclos, a taxa prevista de inadimplência foi 27,7% e as previsões foram reproduzíveis.</p>
+
+<div class="crit">Critério 9</div>
+<h2>10. Repositório, evidências e reprodutibilidade</h2>
+<table>
+  <tr><th>Caminho</th><th>Conteúdo</th></tr>
+  <tr><td><code>.github/workflows/pipeline_mlops.yml</code></td><td>Workflow único</td></tr>
+  <tr><td><code>config/config.yaml</code></td><td>Todos os parâmetros: fonte, partição, votação, modelos, promoção, drift, caminhos</td></tr>
+  <tr><td><code>src/</code></td><td>Ingestão, pré-processamento, seleção, modelagem, promoção, drift, executor, exportação do MLflow</td></tr>
+  <tr><td><code>notebooks/01_etl</code> … <code>05_previsoes.ipynb</code></td><td>Notebooks executados no último ciclo</td></tr>
+  <tr><td><code>data/raw/batches/</code>, <code>data/raw/inferencia/</code></td><td>Lotes publicados e base de inferência (a fonte original não é versionada e é baixada com checksum)</td></tr>
+  <tr><td><code>models/</code></td><td>Manifesto do vigente, versões promovidas e histórico de decisões</td></tr>
+  <tr><td><code>mlruns/</code></td><td>Store do MLflow</td></tr>
+  <tr><td><code>reports/evidencias/&lt;cycle_id&gt;/</code></td><td>JSON/CSV de cada etapa e cópia dos notebooks executados no ciclo</td></tr>
+  <tr><td><code>evidencias/</code></td><td>Logs do GitHub Actions e exportação do MLflow, com índice pelo checklist</td></tr>
+  <tr><td><code>tests/</code></td><td>38 testes automatizados</td></tr>
+  <tr><td><code>reports/relatorio_n3.pdf</code></td><td>Este relatório (fonte: <code>reports/relatorio_n3.html</code>)</td></tr>
+</table>
+<p><b>Testes.</b> 38 testes com dados sintéticos, sem rede, cobrindo validação de dados, atributos derivados, estabilidade da partição, ajuste do pré-processador só no treino, votação (inclusive quantidade mínima e desempate), competição, regra de promoção, manifesto (inclusive artefato adulterado), PSI e <code>data_version</code>. Rodam em todo ciclo, antes do pipeline.</p>
+<p><b>Reprodutibilidade.</b> Checksum da fonte, semente fixa (42) em todas as etapas aleatórias, <code>data_version</code> derivada do conteúdo, dependências com versão fixa em <code>requirements.txt</code> e caminhos relativos à raiz. Os ciclos 1 e 2 foram executados duas vezes e produziram as mesmas métricas, votos e decisões até a 4ª casa decimal. O ciclo 3, executado no GitHub, reproduziu os mesmos números obtidos localmente em um clone limpo.</p>
+<pre>pip install -r requirements.txt
+pytest
+python -m src.pipeline --novo-lote   # publica o próximo lote e roda o ciclo
+python -m src.pipeline --mlflow-ui   # histórico no MLflow</pre>
+
+<div class="crit">Critério 10</div>
+<h2>11. Recurso adicional: monitoramento de drift</h2>
+<h3>Problema identificado</h3>
+<p>Em crédito, a população de clientes muda com a economia, a política de limites e a sazonalidade. Um modelo treinado em uma população pode degradar silenciosamente em outra. A regra de promoção sozinha não detecta isso: ela compara modelos, não populações, e com margem fixa pode manter um vigente treinado em dados que já não representam os clientes atuais.</p>
+<h3>Justificativa</h3>
+<p>O pipeline já retreina a cada lote, mas não sabia <i>quando</i> o retreino é urgente. Medir a mudança na distribuição dos atributos dá esse sinal antes de a métrica cair (o rótulo de inadimplência só chega um mês depois) e permite agir na própria decisão de promoção, em vez de apenas registrar um alerta.</p>
+<h3>Solução implementada</h3>
+<p><code>src/drift.py</code> calcula o <i>Population Stability Index</i> (PSI) de cada atributo entre os lotes usados pelo modelo vigente (referência, lida do manifesto) e os lotes novos, com 10 faixas por quantis da referência:</p>
+<table>
+  <tr><th>PSI</th><th>Status</th><th>Efeito</th></tr>
+  <tr><td>&lt; 0,10</td><td>estável</td><td>Nenhum</td></tr>
+  <tr><td>0,10 a 0,25</td><td>moderado</td><td>Alerta registrado no ciclo e no MLflow</td></tr>
+  <tr><td>≥ 0,25 em atributo do vigente</td><td>severo</td><td>A margem de promoção cai para 0: o desafiante, treinado com os dados novos, substitui o vigente se não for pior</td></tr>
+</table>
+<h3>Ponto de integração</h3>
+<p>O cálculo roda no notebook 01, em todo ciclo, dentro do workflow agendado. O resultado vai para <code>reports/evidencias/&lt;cycle_id&gt;/01_drift.json</code>, para o run <code>drift</code> do MLflow (PSI por atributo e status) e para a decisão do notebook 04, que relaxa a margem quando o drift é severo (<code>drift.relax_promotion_on_severe: true</code> em <code>config/config.yaml</code>).</p>
+<h3>Resultado demonstrado</h3>
+<p>Como os lotes são uma partição aleatória da mesma fonte, não há drift real: os ciclos 2 e 3 foram classificados como estáveis (maior PSI 0,0035, em <code>AGE</code>, no ciclo 3), o que é o resultado correto. Para provar que o detector funciona, o notebook 01 roda em todo ciclo um <b>controle positivo</b>: desloca <code>LIMIT_BAL</code>, <code>PAY_0</code>, <code>AGE</code> e <code>UTILIZACAO_ATUAL</code> em uma amostra e confere que são classificados como severos (PSI de 0,54 a 2,25), enquanto a mesma amostra sem deslocamento fica estável (PSI ≤ 0,0035). As duas asserções interrompem o pipeline se falharem. Testes automatizados cobrem atributos contínuos e discretos, a escolha da referência pelo manifesto e o efeito na regra de promoção.</p>
+
+<h2>12. Resultados dos ciclos</h2>
+<table>
+  <tr><th></th><th>Ciclo 1</th><th>Ciclo 2</th><th>Ciclo 3</th></tr>
+  <tr><td>Onde rodou</td><td>Local</td><td>Local</td><td>GitHub Actions</td></tr>
+  <tr><td><code>cycle_id</code></td><td><code>ciclo_20261116T223751Z_a2d3d2d2</code></td><td><code>ciclo_20261116T223819Z_2db70707</code></td><td><code>ciclo_gha_43986932580_1</code></td></tr>
+  <tr><td><code>data_version</code></td><td><code>dv_a2d3d2d25ce5c5c8</code></td><td><code>dv_2db70707140b1359</code></td><td><code>dv_3a043c533b992faa</code></td></tr>
+  <tr><td>Lotes</td><td>001</td><td>001–002</td><td>001–003</td></tr>
+  <tr><td>Linhas (treino / validação / teste)</td><td>18.000 (10.851 / 3.613 / 3.536)</td><td>24.000 (14.475 / 4.819 / 4.706)</td><td>27.000 (16.239 / 5.439 / 5.322)</td></tr>
+  <tr><td>Drift</td><td>sem referência</td><td>estável</td><td>estável</td></tr>
+  <tr><td>Atributos eleitos</td><td class="n">9</td><td class="n">9</td><td class="n">10</td></tr>
+  <tr><td>Modelo A: F1 / ROC-AUC (validação)</td><td class="n">0,5293 / 0,7530</td><td class="n">0,5295 / 0,7500</td><td class="n">0,5246 / 0,7466</td></tr>
+  <tr><td>Modelo B: F1 / ROC-AUC (validação)</td><td class="n">0,5439 / 0,7829</td><td class="n">0,5410 / 0,7783</td><td class="n">0,5343 / 0,7738</td></tr>
+  <tr><td>Vencedor do ciclo</td><td>B</td><td>B</td><td>B</td></tr>
+  <tr><td>Vigente reavaliado (F1 validação)</td><td>-</td><td class="n">0,5403</td><td class="n">0,5338</td></tr>
+  <tr><td>Decisão</td><td><code>promovido_inicial</code></td><td><code>mantido</code></td><td><code>mantido</code></td></tr>
+  <tr><td>F1 do vigente no teste</td><td class="n">0,5249</td><td class="n">0,5363</td><td class="n">0,5455</td></tr>
+</table>
+<p><b>Interpretação.</b> A Random Forest venceu a regressão logística nos três ciclos, com cerca de 0,01 a mais de F1 e 0,03 a mais de ROC-AUC, o que indica relações não lineares entre atraso, limite e utilização. Nos ciclos 2 e 3, o novo vencedor superou o vigente por menos de 0,001 de F1, muito abaixo da margem de 0,01, e a promoção foi corretamente recusada: os modelos são equivalentes e trocar o modelo em produção só traria risco. O F1 de teste do vigente mudou entre ciclos porque o conjunto de teste cresceu com os clientes dos lotes novos; os clientes de teste anteriores permanecem no teste.</p>
+<p>No ciclo 3, o modelo vigente teve no teste precisão 0,486, recall 0,621, acurácia 0,780 e ROC-AUC 0,788 (matriz de confusão: 3.445 VN, 744 FP, 429 FN, 704 VP). Ele identifica 62% dos inadimplentes, e cerca de metade dos clientes sinalizados de fato não paga.</p>
+
+<h2>13. Limitações e trabalhos futuros</h2>
+<ul>
+  <li><b>Lotes simulados.</b> A fonte é estática, então não há drift real; a evidência de detecção vem do controle positivo e dos testes.</li>
+  <li><b>Dados de 2005, de um único banco.</b> Sem renda nem histórico além de 6 meses. <code>SEX</code>, <code>AGE</code> e <code>MARRIAGE</code> são variáveis sensíveis; nenhuma foi eleita, mas um uso real exigiria análise de viés.</li>
+  <li><b>Limiar de classificação fixo em 0,5.</b> Otimizá-lo poderia elevar o F1, mas exigiria uma segunda validação para não enviesar a competição.</li>
+  <li><b>Leve viés a favor do desafiante,</b> escolhido na mesma validação usada na promoção. A margem de 0,01 absorve esse efeito; validação cruzada do vencedor no treino seria mais rigorosa.</li>
+  <li><b>Crescimento do repositório.</b> Cada ciclo adiciona cerca de 6 MB ao <code>mlruns/</code>. Em produção, o store iria para um servidor MLflow ou armazenamento de objetos.</li>
+</ul>
+
+<h2>14. Conclusões</h2>
+<p>O projeto entrega um pipeline MLOps único, agendado e reprodutível, em que cada ciclo incorpora um lote novo, refaz a votação de atributos, treina e compara dois algoritmos sob o mesmo protocolo e decide automaticamente, com regra predefinida, se o modelo em produção muda. Tudo fica rastreável por <code>cycle_id</code> e <code>data_version</code> no MLflow, no manifesto do modelo vigente e nas evidências por ciclo, e o estado sobrevive aos runners descartáveis do GitHub Actions.</p>
+<p>Os três ciclos executados mostram o comportamento desejado de um processo de evolução de modelos: a votação reagiu aos dados novos (o conjunto eleito mudou a cada ciclo), a Random Forest venceu consistentemente a regressão logística, e a promoção foi recusada quando o ganho ficou abaixo da margem, preservando um modelo estável em vez de trocá-lo por ruído. O monitoramento de drift acrescenta o sinal que faltava para acelerar a substituição quando a população muda.</p>
+<p>Os principais próximos passos seriam usar dados com chegada real ao longo do tempo, otimizar o limiar de classificação com uma validação dedicada e mover o store do MLflow para um servidor persistente.</p>
+
+</body>
+</html>
