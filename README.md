@@ -2,7 +2,7 @@
 
 Trabalho Avaliativo N3 · Análise Preditiva.
 
-Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, disparado manualmente, roda um **ciclo** completo a cada novo lote de dados:
+Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a fatura do mês seguinte. O modelo não é treinado uma vez só. Um workflow do GitHub Actions, agendado semanalmente, roda um **ciclo** completo a cada novo lote de dados:
 
 1. validar os dados;
 2. eleger atributos por votação de três métodos;
@@ -29,7 +29,8 @@ Este projeto prevê se um cliente de cartão de crédito vai deixar de pagar a f
 - [Versionamento de dados e novos lotes](#versionamento-de-dados-e-novos-lotes)
 - [GitHub Actions e persistência](#github-actions-e-persistência)
 - [Monitoramento de drift (Critério 10)](#monitoramento-de-drift-critério-10)
-- [Demonstração em dois ciclos](#demonstração-em-dois-ciclos)
+- [Demonstração em três ciclos](#demonstração-em-três-ciclos)
+- [Entregáveis](#entregáveis)
 - [Reprodutibilidade](#reprodutibilidade)
 - [Limitações conhecidas](#limitações-conhecidas)
 
@@ -88,7 +89,7 @@ Atributos derivados no ETL. Cada um usa apenas a própria linha, então não há
 ## Arquitetura
 
 ```text
-GitHub Actions: .github/workflows/pipeline_mlops.yml  (workflow_dispatch)
+GitHub Actions: .github/workflows/pipeline_mlops.yml  (schedule semanal + workflow_dispatch)
   │  checkout do estado persistido → pip install → pytest
   │
   ├─ python -m src.ingestao --novo-lote   ingestão: publica o próximo lote, data_version = hash do conteúdo
@@ -101,7 +102,7 @@ GitHub Actions: .github/workflows/pipeline_mlops.yml  (workflow_dispatch)
        ├─ 04_selecao_promocao.ipynb  vencedor vs modelo vigente → promoção → versão + manifesto
        └─ 05_previsoes.ipynb         previsões com o modelo vigente + prova de reprodutibilidade
   │
-  ├─ upload-artifact: evidências do run (notebooks executados, JSONs, previsões)
+  ├─ upload-artifact: pacote do run (mlruns, models, reports, notebooks executados)
   └─ git commit + push: lotes, mlruns/, models/, reports/   (só se tudo acima passou)
 ```
 
@@ -192,11 +193,11 @@ Todo run filho tem as tags `cycle_id`, `data_version` e `stage`. Para comparar o
 pytest
 ```
 
-São 37 testes com dados sintéticos, sem rede, que rodam em cerca de 2 segundos. Cobrem:
+São 38 testes com dados sintéticos, sem rede, que rodam em cerca de 2 segundos. Cobrem:
 - a validação de dados: estrutura, alvo, nulos, códigos não documentados e limite de linhas inválidas;
 - os atributos derivados e a estabilidade da partição;
 - o ajuste do pré-processador só no treino;
-- a votação de atributos: regra configurável e registro de cada voto;
+- a votação de atributos: regra configurável, quantidade mínima, desempate e registro de cada voto;
 - a competição: direção da métrica, desempate e mesmos atributos para A e B;
 - a regra de promoção: inicial, margem, limite exato, desligada, drift e minimização;
 - a geração do manifesto: campos, não sobrescrita e detecção de artefato adulterado;
@@ -226,7 +227,7 @@ Todos os valores ajustáveis ficam em `config/config.yaml`, e o código não rep
 | `project` | Nome do projeto e do experimento MLflow |
 | `data` | Fonte (URL, SHA-256), alvo, coluna de ID, `random_state: 42`, frações dos lotes, limite de linhas inválidas |
 | `evaluation` | `primary_metric: f1`, `direction: maximize`, `test_size: 0.2`, `validation_size: 0.2`, métricas secundárias |
-| `features` | `voting.minimum_votes: 2`, `k_best`, `rfe_features`, `random_forest_features` (10 cada), parâmetros dos estimadores internos dos seletores |
+| `features` | `voting.minimum_votes: 2`, `voting.minimum_features: 5`, `k_best`, `rfe_features`, `random_forest_features` (10 cada), parâmetros dos estimadores internos dos seletores |
 | `models` | Modelo A e modelo B: `enabled`, `label` e hiperparâmetros. A ordem define o desempate |
 | `promotion` | `enabled: true`, `minimum_improvement: 0.01` |
 | `paths` | Todos os caminhos, relativos à raiz |
@@ -257,7 +258,13 @@ Os três métodos rodam no mesmo ciclo, sobre o treino imputado e padronizado:
 | 2. Importância de `RandomForestClassifier` | Redução média de impureza de Gini | 10 maiores |
 | 3. `RFE(LogisticRegression)` | Eliminação recursiva pelo menor coeficiente absoluto | 10 restantes |
 
-**Regra:** um atributo é eleito com pelo menos `features.voting.minimum_votes` votos (padrão 2 de 3). Cada ciclo grava `reports/evidencias/<cycle_id>/02_votacao_features.csv`, com uma linha por (método, atributo) e as colunas `cycle_id`, `data_version`, `method`, `feature`, `score`, `rank`, `vote`, `votes` e `final_selection`. A mesma tabela vai para o MLflow. A votação usa as colunas originais, e não as colunas após o one-hot, para que o conjunto eleito seja legível e o mesmo nos dois modelos.
+**Regra**, fixada em `config/config.yaml` antes de qualquer execução:
+
+- um atributo é eleito com pelo menos `features.voting.minimum_votes` votos (padrão 2 de 3);
+- **quantidade mínima:** o conjunto tem pelo menos `features.voting.minimum_features` atributos (padrão 5). Se os votos elegerem menos, o conjunto é completado pelos mais votados (`elected_by = "minimo"`);
+- **desempate:** com o mesmo número de votos, vence o menor rank médio entre os três métodos (`mean_rank`); depois, a ordem original das colunas.
+
+Cada ciclo grava `reports/evidencias/<cycle_id>/02_votacao_features.csv`, com uma linha por (método, atributo) e as colunas `cycle_id`, `data_version`, `method`, `feature`, `score`, `rank`, `vote`, `votes`, `mean_rank`, `final_selection` e `elected_by`. A mesma tabela vai para o MLflow. A votação usa as colunas originais, e não as colunas após o one-hot, para que o conjunto eleito seja legível e o mesmo nos dois modelos.
 
 ## Competição entre modelos
 
@@ -303,8 +310,8 @@ Um lote novo muda o treino. Por isso, todo ciclo refaz a votação de atributos,
 
 Existe um único workflow, `.github/workflows/pipeline_mlops.yml`:
 
-- **Gatilho:** `workflow_dispatch` (execução manual em Actions → pipeline-mlops → Run workflow), com o input `novo_lote` que publica o próximo lote antes do ciclo.
-- **Passos:** checkout, Python 3.12, `pip install`, cache da fonte UCI, `pytest`, `python -m src.pipeline [--novo-lote]`, resumo no *job summary*, `upload-artifact` das evidências e persistência no repositório.
+- **Gatilhos:** `schedule` com `cron: "0 9 * * 1"` (toda segunda-feira, 09:00 UTC) e `workflow_dispatch` (execução manual em Actions → pipeline-mlops → Run workflow, para testes). O input `novo_lote` publica o próximo lote antes do ciclo. Execuções agendadas sempre tentam publicar o próximo lote. Quando todos já foram publicados, o ciclo roda com os lotes existentes e registra um aviso.
+- **Passos:** checkout, Python 3.12, `pip install`, cache da fonte UCI, `pytest`, `python -m src.pipeline [--novo-lote]`, resumo no *job summary*, `upload-artifact` do pacote do ciclo e persistência no repositório.
 - **Parada em falha:** cada passo para o job se falhar. O executor retorna código 1 no primeiro notebook com erro.
 - **Concorrência:** um grupo `concurrency` impede dois ciclos simultâneos.
 
@@ -323,7 +330,7 @@ O próximo run começa com `actions/checkout` e encontra esse estado. Duas escol
 1. **Promoção atômica.** O passo de persistência só roda se todos os anteriores passaram. Se o notebook 05 falhar depois de uma promoção, o novo manifesto existe só no disco do runner descartado, e o modelo vigente no repositório não muda.
 2. **Caminhos portáveis do MLflow.** O MLflow grava caminhos absolutos de artefato, e o runner clona o repositório em outro diretório. `configure_mlflow` reescreve o prefixo gravado no banco para o diretório atual antes de cada uso. Isso foi verificado movendo um store e recarregando um modelo logado.
 
-Além disso, cada run publica as evidências como *artifact* do GitHub Actions, inclusive quando falha.
+Além disso, cada run publica `mlruns/`, `models/`, `reports/` e os notebooks executados como *artifact* baixável do GitHub Actions, inclusive quando falha.
 
 **Localmente** é o mesmo modelo, sem o commit automático. O estado fica em `mlruns/`, `models/` e `reports/`, e você versiona com `git` quando quiser.
 
@@ -364,7 +371,7 @@ lote novo → 01_etl: PSI por atributo (lotes do vigente vs lotes novos)
 - O notebook 01 traz um **controle positivo**. Ele aplica um deslocamento conhecido a uma cópia da validação: limite 40% menor, um mês a mais de atraso, clientes 8 anos mais velhos. O PSI classifica esses atributos como *severo*, e a mesma amostra sem deslocamento como *estável*. As duas classificações são asserções que param o pipeline se falharem.
 - Testes automatizados cobrem atributos contínuos e discretos, a escolha da referência pelo manifesto e o efeito na regra de promoção.
 
-## Demonstração em dois ciclos
+## Demonstração em três ciclos
 
 Os dois ciclos foram executados localmente, com `python -m src.pipeline` e depois `python -m src.pipeline --novo-lote`. As evidências completas estão em `reports/evidencias/`, e a tabela abaixo resume `reports/evidencias/comparacao_ciclos.md`.
 
@@ -394,7 +401,21 @@ Os dois ciclos foram executados localmente, com `python -m src.pipeline` e depoi
 - O controle positivo de drift do notebook 01 classificou `LIMIT_BAL`, `PAY_0`, `AGE` e `UTILIZACAO_ATUAL` deslocados como severos (PSI de 0,54 a 2,25). Os mesmos atributos sem deslocamento ficaram estáveis (PSI ≤ 0,0035).
 - Os dois ciclos rodaram duas vezes nesta máquina e produziram as mesmas métricas, os mesmos votos e as mesmas decisões até a 4ª casa decimal.
 
-O ciclo 3 (`lote_003`) fica para a primeira execução do workflow no GitHub Actions.
+O ciclo 3 (`ciclo_gha_43986932580_1`) rodou no GitHub Actions, com o `lote_003` (27.000 linhas). A votação elegeu 10 atributos (`PAY_4` volta e `PAY_6` fica). O modelo B venceu de novo com F1 0,5343 contra 0,5338 do vigente reavaliado, abaixo da margem de 0,01, então o modelo do ciclo 1 foi **mantido**. O F1 de teste do vigente foi 0,5455. O workflow fez commit do estado (`79d1b2e`), o que comprova a persistência entre runners.
+
+## Entregáveis
+
+| Entregável | Onde |
+|---|---|
+| Repositório Git | este repositório: código (`src/`), notebooks, YAML, `config/config.yaml`, README |
+| Relatório técnico | `reports/relatorio_n3.pdf` (fonte: `reports/relatorio_n3.html`) |
+| Execução agendada | `evidencias/github_actions/`: logs dos runs do workflow |
+| Histórico MLflow | `mlruns/` (store completo) e `evidencias/mlflow/runs.md` / `runs.csv`, gerados por `python -m src.exportar_mlflow` |
+| Evidências por ciclo | `reports/evidencias/<cycle_id>/` e `reports/evidencias/comparacao_ciclos.md` |
+
+O índice completo, ligado ao checklist do enunciado, está em `evidencias/README.md`.
+
+`bash scripts/montar_entrega.sh` monta a pasta `entrega/` (não versionada) com o pacote para envio: relatório, link do repositório, snapshot zip do commit e evidências. Ela é só uma cópia; a fonte da verdade continua sendo o repositório.
 
 ## Reprodutibilidade
 
@@ -432,4 +453,4 @@ Os `cycle_id` locais incluem o horário de execução, então diferem entre exec
 - **Crescimento do repositório.** Cada ciclo adiciona cerca de 6 MB, quase tudo o artefato da Random Forest no MLflow (formato skops). Para um trabalho acadêmico com execução semanal isso é aceitável. Em produção, `mlruns/` iria para um armazenamento de objetos ou um servidor MLflow.
 - **Limiar de decisão.** O limiar de classificação é fixo em 0,5 (com `class_weight=balanced`). Otimizá-lo na validação poderia elevar o F1, mas exigiria uma segunda validação para não enviesar a competição.
 - **Viés leve a favor do desafiante.** O F1 do desafiante é o melhor de dois modelos escolhidos na mesma validação usada para compará-lo ao vigente, então é levemente otimista. A margem de 0,01 também serve para absorver esse viés. Uma alternativa mais rigorosa seria validação cruzada do vencedor no treino.
-- **Workflow não executado aqui.** O workflow foi validado com `actionlint`, mas só roda de fato depois do push para o GitHub.
+- **Agendamento sujeito ao GitHub.** Execuções por `schedule` podem atrasar em horários de pico e só rodam no branch padrão.
