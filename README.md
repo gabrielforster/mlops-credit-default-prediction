@@ -7,7 +7,7 @@ Uma solução de aprendizagem de máquina que estima, para cada cliente de cart�
 | | |
 |---|---|
 | Apresentação | [`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) |
-| Demonstração | [`src/demo.py`](src/demo.py), com instruções em [Demonstração de uso](#7-demonstração-de-uso) |
+| Demonstração | Página web [`src/demo_web.py`](src/demo_web.py) e versão de terminal [`src/demo.py`](src/demo.py), com instruções em [Demonstração de uso](#7-demonstração-de-uso) |
 | Avaliação completa | [`notebooks/06_avaliacao_final.ipynb`](notebooks/06_avaliacao_final.ipynb) |
 | Pipeline de treino | [`docs/pipeline_mlops.md`](docs/pipeline_mlops.md) |
 
@@ -151,7 +151,9 @@ Todos os números e figuras vêm de [`notebooks/06_avaliacao_final.ipynb`](noteb
 
 ## 7. Demonstração de uso
 
-O script `src/demo.py` avalia um cliente com o modelo em uso e explica o resultado em linguagem simples. O modelo treinado já está versionado no repositório, então **não é preciso treinar nada** para rodar a demonstração.
+Uma **página web local** avalia qualquer cliente com o modelo em uso e explica o resultado. O modelo treinado já está versionado no repositório, então **não é preciso treinar nada**. A página usa só a biblioteca padrão do Python, sem recursos externos, e funciona sem internet.
+
+![Página da demonstração: cliente de risco muito alto](reports/figuras/07_demo_web_alto_risco.png)
 
 ### Instalação
 
@@ -167,26 +169,45 @@ source .venv/bin/activate           # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### Execução
+### Página web
 
 ```bash
-# Um cliente do arquivo de 3.000 clientes que o modelo nunca viu
-python -m src.demo --id 11
-
-# Um cliente descrito por você
-python -m src.demo --modelo-json > cliente.json   # gera um cliente de exemplo
-# edite cliente.json (por exemplo PAY_0, LIMIT_BAL, BILL_AMT1)
-python -m src.demo --arquivo cliente.json
-
-# Saída em JSON, para integrar com outro sistema
-python -m src.demo --id 11 --json
+python -m src.demo_web                      # abre http://127.0.0.1:8000 no navegador
+python -m src.demo_web --porta 8080         # outra porta
+python -m src.demo_web --sem-navegador      # só sobe o servidor
 ```
 
-Outros IDs estão em `data/raw/inferencia/novos_clientes.csv`; o `--id 24`, por exemplo, é um cliente de baixo risco. Um ID inexistente faz o script listar exemplos válidos.
+**No formulário à esquerda:**
+- o perfil do cliente;
+- os últimos seis meses de status de pagamento, fatura e valor pago;
+- botões para carregar um exemplo de alto risco, um cliente que paga em dia, ou qualquer um dos 3.000 clientes reais que o modelo nunca viu.
 
-### Exemplo de saída
+Os meses com atraso ficam em vermelho, e **qualquer alteração reavalia o cliente na hora**.
 
-O cliente de `--modelo-json` tem limite de 50 mil, dois meses de atraso em setembro e agosto, 75% do limite usado e nenhum pagamento no último mês:
+**No painel à direita:**
+- **medidor** com a pontuação e a faixa de risco: baixo (< 30%), moderado (30–50%), alto (50–70%) ou muito alto (≥ 70%);
+- **decisão:** provável inadimplente ou não, no limiar de 50%;
+- **variação** desde a avaliação anterior, útil para testar hipóteses ("e se ele tivesse pago em setembro?");
+- **o que mais pesou:** para cada atributo, quantos pontos percentuais o valor do cliente soma (barra vermelha) ou tira (barra verde) da pontuação, comparado ao valor típico (mediana) dos clientes de treino. A explicação é local, vale para aquele cliente, e funciona com qualquer algoritmo.
+
+Uma entrada inválida, como idade 7, é recusada com uma mensagem que aponta o campo.
+
+**Links diretos**, úteis na apresentação:
+- `http://127.0.0.1:8000/?preset=em_dia` abre o cliente que paga em dia;
+- `http://127.0.0.1:8000/?id=11` abre um cliente real pelo ID.
+
+A pontuação ordena os clientes por risco, mas não é uma probabilidade calibrada (seção 6).
+
+### Versão de terminal
+
+A mesma avaliação, sem navegador:
+
+```bash
+python -m src.demo --id 11                        # cliente real nunca visto
+python -m src.demo --modelo-json > cliente.json   # gera um cliente de exemplo para editar
+python -m src.demo --arquivo cliente.json
+python -m src.demo --id 11 --json                 # saída em JSON
+```
 
 ```text
 $ python -m src.demo --arquivo cliente.json
@@ -203,47 +224,44 @@ comparado ao valor tipico do treino):
     +1.3 p.p.  UTILIZACAO_MEDIA  cliente=    0.75  tipico=    0.28  (fatura media do semestre / limite)
 ```
 
-### Como ler a saída
-
-- **Pontuação e faixa de risco.** As faixas são baixo (< 30%), moderado (30–50%), alto (50–70%) e muito alto (≥ 70%). A pontuação ordena os clientes por risco, mas não é uma probabilidade calibrada (seção 6).
-- **Decisão.** Inadimplente ou não, no limiar de 50% do modelo.
-- **O que mais pesou.** Para cada atributo usado pelo modelo, quantos pontos percentuais a pontuação muda se o valor do cliente for trocado pelo valor típico do treino (a mediana). Um valor positivo empurra para "inadimplente". A explicação é local, vale para aquele cliente, e funciona com qualquer algoritmo.
-- **Entradas inválidas.** Uma entrada incompleta ou fora do dicionário da UCI, como `AGE: 7` ou `EDUCATION: 9`, é recusada com uma mensagem que aponta o campo.
-
-A mesma lógica pode ser usada como função Python:
+A lógica também pode ser usada como função Python:
 
 ```python
 from src.demo import avaliar_cliente, explicar, EXEMPLO
-resultado = avaliar_cliente({**EXEMPLO, "PAY_0": -1})
-print(explicar(resultado))
+print(explicar(avaliar_cliente({**EXEMPLO, "PAY_0": -1})))
 ```
 
 ## 8. Apresentação
 
-[`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) tem 16 slides, organizados pelos critérios de avaliação:
+[`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) tem 19 slides, organizados pelos critérios de avaliação. O rodapé de cada slide indica quem o apresenta.
 
-| Slides | Conteúdo |
-|---|---|
-| 1 | Título e integrantes |
-| 2–3 | Introdução: problema, quem usa, dados |
-| 4 | Conceitos: métricas com classes desbalanceadas, modelos, boas práticas |
-| 5 | Organização da atividade: pipeline e estrutura do repositório |
-| 6–7 | Preparação e modelagem: tratamentos, votação de atributos, competição |
-| 8–11 | Avaliação: comparação com alternativas simples, matriz de confusão, limiar, ordenação, importância, erros e limitações |
-| 12 | Demonstração de uso |
-| 13 | Criatividade: retreino automático, promoção com critério, rastreabilidade |
-| 14 | Contribuição de cada integrante |
-| 15 | Considerações finais e trabalhos futuros |
-| 16 | Referências |
+| Slides | Conteúdo | Apresenta |
+|---|---|---|
+| 1–2 | Título e roteiro | Gabriel F. Rocha |
+| 3–4 | Introdução: problema, quem usa, dados | Andre Gustavo Specht |
+| 5 | Conceitos: métricas com classes desbalanceadas, modelos, boas práticas | Arthur Vinicius Hassuma |
+| 6 | Organização da atividade: pipeline e estrutura do repositório | Gabriel F. Rocha |
+| 7 | Preparação dos dados | Andre Gustavo Specht |
+| 8 | Seleção de atributos por votação | Arthur Vinicius Hassuma |
+| 9 | Competição entre modelos | Nicolas Wajima |
+| 10–11 | Avaliação: alternativas simples, matriz de confusão, limiar | Pablo Arman Schuller |
+| 12 | Ordenação do risco e importância dos atributos | Nicolas Wajima |
+| 13 | Erros e limitações | Pablo Arman Schuller |
+| 14–15 | Demonstração ao vivo | Victor da Rocha |
+| 16 | Criatividade: retreino automático, promoção com critério, rastreabilidade | Gabriel F. Rocha |
+| 17 | Contribuição de cada integrante | Victor da Rocha |
+| 18 | Considerações finais e trabalhos futuros | Arthur Vinicius Hassuma |
+| 19 | Referências | Nicolas Wajima |
 
-**Roteiro sugerido para a demonstração ao vivo** (slide 12):
+**Roteiro sugerido para a demonstração ao vivo** (slides 14–15). Antes da aula, rode `python -m src.demo_web` e deixe a página aberta.
 
-1. `python -m src.demo --id 11`: um cliente real nunca visto, de risco moderado.
-2. `python -m src.demo --arquivo cliente.json`: o exemplo de risco muito alto.
-3. Editar `cliente.json` ao vivo, trocando `"PAY_0": 2` por `"PAY_0": -1` (pagou em dia), e rodar de novo para mostrar a pontuação cair.
-4. Editar `"AGE": 7` para mostrar a validação da entrada.
+1. A página abre no exemplo de **alto risco** (86,5%). Mostre o medidor e as barras de "o que mais pesou".
+2. Troque o status de setembro de "2 meses" para "em dia". A pontuação cai, e a variação aparece abaixo da decisão.
+3. Clique em **"Exemplo: paga em dia"** (20,4%, risco baixo). Agora todas as barras reduzem o risco.
+4. Carregue um **cliente real** pelo ID, por exemplo o 11, de risco moderado.
+5. Digite **idade 7** para mostrar a validação da entrada.
 
-A fonte dos slides é `reports/apresentacao_projeto_final.html`. As figuras ficam em `reports/figuras/` e são geradas pelo notebook 06. Para gerar o PDF de novo depois de editar:
+A fonte dos slides é `reports/apresentacao_projeto_final.html`. As figuras estão em `reports/figuras/`: os gráficos vêm do notebook 06, e as capturas são da página web. Para gerar o PDF de novo depois de editar:
 
 ```bash
 chromium --headless --no-pdf-header-footer \
@@ -260,23 +278,25 @@ src/
   features.py             três métodos de seleção e votação
   modelagem.py            treino, métricas e competição
   promocao.py             modelo vigente, versões e manifesto
-  demo.py                 demonstração de uso
+  demo.py                 demonstração de uso (terminal)
+  demo_web.py             demonstração de uso (página web local)
+  web/demo.html           a página da demonstração
 notebooks/
   01_etl.ipynb .. 05_previsoes.ipynb   ciclo de treino (ver docs/pipeline_mlops.md)
   06_avaliacao_final.ipynb             avaliação final, erros e limitações
 models/                   modelo vigente (joblib) e histórico de decisões
 reports/
   apresentacao_projeto_final.pdf       apresentação
-  figuras/                             gráficos do notebook 06
+  figuras/                             gráficos do notebook 06 e capturas da demonstração
   evidencias/                          resultados de cada etapa
-tests/                    41 testes (pytest)
+tests/                    42 testes (pytest)
 docs/pipeline_mlops.md    documentação técnica do pipeline de treino
 ```
 
 ## 10. Reprodutibilidade e testes
 
 ```bash
-pytest                                                                         # 41 testes, ~2 s
+pytest                                                                         # 42 testes, ~2 s
 jupyter nbconvert --to notebook --execute --inplace notebooks/06_avaliacao_final.ipynb   # refaz a avaliação e as figuras
 python -m src.pipeline                                                         # novo ciclo de treino completo
 ```
@@ -287,14 +307,14 @@ python -m src.pipeline                                                         #
 
 ## 11. Equipe e contribuições
 
-| Integrante | Contribuição |
-|---|---|
-| Andre Gustavo Specht | *a preencher* |
-| Arthur Vinicius Hassuma | *a preencher* |
-| Gabriel F. Rocha | *a preencher* |
-| Nicolas Wajima | *a preencher* |
-| Pablo Arman Schuller | *a preencher* |
-| Victor da Rocha | *a preencher* |
+| Integrante | Desenvolvimento | Apresenta |
+|---|---|---|
+| Andre Gustavo Specht | Análise exploratória e preparação dos dados: validação, códigos não documentados, outliers, atributos derivados e partição por cliente (`src/preprocessamento.py`, notebook 01) | Problema, dados e preparação |
+| Arthur Vinicius Hassuma | Seleção de atributos: os três métodos e a regra de votação (`src/features.py`, notebook 02); revisão dos conceitos e das referências | Conceitos, seleção de atributos e considerações finais |
+| Gabriel F. Rocha | Arquitetura do repositório e do pipeline: configuração, MLflow, GitHub Actions com retreino semanal, promoção e drift (`src/pipeline.py`, `src/promocao.py`, `src/drift.py`) | Abertura, pipeline e retreino automático |
+| Nicolas Wajima | Modelagem: treino e competição entre regressão logística e Random Forest, hiperparâmetros e importância dos atributos (`src/modelagem.py`, notebooks 03 e 04) | Competição, ordenação do risco e referências |
+| Pablo Arman Schuller | Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação, escolha do limiar e análise de erros (notebook 06) | Avaliação, erros e limitações |
+| Victor da Rocha | Demonstração de uso: script e página web (`src/demo.py`, `src/demo_web.py`), apresentação e README | Demonstração ao vivo e equipe |
 
 ## 12. Considerações finais
 
@@ -308,7 +328,7 @@ python -m src.pipeline                                                         #
 - definir o limiar a partir do custo real de cada erro;
 - testar gradient boosting e novos atributos, como renda e outras dívidas;
 - monitorar a equidade entre grupos a cada ciclo;
-- expor a demonstração numa interface web simples.
+- explicar cada previsão com valores SHAP e publicar a demonstração como um serviço.
 
 ## 13. Referências
 
