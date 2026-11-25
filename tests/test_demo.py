@@ -26,3 +26,16 @@ def test_avaliar_cliente_rejeita_entrada_incompleta_ou_fora_do_dominio():
         avaliar_cliente({"LIMIT_BAL": 1000}, ROOT)
     with pytest.raises(ValueError, match="AGE"):
         avaliar_cliente({**EXEMPLO, "AGE": 7}, ROOT)
+
+
+def test_demo_web_presets_e_clientes_reais():
+    from src.demo_web import EM_DIA, PRESETS, cliente, info
+
+    dados = info(ROOT)
+    assert dados["atributos"] and set(PRESETS) <= set(dados["presets"])
+    assert avaliar_cliente(EM_DIA, ROOT)["faixa"] == "baixo"
+    assert avaliar_cliente(EXEMPLO, ROOT)["faixa"] == "muito alto"
+    real = cliente(ROOT, dados["ids"][0])
+    assert set(real) == set(dados["campos"])
+    with pytest.raises(KeyError):
+        cliente(ROOT, -1)
