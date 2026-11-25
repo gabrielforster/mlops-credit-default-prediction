@@ -50,8 +50,6 @@
   .cover .sub { font-size: 17pt; opacity: .9; max-width: 230mm; }
   .cover table td { border: none; color: #fff; padding: .6mm 6mm .6mm 0; font-size: 12.5pt; }
   .shot { border: .8pt solid var(--line); box-shadow: 0 1.5mm 4mm rgba(0,0,0,.08); }
-  .who { color: var(--accent); font-weight: bold; }
-  .agenda td { padding: 1.6mm 2.5mm; font-size: 12.5pt; }
   .vote { text-align: center; }
   .vote.y { color: var(--accent); font-weight: bold; }
   .refs { font-size: 11.5pt; line-height: 1.4; padding-left: 0; list-style: none; }
@@ -69,24 +67,8 @@
   </div>
   <table>
     <tr><td><b>Integrantes</b></td><td>Andre Gustavo Specht · Arthur Vinicius Hassuma · Gabriel F. Rocha · Nicolas Wajima · Pablo Arman Schuller · Victor da Rocha</td></tr>
-    <tr><td><b>Repositório</b></td><td>github.com/gabrielforster/mlops-credit-default-prediction</td></tr>
+    <tr><td><b>Repositório</b></td><td><a href="https://github.com/gabrielforster/mlops-credit-default-prediction/tree/n3-machine-learning" style="color:inherit">github.com/gabrielforster/mlops-credit-default-prediction/tree/n3-machine-learning</a></td></tr>
   </table>
-</section>
-
-<!-- Roteiro -->
-<section class="slide">
-  <div class="kicker">Roteiro</div>
-  <h2>Roteiro da apresentação e quem apresenta</h2>
-  <table class="agenda">
-    <tr><th style="width:8%">Slides</th><th style="width:46%">Parte</th><th>Apresenta</th></tr>
-    <tr><td>3–4, 7</td><td>Problema, quem usa, dados e preparação</td><td class="who">Andre Gustavo Specht</td></tr>
-    <tr><td>5, 8, 18</td><td>Conceitos, seleção de atributos e considerações finais</td><td class="who">Arthur Vinicius Hassuma</td></tr>
-    <tr><td>9, 12, 19</td><td>Competição entre modelos, ordenação do risco e referências</td><td class="who">Nicolas Wajima</td></tr>
-    <tr><td>10–11, 13</td><td>Avaliação, matriz de confusão, limiar, erros e limitações</td><td class="who">Pablo Arman Schuller</td></tr>
-    <tr><td>14–15, 17</td><td>Demonstração ao vivo e contribuições da equipe</td><td class="who">Victor da Rocha</td></tr>
-    <tr><td>1–2, 6, 16</td><td>Abertura, organização do pipeline e retreino automático</td><td class="who">Gabriel F. Rocha</td></tr>
-  </table>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Gabriel F. Rocha · 2</span></div>
 </section>
 
 <!-- 2. Introdução -->
@@ -109,7 +91,7 @@
       <p class="muted small">O modelo apoia a decisão e não a substitui: a pontuação ordena clientes por risco para que pessoas decidam a ação.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Andre Gustavo Specht · 3</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>2</span></div>
 </section>
 
 <!-- 3. Dados -->
@@ -127,7 +109,7 @@
       <p>O atraso recente é o sinal mais forte: quem atrasou dois meses em setembro tem <b>69%</b> de inadimplência, contra 13% a 17% de quem não estava atrasado.</p>
   </div>
   <div class="fig full"><img src="figuras/01_dados.png" alt="Distribuição das classes e taxa de inadimplência por status de pagamento e por limite"></div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Andre Gustavo Specht · 4</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>3</span></div>
 </section>
 
 <!-- 4. Conceitos -->
@@ -154,7 +136,7 @@
       <p><b>Seleção de atributos</b> por três métodos e votação. <b>MLOps:</b> versionamento, rastreio (MLflow) e retreino automático.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Arthur Vinicius Hassuma · 5</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>4</span></div>
 </section>
 
 <!-- 5. Organização -->
@@ -185,7 +167,7 @@ reports/figuras/       gráficos desta apresentação
 mlruns/                histórico do MLflow
 tests/                 42 testes (pytest)</pre>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Gabriel F. Rocha · 6</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>5</span></div>
 </section>
 
 <!-- 6. Preparação -->
@@ -201,7 +183,7 @@ tests/                 42 testes (pytest)</pre>
     <tr><td>Partição treino / validação / teste (60 / 20 / 20) por hash do ID</td><td>Cada cliente cai sempre na mesma partição, mesmo quando chegam lotes novos. O teste nunca contamina o treino.</td></tr>
     <tr><td>Padronização e one-hot ajustados só no treino, dentro do <code>Pipeline</code></td><td>Evita vazamento e garante que a previsão aplique exatamente a mesma transformação do treino.</td></tr>
   </table>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Andre Gustavo Specht · 7</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>6</span></div>
 </section>
 
 <!-- 7. Modelagem -->
@@ -233,7 +215,7 @@ tests/                 42 testes (pytest)</pre>
       <tr><td colspan="5" class="muted">Mais 8 atributos com 1 voto (ex.: <code>BILL_AMT1</code>, <code>RAZAO_PAGAMENTO</code>) e 12 sem votos.</td></tr>
     </table>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Arthur Vinicius Hassuma · 8</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>7</span></div>
 </section>
 
 <section class="slide">
@@ -258,7 +240,7 @@ tests/                 42 testes (pytest)</pre>
       </ul>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Nicolas Wajima · 9</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>8</span></div>
 </section>
 
 <!-- 8. Avaliação -->
@@ -283,7 +265,7 @@ tests/                 42 testes (pytest)</pre>
     </div>
     <div class="fig"><img src="figuras/02_roc_pr.png" alt="Curvas ROC e precisão-revocação no teste"></div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Pablo Arman Schuller · 10</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>9</span></div>
 </section>
 
 <!-- 9. Matriz de confusão e limiar -->
@@ -299,7 +281,7 @@ tests/                 42 testes (pytest)</pre>
       <p>O limiar foi escolhido <b>na validação</b>. O F1 é praticamente o mesmo entre 0,5 e 0,6. Abaixando para 0,3, o modelo encontra <b>89%</b> dos inadimplentes, mas sinaliza 65% da base.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Pablo Arman Schuller · 11</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>10</span></div>
 </section>
 
 <!-- 10. Ordenação e importância -->
@@ -316,7 +298,7 @@ tests/                 42 testes (pytest)</pre>
       <p class="small">Embaralhando cada atributo no teste, a maior queda de AUC vem de <code>PAY_0</code>, seguido do uso do limite e do valor pago. <code>PAY_2</code> a <code>PAY_4</code> acrescentam pouco: <code>ATRASO_MAXIMO</code> já resume o que eles informam.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Nicolas Wajima · 12</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>11</span></div>
 </section>
 
 <!-- 11. Erros -->
@@ -343,7 +325,7 @@ tests/                 42 testes (pytest)</pre>
       </ul>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Pablo Arman Schuller · 13</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>12</span></div>
 </section>
 
 <!-- 12. Demonstração -->
@@ -364,7 +346,7 @@ tests/                 42 testes (pytest)</pre>
       <p class="muted">Exemplo: 2 meses de atraso em set e ago, 96% do limite usado em setembro → <b>86,5%, risco muito alto</b>.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Victor da Rocha · 14</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>13</span></div>
 </section>
 
 <section class="slide">
@@ -382,7 +364,7 @@ python -m src.demo_web</pre>
       <p class="muted">Também dá para carregar qualquer um dos 3.000 clientes reais que o modelo nunca viu.</p>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Victor da Rocha · 15</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>14</span></div>
 </section>
 
 <!-- 13. Criatividade -->
@@ -404,7 +386,7 @@ python -m src.demo_web</pre>
     </div>
   </div>
   <p class="small muted" style="margin-top:5mm">Três ciclos executados: dois locais e um no GitHub Actions. Nos três, o modelo vigente foi promovido (no primeiro) ou mantido (nos dois seguintes), e as previsões foram reproduzidas a partir do arquivo salvo e do MLflow.</p>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Gabriel F. Rocha · 16</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>15</span></div>
 </section>
 
 <!-- 14. Contribuições -->
@@ -412,15 +394,15 @@ python -m src.demo_web</pre>
   <div class="kicker">Equipe</div>
   <h2>Contribuição de cada integrante</h2>
   <table class="small">
-    <tr><th style="width:22%">Integrante</th><th>Desenvolvimento</th><th style="width:24%">Apresenta</th></tr>
-    <tr><td><b>Andre Gustavo Specht</b></td><td>Análise exploratória e preparação dos dados: validação, códigos não documentados, outliers, atributos derivados e partição por cliente</td><td>Problema, dados e preparação</td></tr>
-    <tr><td><b>Arthur Vinicius Hassuma</b></td><td>Seleção de atributos: os três métodos e a regra de votação; revisão dos conceitos e das referências</td><td>Conceitos, seleção de atributos e considerações finais</td></tr>
-    <tr><td><b>Gabriel F. Rocha</b></td><td>Arquitetura do repositório e do pipeline: configuração, MLflow, GitHub Actions com retreino semanal, promoção e drift</td><td>Abertura, pipeline e retreino automático</td></tr>
-    <tr><td><b>Nicolas Wajima</b></td><td>Modelagem: treino e competição entre regressão logística e Random Forest, hiperparâmetros e importância dos atributos</td><td>Competição, ordenação do risco e referências</td></tr>
-    <tr><td><b>Pablo Arman Schuller</b></td><td>Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação, escolha do limiar e análise de erros</td><td>Avaliação, erros e limitações</td></tr>
-    <tr><td><b>Victor da Rocha</b></td><td>Demonstração de uso: script e página web, apresentação e README</td><td>Demonstração ao vivo e equipe</td></tr>
+    <tr><th style="width:22%">Integrante</th><th>Desenvolvimento</th></tr>
+    <tr><td><b>Andre Gustavo Specht</b></td><td>Análise exploratória e preparação dos dados: validação, códigos não documentados, outliers, atributos derivados e partição por cliente</td></tr>
+    <tr><td><b>Arthur Vinicius Hassuma</b></td><td>Seleção de atributos: os três métodos e a regra de votação; revisão dos conceitos e das referências</td></tr>
+    <tr><td><b>Gabriel F. Rocha</b></td><td>Arquitetura do repositório e do pipeline: configuração, MLflow, GitHub Actions com retreino semanal, promoção e drift</td></tr>
+    <tr><td><b>Nicolas Wajima</b></td><td>Modelagem: treino e competição entre regressão logística e Random Forest, hiperparâmetros e importância dos atributos</td></tr>
+    <tr><td><b>Pablo Arman Schuller</b></td><td>Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação, escolha do limiar e análise de erros</td></tr>
+    <tr><td><b>Victor da Rocha</b></td><td>Demonstração de uso: script e página web, apresentação e README</td></tr>
   </table>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Victor da Rocha · 17</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>16</span></div>
 </section>
 
 <!-- 15. Considerações finais -->
@@ -448,7 +430,7 @@ python -m src.demo_web</pre>
       </ul>
     </div>
   </div>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Arthur Vinicius Hassuma · 18</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>17</span></div>
 </section>
 
 <!-- 16. Referências -->
@@ -466,7 +448,7 @@ python -m src.demo_web</pre>
     <li>YEH, I. C.; LIEN, C. H. The comparisons of data mining techniques for the predictive accuracy of probability of default of credit card clients. <i>Expert Systems with Applications</i>, v. 36, n. 2, p. 2473–2480, 2009.</li>
     <li>ZAHARIA, M. et al. Accelerating the machine learning lifecycle with MLflow. <i>IEEE Data Engineering Bulletin</i>, v. 41, n. 4, p. 39–45, 2018.</li>
   </ul>
-  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>apresenta: Nicolas Wajima · 19</span></div>
+  <div class="foot"><span>Projeto N3 · Predição de inadimplência</span><span>18</span></div>
 </section>
 
 </body>
