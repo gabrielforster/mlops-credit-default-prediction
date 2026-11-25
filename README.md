@@ -233,27 +233,30 @@ print(explicar(avaliar_cliente({**EXEMPLO, "PAY_0": -1})))
 
 ## 8. Apresentação
 
-[`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) tem 19 slides, organizados pelos critérios de avaliação. O rodapé de cada slide indica quem o apresenta.
+[`reports/apresentacao_projeto_final.pdf`](reports/apresentacao_projeto_final.pdf) tem 18 slides, organizados pelos critérios de avaliação.
 
-| Slides | Conteúdo | Apresenta |
-|---|---|---|
-| 1–2 | Título e roteiro | Gabriel F. Rocha |
-| 3–4 | Introdução: problema, quem usa, dados | Andre Gustavo Specht |
-| 5 | Conceitos: métricas com classes desbalanceadas, modelos, boas práticas | Arthur Vinicius Hassuma |
-| 6 | Organização da atividade: pipeline e estrutura do repositório | Gabriel F. Rocha |
-| 7 | Preparação dos dados | Andre Gustavo Specht |
-| 8 | Seleção de atributos por votação | Arthur Vinicius Hassuma |
-| 9 | Competição entre modelos | Nicolas Wajima |
-| 10–11 | Avaliação: alternativas simples, matriz de confusão, limiar | Pablo Arman Schuller |
-| 12 | Ordenação do risco e importância dos atributos | Nicolas Wajima |
-| 13 | Erros e limitações | Pablo Arman Schuller |
-| 14–15 | Demonstração ao vivo | Victor da Rocha |
-| 16 | Criatividade: retreino automático, promoção com critério, rastreabilidade | Gabriel F. Rocha |
-| 17 | Contribuição de cada integrante | Victor da Rocha |
-| 18 | Considerações finais e trabalhos futuros | Arthur Vinicius Hassuma |
-| 19 | Referências | Nicolas Wajima |
+| Slide | Conteúdo |
+|---|---|
+| 1 | Título, integrantes e repositório |
+| 2 | Introdução: o problema e quem usa a solução |
+| 3 | Introdução: os dados (UCI, id 350) |
+| 4 | Conceitos: métricas com classes desbalanceadas, modelos, boas práticas |
+| 5 | Organização da atividade: pipeline e estrutura do repositório |
+| 6 | Preparação dos dados |
+| 7 | Seleção de atributos por votação |
+| 8 | Competição entre modelos |
+| 9 | Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação |
+| 10 | Matriz de confusão e escolha do limiar |
+| 11 | Ordenação do risco e importância dos atributos |
+| 12 | Erros e limitações |
+| 13 | Demonstração: a página web |
+| 14 | Demonstração: e se o cliente pagasse em dia? |
+| 15 | Criatividade: retreino automático, promoção com critério, rastreabilidade |
+| 16 | Contribuição de cada integrante |
+| 17 | Considerações finais e trabalhos futuros |
+| 18 | Referências |
 
-**Roteiro sugerido para a demonstração ao vivo** (slides 14–15). Antes da aula, rode `python -m src.demo_web` e deixe a página aberta.
+**Roteiro sugerido para a demonstração ao vivo** (slides 13–14). Antes da aula, rode `python -m src.demo_web` e deixe a página aberta.
 
 1. A página abre no exemplo de **alto risco** (86,5%). Mostre o medidor e as barras de "o que mais pesou".
 2. Troque o status de setembro de "2 meses" para "em dia". A pontuação cai, e a variação aparece abaixo da decisão.
@@ -307,14 +310,14 @@ python -m src.pipeline                                                         #
 
 ## 11. Equipe e contribuições
 
-| Integrante | Desenvolvimento | Apresenta |
-|---|---|---|
-| Andre Gustavo Specht | Análise exploratória e preparação dos dados: validação, códigos não documentados, outliers, atributos derivados e partição por cliente (`src/preprocessamento.py`, notebook 01) | Problema, dados e preparação |
-| Arthur Vinicius Hassuma | Seleção de atributos: os três métodos e a regra de votação (`src/features.py`, notebook 02); revisão dos conceitos e das referências | Conceitos, seleção de atributos e considerações finais |
-| Gabriel F. Rocha | Arquitetura do repositório e do pipeline: configuração, MLflow, GitHub Actions com retreino semanal, promoção e drift (`src/pipeline.py`, `src/promocao.py`, `src/drift.py`) | Abertura, pipeline e retreino automático |
-| Nicolas Wajima | Modelagem: treino e competição entre regressão logística e Random Forest, hiperparâmetros e importância dos atributos (`src/modelagem.py`, notebooks 03 e 04) | Competição, ordenação do risco e referências |
-| Pablo Arman Schuller | Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação, escolha do limiar e análise de erros (notebook 06) | Avaliação, erros e limitações |
-| Victor da Rocha | Demonstração de uso: script e página web (`src/demo.py`, `src/demo_web.py`), apresentação e README | Demonstração ao vivo e equipe |
+| Integrante | Desenvolvimento |
+|---|---|
+| Andre Gustavo Specht | Análise exploratória e preparação dos dados: validação, códigos não documentados, outliers, atributos derivados e partição por cliente (`src/preprocessamento.py`, notebook 01) |
+| Arthur Vinicius Hassuma | Seleção de atributos: os três métodos e a regra de votação (`src/features.py`, notebook 02); revisão dos conceitos e das referências |
+| Gabriel F. Rocha | Arquitetura do repositório e do pipeline: configuração, MLflow, GitHub Actions com retreino semanal, promoção e drift (`src/pipeline.py`, `src/promocao.py`, `src/drift.py`) |
+| Nicolas Wajima | Modelagem: treino e competição entre regressão logística e Random Forest, hiperparâmetros e importância dos atributos (`src/modelagem.py`, notebooks 03 e 04) |
+| Pablo Arman Schuller | Avaliação: comparação com alternativas simples, curvas ROC e precisão × revocação, escolha do limiar e análise de erros (notebook 06) |
+| Victor da Rocha | Demonstração de uso: script e página web (`src/demo.py`, `src/demo_web.py`), apresentação e README |
 
 ## 12. Considerações finais
 
