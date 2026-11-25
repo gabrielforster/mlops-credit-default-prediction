@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Risco de Inadimplência</title>
+<style>
+  :root {
+    --ink: #1d232b; --muted: #5b6573; --line: #dfe3e8; --bg: #f5f3f4; --card: #ffffff;
+    --accent: #731B34; --accent-soft: #f3e6ea;
+    --baixo: #3f7d5a; --moderado: #c08a1e; --alto: #c4561f; --muito-alto: #731B34;
+    --down: #3f7d5a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: "Inter", "Liberation Sans", "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--ink); font-size: 15px; }
+  header { background: var(--accent); color: #fff; padding: 18px 28px; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap; }
+  header h1 { margin: 0; font-size: 22px; font-weight: 700; }
+  header .sub { opacity: .85; font-size: 13px; }
+  main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; padding: 20px 28px 28px; max-width: 1380px; margin: 0 auto; }
+  @media (max-width: 960px) { main { grid-template-columns: 1fr; padding: 16px; } header { padding: 16px; } }
+  .card { background: var(--card); border-radius: 10px; border: 1px solid var(--line); padding: 18px 20px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--accent); margin: 0 0 10px; }
+  .loaders { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+  button, select, input { font: inherit; color: inherit; }
+  button { border: 1px solid var(--accent); background: #fff; color: var(--accent); border-radius: 6px; padding: 7px 12px; cursor: pointer; font-weight: 600; font-size: 13.5px; }
+  button:hover { background: var(--accent-soft); }
+  button.primary { background: var(--accent); color: #fff; }
+  .loaders .sep { color: var(--muted); font-size: 13px; margin: 0 4px; }
+  .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px 12px; margin-bottom: 18px; }
+  @media (max-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  input, select { border: 1px solid var(--line); border-radius: 6px; padding: 7px 8px; background: #fff; font-size: 14px; width: 100%; min-width: 0; }
+  input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+  .hist { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .hist th { font-size: 12px; color: var(--muted); text-align: left; padding: 0 4px 6px; font-weight: 600; }
+  .hist th:first-child { width: 92px; }
+  .hist td { padding: 3px 4px; }
+  .hist td:first-child { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+  .hist select, .hist input { padding: 6px 5px; font-size: 13px; }
+  .hist tr.status select.late { background: #fbe9e4; border-color: #e6b3a3; }
+  .table-scroll { overflow-x: auto; }
+  .hint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .result { position: sticky; top: 16px; align-self: start; }
+  .gauge-wrap { display: flex; flex-direction: column; align-items: center; margin: 4px 0 6px; }
+  .gauge { width: 100%; max-width: 360px; }
+  .score { font-size: 46px; font-weight: 800; line-height: 1; margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .band { margin-top: 8px; font-weight: 700; font-size: 15px; padding: 4px 12px; border-radius: 999px; color: #fff; }
+  .decision { margin-top: 10px; font-size: 15px; text-align: center; }
+  .delta { margin-top: 4px; font-size: 13px; color: var(--muted); min-height: 18px; }
+  .factors { margin-top: 18px; }
+  .factor { display: grid; grid-template-columns: minmax(0, 1fr) 160px 62px; gap: 10px; align-items: center; padding: 7px 0; border-top: 1px solid var(--line); }
+  .factor .name { font-size: 13.5px; font-weight: 600; }
+  .factor .desc { font-size: 12px; color: var(--muted); }
+  .bar { position: relative; height: 14px; background: #f1eff0; border-radius: 3px; }
+  .bar::after { content: ""; position: absolute; left: 50%; top: -3px; bottom: -3px; width: 1px; background: #9aa1aa; }
+  .bar span { position: absolute; top: 0; bottom: 0; border-radius: 3px; transition: all .25s ease; }
+  .val { font-size: 13px; font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
+  .legend { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin: 4px 0 0; padding-left: calc(100% - 232px); }
+  .note { font-size: 12px; color: var(--muted); margin-top: 14px; line-height: 1.45; }
+  .about { margin-top: 22px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (max-width: 640px) { .about { grid-template-columns: 1fr; } }
+  .about div { background: var(--bg); border-top: 3px solid var(--accent); border-radius: 0 0 8px 8px; padding: 10px 12px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+  .about b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 3px; }
+  .error { background: #fbe9e4; color: #8a2a12; border: 1px solid #e6b3a3; border-radius: 6px; padding: 8px 12px; font-size: 13.5px; margin-bottom: 10px; display: none; }
+  .loading { opacity: .55; transition: opacity .15s; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Risco de inadimplência no cartão de crédito</h1>
+    <div class="sub">Projeto N3 · Aprendizagem de Máquina · Católica de Santa Catarina</div>
+  </div>
+  <div class="sub" id="model">carregando modelo…</div>
+</header>
+
+<main>
+  <section class="card">
+    <h2>Cliente</h2>
+    <div class="loaders">
+      <button class="primary" data-preset="alto_risco">Exemplo: alto risco</button>
+      <button class="primary" data-preset="em_dia">Exemplo: paga em dia</button>
+      <span class="sep">ou cliente real nunca visto pelo modelo:</span>
+      <select id="ids" aria-label="ID do cliente" style="width:auto"></select>
+      <button id="load-id">Carregar</button>
+    </div>
+
+    <div class="grid">
+      <label>Limite de crédito (NT$)<input type="number" name="LIMIT_BAL" min="1" step="10000"></label>
+      <label>Idade<input type="number" name="AGE" min="18" max="100" step="1"></label>
+      <label>Sexo<select name="SEX"><option value="1">masculino</option><option value="2">feminino</option></select></label>
+      <label>Escolaridade<select name="EDUCATION"><option value="1">pós-graduação</option><option value="2">universidade</option><option value="3">ensino médio</option><option value="4">outros</option></select></label>
+      <label>Estado civil<select name="MARRIAGE"><option value="1">casado(a)</option><option value="2">solteiro(a)</option><option value="3">outros</option></select></label>
+    </div>
+
+    <h2>Últimos seis meses (2005)</h2>
+    <div class="table-scroll">
+      <table class="hist" id="hist"></table>
+    </div>
+    <div class="hint">Status: em dia, rotativo (pagou parte), sem consumo, ou <b>n meses de atraso</b> (em vermelho). Qualquer alteração reavalia o cliente na hora.</div>
+
+    <div class="about">
+      <div><b>O modelo</b>Random Forest treinada com 10.851 clientes de 2005. No teste com 5.322 clientes nunca vistos: F1 0,546 e AUC 0,788.</div>
+      <div><b>O que ele usa</b>9 atributos eleitos por votação: o histórico de atraso, o limite, o uso do limite e o valor pago. Sexo, idade, escolaridade e estado civil não entram.</div>
+      <div><b>Como ler</b>A pontuação ordena o risco. Entre os 10% de maior pontuação, 68% ficaram inadimplentes. Entre os 10% de menor, 4%.</div>
+    </div>
+  </section>
+
+  <section class="card result" id="result">
+    <div class="error" id="error"></div>
+    <h2>Avaliação do modelo</h2>
+    <div class="gauge-wrap">
+      <svg class="gauge" viewBox="0 0 300 170" role="img" aria-label="Pontuação de risco">
+        <g id="bands"></g>
+        <path id="needle" d="M150 150 L150 62" stroke="#1d232b" stroke-width="4" stroke-linecap="round" style="transform-origin:150px 150px; transition: transform .35s ease"></path>
+        <circle cx="150" cy="150" r="7" fill="#1d232b"></circle>
+        <text x="22" y="166" font-size="11" fill="#5b6573">0%</text>
+        <text x="262" y="166" font-size="11" fill="#5b6573">100%</text>
+      </svg>
+      <div class="score" id="score">–</div>
+      <div class="band" id="band" style="background:#9aa1aa">–</div>
+      <div class="decision" id="decision"></div>
+      <div class="delta" id="delta"></div>
+    </div>
+
+    <div class="factors">
+      <h2>O que mais pesou</h2>
+      <div id="factors"></div>
+      <div class="legend"><span>reduz o risco</span><span>aumenta</span></div>
+    </div>
+    <p class="note">Cada barra mostra quantos pontos percentuais o valor deste cliente soma ou tira da pontuação, comparado ao valor típico (mediana) dos clientes de treino.<br>
+      A pontuação ordena os clientes por risco. Ela não é uma probabilidade calibrada: o modelo dá peso extra aos inadimplentes no treino, o que desloca a escala para cima.</p>
+  </section>
+</main>
+
+<script>
+const MONTHS = ["set", "ago", "jul", "jun", "mai", "abr"];
+const PAY = ["PAY_0", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6"];
+const STATUS = [[-2, "sem consumo"], [-1, "em dia"], [0, "rotativo"], ...[1,2,3,4,5,6,7,8].map(n => [n, n === 1 ? "1 mês" : `${n} meses`])];
+const BANDS = [[0, .3, "var(--baixo)", "baixo"], [.3, .5, "var(--moderado)", "moderado"], [.5, .7, "var(--alto)", "alto"], [.7, 1, "var(--muito-alto)", "muito alto"]];
+const NAMES = {LIMIT_BAL: "Limite de crédito", PAY_0: "Status em setembro", PAY_2: "Status em agosto", PAY_3: "Status em julho",
+  PAY_4: "Status em junho", PAY_5: "Status em maio", PAY_6: "Status em abril", PAY_AMT1: "Valor pago em setembro",
+  UTILIZACAO_ATUAL: "Uso do limite em setembro", UTILIZACAO_MEDIA: "Uso médio do limite", RAZAO_PAGAMENTO: "Pago ÷ faturado",
+  MESES_EM_ATRASO: "Meses com atraso", ATRASO_MAXIMO: "Maior atraso"};
+const fmt = new Intl.NumberFormat("pt-BR", {maximumFractionDigits: 2});
+const pct = v => `${(v * 100).toFixed(1).replace(".", ",")}%`;
+const form = document.querySelector("main");
+let last = null, timer = null, seq = 0;
+
+function buildHistory() {
+  const t = document.getElementById("hist");
+  const opts = STATUS.map(([v, l]) => `<option value="${v}">${l}</option>`).join("");
+  t.innerHTML = `<tr><th></th>${MONTHS.map(m => `<th>${m}</th>`).join("")}</tr>
+    <tr class="status"><td>Status</td>${PAY.map(p => `<td><select name="${p}">${opts}</select></td>`).join("")}</tr>
+    <tr><td>Fatura (NT$)</td>${[1,2,3,4,5,6].map(i => `<td><input type="number" step="1000" name="BILL_AMT${i}"></td>`).join("")}</tr>
+    <tr><td>Pago (NT$)</td>${[1,2,3,4,5,6].map(i => `<td><input type="number" min="0" step="500" name="PAY_AMT${i}"></td>`).join("")}</tr>`;
+}
+
+function arc(a0, a1, r) {
+  const p = a => [150 + r * Math.cos(Math.PI * (1 - a)), 150 - r * Math.sin(Math.PI * (1 - a))];
+  const [x0, y0] = p(a0), [x1, y1] = p(a1);
+  return `M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}`;
+}
+function buildGauge() {
+  document.getElementById("bands").innerHTML = BANDS.map(([a, b, c]) =>
+    `<path d="${arc(a + .004, b - .004, 118)}" stroke="${c}" stroke-width="22" fill="none"></path>`).join("");
+}
+
+function fill(cliente) {
+  for (const [k, v] of Object.entries(cliente)) {
+    const el = form.querySelector(`[name="${k}"]`);
+    if (el) el.value = v;
+  }
+  markLate();
+  evaluate();
+}
+function read() {
+  const out = {};
+  form.querySelectorAll("[name]").forEach(el => out[el.name] = el.value === "" ? null : Number(el.value));
+  return out;
+}
+function markLate() {
+  PAY.forEach(p => { const el = form.querySelector(`[name="${p}"]`); el.classList.toggle("late", Number(el.value) >= 1); });
+}
+
+async function evaluate() {
+  const id = ++seq;
+  const box = document.getElementById("result");
+  box.classList.add("loading");
+  const res = await fetch("/api/avaliar", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(read())});
+  const data = await res.json();
+  if (id !== seq) return;
+  box.classList.remove("loading");
+  const err = document.getElementById("error");
+  if (!res.ok) { err.textContent = `Entrada inválida: ${data.erro}`; err.style.display = "block"; return; }
+  err.style.display = "none";
+  render(data);
+}
+
+function render(r) {
+  const band = BANDS.find(([a, b]) => r.pontuacao < b) || BANDS[3];
+  document.getElementById("needle").style.transform = `rotate(${(r.pontuacao - .5) * 180}deg)`;
+  document.getElementById("score").textContent = pct(r.pontuacao);
+  const b = document.getElementById("band");
+  b.textContent = `risco ${band[3]}`; b.style.background = band[2];
+  document.getElementById("decision").innerHTML = r.classe === 1
+    ? "<b>Provável inadimplente</b> no próximo mês (limiar de 50%)"
+    : "<b>Provável adimplente</b> no próximo mês (limiar de 50%)";
+  const delta = last === null ? "" : (() => {
+    const d = (r.pontuacao - last) * 100;
+    return Math.abs(d) < .05 ? "sem mudança desde a última avaliação" : `${d > 0 ? "+" : "−"}${Math.abs(d).toFixed(1).replace(".", ",")} p.p. desde a última avaliação`;
+  })();
+  document.getElementById("delta").textContent = delta;
+  last = r.pontuacao;
+
+  const top = r.fatores.slice(0, 6);
+  const scale = Math.max(.1, ...top.map(f => Math.abs(f.efeito)));
+  document.getElementById("factors").innerHTML = top.map(f => {
+    const w = Math.abs(f.efeito) / scale * 50;
+    const up = f.efeito >= 0;
+    const style = up ? `left:50%;width:${w}%;background:var(--accent)` : `right:50%;width:${w}%;background:var(--down)`;
+    const val = `${up ? "+" : "−"}${Math.abs(f.efeito * 100).toFixed(1).replace(".", ",")}`;
+    return `<div class="factor"><div><div class="name">${NAMES[f.atributo] || f.atributo}</div>
+      <div class="desc">cliente ${fmt.format(f.valor_cliente)} · típico ${fmt.format(f.valor_tipico)}</div></div>
+      <div class="bar"><span style="${style}"></span></div><div class="val" style="color:${up ? "var(--accent)" : "var(--down)"}">${val} p.p.</div></div>`;
+  }).join("");
+}
+
+async function init() {
+  buildHistory(); buildGauge();
+  const info = await (await fetch("/api/info")).json();
+  document.getElementById("model").textContent = `modelo: ${info.algoritmo === "random_forest" ? "Random Forest" : info.algoritmo} · ${info.atributos.length} atributos`;
+  document.getElementById("ids").innerHTML = info.ids.map(i => `<option value="${i}">ID ${i}</option>`).join("");
+  document.querySelectorAll("[data-preset]").forEach(btn => btn.onclick = () => fill(info.presets[btn.dataset.preset].cliente));
+  document.getElementById("load-id").onclick = async () => {
+    const res = await fetch(`/api/cliente/${document.getElementById("ids").value}`);
+    if (res.ok) fill(await res.json());
+  };
+  form.addEventListener("input", e => { if (e.target.name) { markLate(); clearTimeout(timer); timer = setTimeout(evaluate, 250); } });
+  const q = new URLSearchParams(location.search);
+  if (q.get("id")) {
+    document.getElementById("ids").value = q.get("id");
+    const res = await fetch(`/api/cliente/${q.get("id")}`);
+    if (res.ok) return fill(await res.json());
+  }
+  fill((info.presets[q.get("preset")] || info.presets.alto_risco).cliente);
+}
+init();
+</script>
+</body>
+</html>
